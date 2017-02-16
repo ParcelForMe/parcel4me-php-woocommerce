@@ -2,7 +2,7 @@
 Contributors: parcel4me     
 Donate link: http://example.com/    
 Tags: checkout, parcel4me, parcel, payment, delivery, woocommerce    
-Requires at least: 4.6
+Requires at least: 4.6    
 Tested up to: 4.7    
 Stable tag: 4.3    
 License: MIT    
@@ -25,17 +25,22 @@ Join the delivery revolution today with Parcel for Me.
 [http://parcelfor.me/
 ](http://parcelfor.me/)
 
-A few notes about the sections above:
-
 
 == Installation ==
 
 
-1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
+1. Upload the plugin files to the `/wp-content/plugins/parcel4me` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
-1. Use the Settings->Plugin Name screen to configure the plugin
+1. Use the *Settings->ParcelForMe Config* screen to configure the plugin
 
-### TO DO ###
+### TO DO : Details about getting setup with Parcel4Me and Gloabl Deliveries Portal thingy - links for where to get them - and then where to set the settings###
+
+
+**Shortcodes**
+
+- `[p4m-login]` to allow login and show login status - place this widget promenently in your shop interface (usually in the banner beside your shop login)
+- `[p4m-signup]` to allow signup to/via Parcel For Me 
+- `[p4m-checkout]` put this into the page that is setup in  *Settings->ParcelForMe Config->Checkout Page* 
 
 
 == Frequently Asked Questions ==
