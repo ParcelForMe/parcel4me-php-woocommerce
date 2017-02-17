@@ -21,56 +21,151 @@ class Parcel4me_Settings {
       */
 
       function p4m_settings_init() {
+        
         // register a new setting for "p4m" page
         register_setting( 'p4m', 'p4m_options' );
         
-        // register a new section in the "p4m" page
+        
         add_settings_section(
-          'p4m_section_developers',
-          __( 'The Matrix has you.', 'p4m' ),
-          'p4m_section_developers_cb',
+          'p4m_section_p4moauth',
+          __( 'Parcel For Me OAuth Settings', 'p4m' ),
+          'p4m_section_p4moauth_cb',
           'p4m'
         );
-        
-        // register a new field in the "p4m_section_developers" section, inside the "p4m" page
+                
         add_settings_field(
-          'p4m_field_pill', // as of WP 4.6 this value is used only internally
-          // use $args' label_for to populate the id inside the callback
-          __( 'Pill', 'p4m' ),
-          'p4m_field_pill_cb',
+          'p4m_field_p4moauth_id',
+          __( 'Client Id', 'p4m' ),
+          'text_input_field_cb',
           'p4m',
-          'p4m_section_developers',
+          'p4m_section_p4moauth',
           [
-            'label_for' => 'p4m_field_pill',
+            'label_for' => 'p4m_field_p4moauth_id',
+            'class' => 'p4m_row',
+            'p4m_custom_data' => 'custom'
+          ]
+        );
+        add_settings_field(
+          'p4m_field_p4moauth_secret',
+          __( 'Client Secret', 'p4m' ),
+          'text_input_field_cb',
+          'p4m',
+          'p4m_section_p4moauth',
+          [
+            'label_for' => 'p4m_field_p4moauth_secret',
+            'class' => 'p4m_row',
+            'p4m_custom_data' => 'custom'
+          ]
+        );
+
+
+        add_settings_section(
+          'p4m_section_gfsoauth',
+          __( 'Global Freight Solutions OAuth Settings', 'p4m' ),
+          'p4m_section_gfsoauth_cb',
+          'p4m'
+        );
+
+        add_settings_field(
+          'p4m_field_gfsoauth_id',
+          __( 'Client Id', 'p4m' ),
+          'text_input_field_cb',
+          'p4m',
+          'p4m_section_gfsoauth',
+          [
+            'label_for' => 'p4m_field_gfsoauth_id',
+            'class' => 'p4m_row',
+            'p4m_custom_data' => 'custom'
+          ]
+        );
+        add_settings_field(
+          'p4m_field_gfsoauth_secret',
+          __( 'Client Secret', 'p4m' ),
+          'text_input_field_cb',
+          'p4m',
+          'p4m_section_gfsoauth',
+          [
+            'label_for' => 'p4m_field_gfsoauth_secret',
+            'class' => 'p4m_row',
+            'p4m_custom_data' => 'custom'
+          ]
+        );
+
+
+        add_settings_section(
+          'p4m_section_checkout',
+          __( 'Checkout Page', 'p4m' ),
+          'p4m_nosubheading_cb',
+          'p4m'
+        );
+
+        add_settings_field(
+          'p4m_field_checkout_uri',
+          __( 'Permalink', 'p4m' ),
+          'checkoutpage_field_cb',
+          'p4m',
+          'p4m_section_checkout',
+          [
+            'label_for' => 'p4m_field_checkout_uri',
+            'class' => 'p4m_row',
+            'p4m_custom_data' => 'custom'
+          ]
+        );
+
+
+        add_settings_section(
+          'p4m_section_env',
+          __( 'Parcel For Me Environment', 'p4m' ),
+          'p4m_nosubheading_cb',
+          'p4m'
+        );
+
+        add_settings_field(
+          'p4m_field_env',
+          __( 'Environment/Mode', 'p4m' ),
+          'p4m_field_env_cb',
+          'p4m',
+          'p4m_section_env',
+          [
+            'label_for' => 'p4m_field_env',
             'class' => 'p4m_row',
             'p4m_custom_data' => 'custom',
           ]
         );
+
+
       }
       
+
       /**
       * register our p4m_settings_init to the admin_init action hook
       */
       add_action( 'admin_init', 'p4m_settings_init' );
       
 
-
       /**
       * custom option and settings:
       * callback functions
       */
       
-      // developers section cb
       
       // section callbacks can accept an $args parameter, which is an array.
       // $args have the following keys defined: title, id, callback.
       // the values are defined at the add_settings_section() function.
-      function p4m_section_developers_cb( $args ) {
+      function p4m_section_p4moauth_cb( $args ) {
         ?>
-        <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Follow the white rabbit.', 'p4m' ); ?></p>
+        <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Obtain your ParcelForMe OAUTH2.0 Credentials from : ', 'p4m' ); ?> <b>(PLACEHOLDER URL)</b> <a href="http://developer.parcelfor.me/" target="_blank">developer.parcelfor.me</a>.</p>
         <?php
       }
-      
+      function p4m_section_gfsoauth_cb( $args ) {
+        ?>
+        <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Obtain your Global Freight Solutions OAUTH2.0 Credentials from : ', 'p4m' ); ?> <b>(PLACEHOLDER URL)</b> <a href="https://www.justshoutgfs.com/request-a-quote/" target="_blank">justshoutgfs.com</a>.</p>
+        <?php
+      }
+      function p4m_nosubheading_cb( $args ) {
+        // do nothing callback
+      }
+
 
       
       // field callbacks can accept an $args parameter, which is an array.
@@ -79,7 +174,7 @@ class Parcel4me_Settings {
       // the "label_for" key value is used for the "for" attribute of the <label>.
       // the "class" key value is used for the "class" attribute of the <tr> containing the field.
       // you can add custom key value pairs to be used inside your callbacks.
-      function p4m_field_pill_cb( $args ) {
+      function p4m_field_env_cb( $args ) {
         // get the value of the setting we've registered with register_setting()
         $options = get_option( 'p4m_options' );
         // output the field
@@ -88,20 +183,57 @@ class Parcel4me_Settings {
         data-custom="<?php echo esc_attr( $args['p4m_custom_data'] ); ?>"
         name="p4m_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
         >
-        <option value="red" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'red', false ) ) : ( '' ); ?>>
-        <?php esc_html_e( 'red pill', 'p4m' ); ?>
+        <option value="live" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'live', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'live environment', 'p4m' ); ?>
         </option>
-        <option value="blue" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'blue', false ) ) : ( '' ); ?>>
-        <?php esc_html_e( 'blue pill', 'p4m' ); ?>
+        <option value="test" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'test', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'test environment', 'p4m' ); ?>
+        </option>
+        <option value="dev" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'dev', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'dev environment', 'p4m' ); ?>
         </option>
         </select>
         <p class="description">
-        <?php esc_html_e( 'You take the blue pill and the story ends. You wake in your bed and you believe whatever you want to believe.', 'p4m' ); ?>
+        <?php esc_html_e( 'Use "live" for your production site, or "test" for your sandbox environment.', 'p4m' ); ?>
         </p>
 
         <?php
       }
       
+      function text_input_field_cb( $args ) {
+        // get the value of the setting we've registered with register_setting()
+        $options = get_option( 'p4m_options' );
+        // output the field
+        ?>
+        <input 
+          data-custom="<?php echo esc_attr( $args['p4m_custom_data'] ); ?>"
+          name="p4m_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
+          type="text" 
+          value="<?php echo $options[ $args['label_for'] ] ?>" 
+        />
+        <?php
+      }
+
+      function checkoutpage_field_cb( $args ) {
+        // get the value of the setting we've registered with register_setting()
+        $options = get_option( 'p4m_options' );
+        // output the field
+        ?>
+        <input 
+          data-custom="<?php echo esc_attr( $args['p4m_custom_data'] ); ?>"
+          name="p4m_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
+          type="text" 
+          value="<?php echo $options[ $args['label_for'] ] ?>" 
+        />
+        <p class="description">
+        <?php esc_html_e( 'This is the permalink to one of your pages, which includes the [p4m-checkout] shortcode.', 'p4m' ); ?>
+        </p>
+        <?php
+      }
+
+
+
+
       /**
       * top level menu
       */
@@ -140,11 +272,18 @@ class Parcel4me_Settings {
           add_settings_error( 'p4m_messages', 'p4m_message', __( 'Settings Saved', 'p4m' ), 'updated' );
         }
         
+  
         // show error/update messages
         settings_errors( 'p4m_messages' );
         ?>
         <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+
+        <p>
+          To enable <a href="http://parcelfor.me" target="_blank">ParcelForMe</a> you must configure all the following settings
+          and add the <b>[p4m-login]</b> and <b>[p4m-signup]</b> shortcodes to your site.
+        </p>
+        
         <form action="options.php" method="post">
         <?php
         // output security fields for the registered setting "p4m"
