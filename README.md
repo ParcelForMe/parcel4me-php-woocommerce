@@ -1,3 +1,4 @@
+
 # ParcelForMe for WooCommerce
 
 This is the repo for the ParcelForMe WooCommerce plugin.
@@ -5,4 +6,6 @@ This is the repo for the ParcelForMe WooCommerce plugin.
 ![](https://woocommerce.com/wp-content/themes/woomattic/images/logo-woocommerce@2x.png)
 ![](http://parcelfor.me/images/site/logo--horizontal.svg)
 
-See [readme.txt](readme.txt) for more details.
+See the [parcelfor.me](http://parcelfor.me/) website for more information about Parcel For Me.
+
+See [the readme.txt](parcel4me/readme.txt) for more details about this plugin.
