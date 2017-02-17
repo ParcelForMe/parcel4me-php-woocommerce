@@ -11,8 +11,7 @@
 
 
 require_once __DIR__.'/parcel4me-settings-class.php';
-
-
+require_once __DIR__.'/vendor/autoload.php';
 
 
 class Parcel4me_Woo {

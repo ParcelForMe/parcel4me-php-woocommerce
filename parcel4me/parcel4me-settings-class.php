@@ -94,19 +94,32 @@ class Parcel4me_Settings {
 
         add_settings_section(
           'p4m_section_checkout',
-          __( 'Checkout Page', 'p4m' ),
+          __( 'Redirect URLs', 'p4m' ),
           'p4m_nosubheading_cb',
           'p4m'
         );
 
         add_settings_field(
           'p4m_field_checkout_uri',
-          __( 'Permalink', 'p4m' ),
+          __( 'Checkout Page', 'p4m' ),
           'checkoutpage_field_cb',
           'p4m',
           'p4m_section_checkout',
           [
             'label_for' => 'p4m_field_checkout_uri',
+            'class' => 'p4m_row',
+            'p4m_custom_data' => 'custom'
+          ]
+        );
+
+        add_settings_field(
+          'p4m_field_paymentcomplete_uri',
+          __( 'Payment Complete Page', 'p4m' ),
+          'paymentcomplete_field_cb',
+          'p4m',
+          'p4m_section_checkout',
+          [
+            'label_for' => 'p4m_field_paymentcomplete_uri',
             'class' => 'p4m_row',
             'p4m_custom_data' => 'custom'
           ]
@@ -227,6 +240,23 @@ class Parcel4me_Settings {
         />
         <p class="description">
         <?php esc_html_e( 'This is the permalink to one of your pages, which includes the [p4m-checkout] shortcode.', 'p4m' ); ?>
+        </p>
+        <?php
+      }
+
+      function paymentcomplete_field_cb( $args ) {
+        // get the value of the setting we've registered with register_setting()
+        $options = get_option( 'p4m_options' );
+        // output the field
+        ?>
+        <input 
+          data-custom="<?php echo esc_attr( $args['p4m_custom_data'] ); ?>"
+          name="p4m_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
+          type="text" 
+          value="<?php echo $options[ $args['label_for'] ] ?>" 
+        />
+        <p class="description">
+        <?php esc_html_e( 'This is the permalink to one of your pages that the user should go to after completing payment.', 'p4m' ); ?>
         </p>
         <?php
       }
