@@ -21,6 +21,20 @@ class Parcel4me_Woo {
 
     $config = new Parcel4me_Settings();
 
+    $site_base_url = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/";
+
+/*
+    P4M\Settings::setPublic('OpenIdConnect:ClientId',     '10004');
+    P4M\Settings::setPublic('OpenIdConnect:ClientSecret', 'secret');
+ NO SETTING :   P4M\Settings::setPublic('OpenIdConnect:RedirectUrl',  $site_base_url.'p4m/getP4MAccessToken');
+    P4M\Settings::setPublic('GFS:ClientId',               'parcel_4_me');
+    P4M\Settings::setPublic('GFS:ClientSecret',           'needmoreparcels');
+
+    //TODO : setting for checkout url 
+    //TODO : setting for paymentcomplete url 
+    //TODO : setting for environment
+*/  
+     
 
     // called just before the woocommerce template functions are included
     add_action( 'init', array( $this, 'include_template_functions' ), 20 );

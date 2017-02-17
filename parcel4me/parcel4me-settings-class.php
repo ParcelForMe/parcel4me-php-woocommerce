@@ -256,7 +256,7 @@ class Parcel4me_Settings {
           value="<?php echo $options[ $args['label_for'] ] ?>" 
         />
         <p class="description">
-        <?php esc_html_e( 'This is the permalink to one of your pages that the user should go to after completing payment.', 'p4m' ); ?>
+        <?php esc_html_e( 'This is the permalink to one of your pages, which includes the [p4m-payment-complete] shortcode.', 'p4m' ); ?>
         </p>
         <?php
       }
