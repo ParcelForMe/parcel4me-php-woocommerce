@@ -1,6 +1,6 @@
 <?
    /*
-   Description: Allow setting config for parcel4me
+   Description: Admin setting config screen for parcel4me
    Version: 0.0.1
    Author: ParcelForMe
    Author URI: http://parcelfor.me/
