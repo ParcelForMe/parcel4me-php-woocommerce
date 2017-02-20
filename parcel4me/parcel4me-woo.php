@@ -11,30 +11,32 @@
 
 
 require_once __DIR__.'/parcel4me-settings-class.php';
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__.'/parcel4me-woo-cart.php';
 
 
 class Parcel4me_Woo {
  
   public function __construct() {
 
-
     $config = new Parcel4me_Settings();
 
-    $site_base_url = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/";
+    // Set the config
+    
+    $options = get_option( 'p4m_options' );
 
-/*
-    P4M\Settings::setPublic('OpenIdConnect:ClientId',     '10004');
-    P4M\Settings::setPublic('OpenIdConnect:ClientSecret', 'secret');
- NO SETTING :   P4M\Settings::setPublic('OpenIdConnect:RedirectUrl',  $site_base_url.'p4m/getP4MAccessToken');
-    P4M\Settings::setPublic('GFS:ClientId',               'parcel_4_me');
-    P4M\Settings::setPublic('GFS:ClientSecret',           'needmoreparcels');
+    $parcel4me_shop_config = array(
+        'environment'                   => $options['p4m_field_env'],
+        'p4m_client_id'                 => $options['p4m_field_p4moauth_id'],
+        'p4m_secret'                    => $options['p4m_field_p4moauth_secret'],
+        'gfs_client_id'                 => $options['p4m_field_gfsoauth_id'],
+        'gfs_secret'                    => $options['p4m_field_gfsoauth_secret'],
+        'redirect_url_checkout'         => $options['p4m_field_checkout_uri'],
+        'redirect_url_payment_complete' => $options['p4m_field_paymentcomplete_uri']
+    );
 
-    //TODO : setting for checkout url 
-    //TODO : setting for paymentcomplete url 
-    //TODO : setting for environment
-*/  
-     
+    /// Define the Instance :
+    $my_shopping_cart = new P4M_Woo_Shop( $parcel4me_shop_config );
+
 
     // called just before the woocommerce template functions are included
     add_action( 'init', array( $this, 'include_template_functions' ), 20 );
