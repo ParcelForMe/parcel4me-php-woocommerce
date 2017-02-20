@@ -11,13 +11,16 @@
 
 
 require_once __DIR__.'/parcel4me-settings-class.php';
-require_once __DIR__.'/parcel4me-woo-cart.php';
+require_once __DIR__.'/parcel4me-woo-cart-class.php';
+require_once __DIR__.'/parcel4me-shortcodes-class.php';
 
 
 class Parcel4me_Woo {
  
   public function __construct() {
 
+
+    $shorts = new Parcel4me_Shortcodes();
     $config = new Parcel4me_Settings();
 
     // Set the config
@@ -35,7 +38,7 @@ class Parcel4me_Woo {
     );
 
     /// Define the Instance :
-    $my_shopping_cart = new P4M_Woo_Shop( $parcel4me_shop_config );
+    $my_shopping_cart = new Parcel4me_Woo_Shop( $parcel4me_shop_config );
 
 
     // called just before the woocommerce template functions are included
