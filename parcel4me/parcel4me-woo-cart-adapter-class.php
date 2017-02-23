@@ -7,11 +7,13 @@
    License: MIT
    */
 
+require_once __DIR__.'/vendor/autoload.php';
+
 require_once __DIR__.'/vendor/parcel4me/parcel4me/src/parcel4me/p4m-shop.php';
 // i'm not sure why I can't load it like this : require_once __DIR__.'/vendor/autoload.php';
 // contributers who know composer autoloader better than me are very welcome to help with that bit. 
 
-class Parcel4me_Woo_Shop extends P4M\P4M_Shop {
+class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
 
     /*

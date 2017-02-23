@@ -239,7 +239,10 @@ class Parcel4me_Settings {
           value="<?php echo $options[ $args['label_for'] ] ?>" 
         />
         <p class="description">
-        <?php esc_html_e( 'This is the permalink to one of your pages, which includes the [p4m-checkout] shortcode.', 'p4m' ); ?>
+        <?php esc_html_e( 'This is the permalink to one of your pages, which includes the [p4m-checkout] shortcode.', 'p4m'); 
+              echo '<br/>';
+              esc_html_e( 'If you add the [p4m-checkout-redirect] shortcode to your standard checkout page, it will redirect here if the user is logged in to Parcel For Me.', 'p4m' ); 
+        ?>
         </p>
         <?php
       }

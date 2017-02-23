@@ -12,19 +12,24 @@
 
 require_once __DIR__.'/parcel4me-settings-class.php';
 require_once __DIR__.'/parcel4me-shortcodes-class.php';
-require_once __DIR__.'/parcel4me-routes-class.php';
-require_once __DIR__.'/parcel4me-woo-cart-class.php';
+require_once __DIR__.'/parcel4me-woo-cart-adapter-class.php';
+
+
+require_once __DIR__.'/parcel4me-routes.php';
+
+
+if (session_id() == "") session_start(); // this is important for the P4M_Shop->getCurrentSessionId() to work !!
 
 
 class Parcel4me_Woo {
  
+  public $p4m_shopping_cart_adapter;
+  
   public function __construct() {
 
 
     $shorts = new Parcel4me_Shortcodes();
     $config = new Parcel4me_Settings();
-    $routes = new Parcel4me_Routes();
-
 
     // Set the config
     $options = get_option( 'p4m_options' );
@@ -39,8 +44,8 @@ class Parcel4me_Woo {
     );
 
     /// Define the Instance :
-    $my_shopping_cart = new Parcel4me_Woo_Shop( $parcel4me_shop_config );
-
+    // NB : must be called $p4m_shopping_cart_adapter
+    $this->p4m_shopping_cart_adapter = new Parcel4me_Woo_Cart_Adapter( $parcel4me_shop_config );
 
 
 

@@ -45,8 +45,22 @@ class Parcel4me_Shortcodes {
     add_shortcode( 'p4m-signup', 'p4m_signup_func' );
 
 
+    // [p4m-checkout-redirect]
+    function p4m_checkout_redirect_func( $atts ) {
+
+      $p4m_shopping_cart_adapter = $GLOBALS['parcel4me_woo']->p4m_shopping_cart_adapter;
+      $p4m_shopping_cart_adapter->checkoutRedirect();
+
+    }
+    add_shortcode( 'p4m-checkout-redirect', 'p4m_checkout_redirect_func' );
+    
+
     // [p4m-checkout]
     function p4m_checkout_func( $atts ) {
+
+      $p4m_shopping_cart_adapter = $GLOBALS['parcel4me_woo']->p4m_shopping_cart_adapter;
+      $p4m_shopping_cart_adapter->checkout();
+
       $gfs_access_token = (array_key_exists('gfsCheckoutToken', $_COOKIE) ? $_COOKIE['gfsCheckoutToken'] : '');
       echo '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-checkout/p4m-checkout.html" />';
       echo '<p4m-checkout use-paypal="true" 
