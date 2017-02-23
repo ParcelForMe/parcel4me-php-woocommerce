@@ -1,6 +1,13 @@
 <?php
    /*
    Description: Setup the P4M shortcodes
+
+                [p4m-login]
+                [p4m-signup]
+                [p4m-checkout-redirect]       : put this in the standard checkout page
+                [p4m-checkout]                : make a new page with this on it, the standard page will redirect to it if p4m logged on 
+                [p4m-payment-complete]
+                
    Version: 0.0.1
    Author: ParcelForMe
    Author URI: http://parcelfor.me/
@@ -53,7 +60,7 @@ class Parcel4me_Shortcodes {
 
     }
     add_shortcode( 'p4m-checkout-redirect', 'p4m_checkout_redirect_func' );
-    
+
 
     // [p4m-checkout]
     function p4m_checkout_func( $atts ) {

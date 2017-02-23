@@ -13,7 +13,7 @@
 require_once __DIR__.'/parcel4me-settings-class.php';
 require_once __DIR__.'/parcel4me-shortcodes-class.php';
 require_once __DIR__.'/parcel4me-woo-cart-adapter-class.php';
-
+require_once __DIR__.'/parcel4me-widgets.php';
 
 require_once __DIR__.'/parcel4me-routes.php';
 
@@ -30,6 +30,13 @@ class Parcel4me_Woo {
 
     $shorts = new Parcel4me_Shortcodes();
     $config = new Parcel4me_Settings();
+    $w_logi = new Parcel4me_Widget_Login();
+    $w_sign = new Parcel4me_Widget_Signup();
+    add_action( 'widgets_init', function(){
+      register_widget( 'Parcel4me_Widget_Login' );
+      register_widget( 'Parcel4me_Widget_Signup' );
+    });
+
 
     // Set the config
     $options = get_option( 'p4m_options' );
