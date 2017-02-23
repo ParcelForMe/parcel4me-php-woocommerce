@@ -34,11 +34,12 @@ class Parcel4me_Shortcodes {
 
     // [p4m-login]
     function p4m_login_func( $atts ){
+      echo '<form style="display:none" action="/my-account/customer-logout" id="p4m_special_hidden_logout_form_hack"></form>';
       echo '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-login/p4m-login.html" />';
       echo '<p4m-login id-srv-url="' . P4M\Settings::getPublic('Server:P4M_OID_SERVER') . '" 
                        client-id="' . P4M\Settings::getPublic('OpenIdConnect:ClientId') . '" 
                        redirect-url="' . P4M\Settings::getPublic('OpenIdConnect:RedirectUrl') . '" 
-                       logout-form="logoutForm"> 
+                       logout-form="p4m_special_hidden_logout_form_hack"> 
             </p4m-login>';
     }
     add_shortcode( 'p4m-login', 'p4m_login_func' );
