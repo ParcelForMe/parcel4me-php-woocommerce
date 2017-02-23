@@ -16,6 +16,11 @@ require_once __DIR__.'/vendor/parcel4me/parcel4me/src/parcel4me/p4m-shop.php';
 class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
 
+    function userIsLoggedIn() {
+        return is_user_logged_in();
+    }
+
+
     /*
 
 
@@ -28,13 +33,13 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
     */
 
-    function userIsLoggedIn() {
-        //return false;
-        return true;
-    }
-
     function createNewUser( $p4m_consumer ) {
-        /*
+/*
+        $username = $p4m_consumer->Email;
+        $password = 
+        wp_create_user( $username, $p4m_consumer->)
+        
+        *
             logic here to create a new user record
             in the shopping cart database
         */
