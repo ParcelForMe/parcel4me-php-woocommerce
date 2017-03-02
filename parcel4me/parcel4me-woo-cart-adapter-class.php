@@ -132,35 +132,73 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         return $consumer;
     }
 
-// WIP ...
+
+    // -----------------------------------------------------------------
+    // Code below here is WooCommerce specific -------------------------
+
 
     function getCartOfCurrentUser() {
-        /*
-            some logic goes here to fetch my cart from 
-            my shopping cart DB and put the details into 
-            this $cart object 
-        */
 
-        // Convert the shopping cart from the shopping cart DB into a 
-        // P4M Cart
+        $woo_cart = WC()->cart;
 
-        $cartItem = new P4M\Model\CartItem();
-        $cartItem->Desc         = "A great thing I am buying";
-        $cartItem->Qty          = 1;
-        $cartItem->Price        = 100;
-        $cartItem->LinkToImage  = "http://cdn2.wpbeginner.com/wp-content/uploads/2015/12/pixabay.jpg";
-        $cartItem->removeNullProperties();
+        // convert Woo Cart into a P4M Cart 
+
+        // first create each item 
+
+        $items = array();
+        $woo_cart_item_details = $woo_cart->get_cart();
+        foreach($woo_cart_item_details as $key => $woo_item) {
+
+            $cartItem = new P4M\Model\CartItem();
+            $cartItem->Make         = $woo_item['data']->post->post_name;
+            $cartItem->Sku          = $woo_item['product_id'];
+            $cartItem->Desc         = $woo_item['data']->post->post_content;
+            $cartItem->Qty          = $woo_item['quantity'];
+            $cartItem->Price        = $woo_item['data']->price;
+            $cartItem->LinkToImage  = ( (has_post_thumbnail( $woo_item['data']->post->ID )) ? (wp_get_attachment_image_src( get_post_thumbnail_id( $woo_item['data']->post->ID ), 'single-post-thumbnail' )[0]) : null );
+          //  $cartItem->LinkToItem   = get_permalink( $woo_item']['data']['post']['ID'] );
+            // Tags
+            // Rating
+            // SiteReference
+            // Options
+            $cartItem->removeNullProperties();    
+
+            $items[] = $cartItem;
+        }
+
+        // and then the cart object 
+
+        $generated_reference = spl_object_hash( $woo_cart );
 
         $cart = new P4M\Model\Cart();
         $cart->SessionId    = $this->getCurrentSessionId();
-        $cart->PaymentType  = "DB";
-        $cart->Items        = [ $cartItem ];
-        $cart->Currency     = "USD";
-        $cart->Reference    = "12345"; //.rand(); // This is REQUIRED (and needs to change for subsequent Paypal payments)
+        $cart->Reference    = $generated_reference; 
+        $cart->Date         = gmdate( "D, d M Y T");
+        $cart->Currency     = get_woocommerce_currency();
+        $cart->ShippingAmt  = $woo_cart->get_cart_shipping_total();
+        $cart->Tax          = $woo_cart->$tax_total;
+        $cart->Total        = $woo_cart->get_total();
+
+        $cart->Items        = $items;
+
+//        $cart->Discounts    = ?? $woo_cart->$coupons ??
+//        $cart->AddressId        = ??
+//        $cart->BillAddressId    = ??
+
         $cart->removeNullProperties();
+
+        /*
+        $xx = json_encode($cart);
+        var_dump($cart);
+        die();
+        */
 
         return $cart;
     }
+
+
+
+// WIP ... 
 
 
     function setCartOfCurrentUser( $p4m_cart ) {
