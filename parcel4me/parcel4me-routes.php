@@ -9,6 +9,10 @@
    License: MIT
    */
 
+if ( ! defined( 'ABSPATH' ) ) { 
+    exit; // Exit if accessed directly
+}
+
 
 add_action( 'parse_request', 'handle_p4m_routes' );
 

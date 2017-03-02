@@ -7,8 +7,12 @@
    License: MIT
    */
 
-require_once __DIR__.'/vendor/autoload.php';
+if ( ! defined( 'ABSPATH' ) ) { 
+    exit; // Exit if accessed directly
+}
 
+
+require_once __DIR__.'/vendor/autoload.php';
 require_once __DIR__.'/vendor/parcel4me/parcel4me/src/parcel4me/p4m-shop.php';
 // i'm not sure why I can't load it like this : require_once __DIR__.'/vendor/autoload.php';
 // contributers who know composer autoloader better than me are very welcome to help with that bit. 
@@ -16,93 +20,119 @@ require_once __DIR__.'/vendor/parcel4me/parcel4me/src/parcel4me/p4m-shop.php';
 class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
 
-    function userIsLoggedIn() {
+    function userIsLoggedIn() 
+    {
         return is_user_logged_in();
     }
 
 
-    /*
-
-
-  __________     ____  ____      
- /_  __/ __ \   / __ \/ __ \   _ 
-  / / / / / /  / / / / / / /  (_)
- / / / /_/ /  / /_/ / /_/ /  _   
-/_/  \____/  /_____/\____/  (_)  
-                                 
-
-    */
-
-    function createNewUser( $p4m_consumer ) {
-/*
+    function createNewUser( $p4m_consumer ) 
+    {
         $username = $p4m_consumer->Email;
-        $password = 
-        wp_create_user( $username, $p4m_consumer->)
+        $password = wp_generate_password();
+        $user_data = array(
+                        'user_login'   => $username,
+                        'user_pass'    => $password,
+                        'user_email'   => $p4m_consumer->Email,
+                        'first_name'   => $p4m_consumer->GivenName,
+                        'nickname'     => $p4m_consumer->GivenName,
+                        'display_name' => $p4m_consumer->GivenName,
+                        'last_name'    => $p4m_consumer->FamilyName
+        );
+        $wp_userid = wp_insert_user( $user_data );
+
+        if ( is_wp_error( $wp_userid ) ) {
+            error_log('P4M: Unable to create new user; '.$username);
+            return false;
+        } else {
+            $wp_user   = get_userdata( $wp_userid );
+            $wp_user->id = $wp_userid; // p4m is expecting to see an ->id field (WP will also have the same as ->ID)
+            return $wp_user;
+        }
+    }
+
+
+    function isValidUserId( $localUserId ) 
+    {
+        return !!get_userdata( $user_id );
+    }
+
+
+    function fetchLocalUserByEmail( $localUserEmailAddress ) {
+        return get_user_by( 'email', $localUserEmailAddress );
+    }
+
+
+    function loginUser( $localUserId ) 
+    {
+        wp_set_auth_cookie( $userid );
+        return true;
+    }
+
+
+    function logoutCurrentUser() 
+    {
+        wp_logout();
+        return true;
+    }
+
+
+    function setCurrentUserDetails( $p4m_consumer ) 
+    {
+
+        // update name and email of wordpress user
+        $wp_user = wp_get_current_user();
+        $wp_user->user_email        = $p4m_consumer->Email;
+        $wp_user->first_name        = $p4m_consumer->GivenName;
+        $wp_user->last_name         = $p4m_consumer->FamilyName;
+        $wp_user->first_name        = $p4m_consumer->GivenName;
+        $wp_user->nickname          = $p4m_consumer->GivenName;
+        $wp_user->display_name      = $p4m_consumer->GivenName;
+        $wp_user->last_name         = $p4m_consumer->FamilyName;
         
-        *
-            logic here to create a new user record
-            in the shopping cart database
-        */
-        $user = new stdClass();
-        $user->first = 'First';
-        $user->last  = 'Last';
-        $user->email = 'new_person@mailinator.com';
-        $user->id    = 1234567;
+        $update_result = wp_update_user( $wp_user );
 
-        return $user;
-    }
+        // TODO: maybe update addresses and payment methods
 
-    function loginUser( $localUserId ) {
-        /*
-            logic to log the user out of the shopping cart 
-        */
-        return true;
-    }
-
-    function logoutCurrentUser() {
-        /*
-            logic to logout the current user from the shopping cart 
-        */
-        return true;
-    }
-
-    function setCurrentUserDetails( $p4m_consumer ) {
-        /* 
-            logic to copy fields from the p4m_consumer onto the current local user 
-        */
-        return true;
+        if ( is_wp_error( $update_result ) ) {
+            error_log('P4M: Unable to update current user');
+            return false;
+        } else {
+            return true;
+        }
     }
     
 
-    function getCurrentUserDetails() {
-        /* 
-            some logic goes here to fetch the 
-            details of the current user 
-        */
-        $user = new stdClass();
-        $user->first = 'First';
-        $user->last  = 'Last';
-        $user->email = 'new_person@mailinator.com';
+    function getCurrentUserDetails() 
+    {
 
-        
-        $p4m_address = new P4M\Model\Address();
-        $p4m_address->AddressType   = 'Address';
-        $p4m_address->Street1       = '21 Pine Street';
-        $p4m_address->State         = 'Qld';
-        $p4m_address->CountryCode   = 'AU';
-        $p4m_address->removeNullProperties();
+        $wp_user = wp_get_current_user();
 
-        // Convert the user from the shopping cart DB into a 
-        // P4M Consumer
+        if ( 0 == $current_user->ID ) {
+            // No logged in user 
+            return false;
+        }
+
+        // TODO : maybe get addresses from woo commerce if possible
+
         $consumer = new P4M\Model\Consumer();
-        $consumer->GivenName  = $user->first;
-        $consumer->FamilyName = $user->last;
-        $consumer->Email      = $user->email;
-        $consumer->Addresses  = array ( $p4m_address ); 
+        $consumer->GivenName  = $wp_user->first_name;
+        $consumer->FamilyName = $wp_user->last_name;
+        $consumer->Email      = $wp_user->user_email;
+
+        if ( !property_exists( $consumer, 'Extras' ) ) {
+            $consumer->Extras  = new stdClass();
+        }  
+        if ( !property_exists( $consumer->Extras, 'LocalId' ) ) {
+            $consumer->Extras->LocalId = $current_user->ID;
+        }
+
         $consumer->removeNullProperties();
 
         return $consumer;
     }
+
+
 
     function getCartOfCurrentUser() {
         /*
@@ -247,9 +277,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         
 
     function handleError($message) {
-        $error_url = 'http://' . $_SERVER['HTTP_HOST'] . '/error/' . urlencode($message);
-        header("Location: {$error_url}");
-        exit();
+        echo '<div class="error p4m-error">'.$message.'</div>';
     }
 
 

@@ -14,6 +14,9 @@
    License: MIT
    */
 
+if ( ! defined( 'ABSPATH' ) ) { 
+    exit; // Exit if accessed directly
+}
 
 class Parcel4me_Shortcodes {
  
