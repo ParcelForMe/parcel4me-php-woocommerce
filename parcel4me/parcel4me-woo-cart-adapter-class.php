@@ -65,7 +65,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
     function loginUser( $localUserId ) 
     {
-        wp_set_auth_cookie( $userid );
+        wp_set_auth_cookie( $localUserId );
         return true;
     }
 
@@ -132,7 +132,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         return $consumer;
     }
 
-
+// WIP ...
 
     function getCartOfCurrentUser() {
         /*
