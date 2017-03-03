@@ -138,7 +138,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
 
     function getCartOfCurrentUser() {
-
+            
         $woo_cart = WC()->cart;
 
         // convert Woo Cart into a P4M Cart 
@@ -149,18 +149,17 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $woo_cart_item_details = $woo_cart->get_cart();
         foreach($woo_cart_item_details as $key => $woo_item) {
 
+            //$truncated_desc = strlen($woo_item['data']->post->post_content) > 120 ? substr($woo_item['data']->post->post_content,0,90)."..." : $woo_item['data']->post->post_content; 
+
             $cartItem = new P4M\Model\CartItem();
             $cartItem->Make         = $woo_item['data']->post->post_name;
             $cartItem->Sku          = $woo_item['product_id'];
-            $cartItem->Desc         = $woo_item['data']->post->post_content;
+            $cartItem->Desc         = $woo_item['data']->post->post_title;
             $cartItem->Qty          = $woo_item['quantity'];
-            $cartItem->Price        = $woo_item['data']->price;
+            $cartItem->Price        = (double)$woo_item['data']->price;
             $cartItem->LinkToImage  = ( (has_post_thumbnail( $woo_item['data']->post->ID )) ? (wp_get_attachment_image_src( get_post_thumbnail_id( $woo_item['data']->post->ID ), 'single-post-thumbnail' )[0]) : null );
-          //  $cartItem->LinkToItem   = get_permalink( $woo_item']['data']['post']['ID'] );
-            // Tags
-            // Rating
-            // SiteReference
-            // Options
+            $cartItem->LinkToItem   = get_permalink( $woo_item['data']->post->ID );
+
             $cartItem->removeNullProperties();    
 
             $items[] = $cartItem;
@@ -175,23 +174,13 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $cart->Reference    = $generated_reference; 
         $cart->Date         = gmdate( "D, d M Y T");
         $cart->Currency     = get_woocommerce_currency();
-        $cart->ShippingAmt  = $woo_cart->get_cart_shipping_total();
-        $cart->Tax          = $woo_cart->$tax_total;
-        $cart->Total        = $woo_cart->get_total();
-
+        $cart->ShippingAmt  = $woo_cart->shipping_total;
+        $cart->Tax          = $woo_cart->tax_total;
+        $cart->Total        = $woo_cart->total;
+        $cart->PaymentType  = "DB"; // TODO : this needs more throught first before implementing
+        // $cart->Discounts    = ?? $woo_cart->$coupons ?? // TODO : coupon logic to do later
         $cart->Items        = $items;
-
-//        $cart->Discounts    = ?? $woo_cart->$coupons ??
-//        $cart->AddressId        = ??
-//        $cart->BillAddressId    = ??
-
         $cart->removeNullProperties();
-
-        /*
-        $xx = json_encode($cart);
-        var_dump($cart);
-        die();
-        */
 
         return $cart;
     }
