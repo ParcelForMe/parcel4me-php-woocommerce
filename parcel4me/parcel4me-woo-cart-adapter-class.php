@@ -171,7 +171,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $cart = new P4M\Model\Cart();
         $cart->SessionId    = $this->getCurrentSessionId();
         $cart->Reference    = $generated_reference; 
-        $cart->Date         = gmdate( "D, d M Y T");
+        $cart->Date         = gmdate( "D, d M Y T" );
         $cart->Currency     = get_woocommerce_currency();
         $cart->ShippingAmt  = $woo_cart->shipping_total;
         $cart->Tax          = $woo_cart->tax_total;
@@ -199,8 +199,6 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
     
 
-// WIP ... 
-
     function setAddressOfCurrentUser( $which_address, $p4m_address ) {
         /*
             logic here to find the address in the local DB
@@ -210,6 +208,8 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         return true;
     }
 
+
+// WIP ... 
 
     function updateShipping( $shippingServiceName, $amount, $dueDate ) {
         /*
@@ -296,10 +296,11 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
 
         public function completePurchase ( $p4m_cart, $transactionId, $transationTypeCode, $authCode ) {
-            /*
-            some logic to update the db to show that the purchase has happened and clear the cart 
-        */
 
+            $woo_cart = WC()->cart;
+            $woo_cart->empty_cart();
+
+            // WIP -- TODO -- create Order in Woo : https://docs.woocommerce.com/wc-apidocs/class-WC_Order.html ??
             return true;
         }
         
