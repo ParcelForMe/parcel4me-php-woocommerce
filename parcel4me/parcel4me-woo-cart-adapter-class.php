@@ -159,7 +159,6 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             $cartItem->Price        = (double)$woo_item['data']->price;
             $cartItem->LinkToImage  = ( (has_post_thumbnail( $woo_item['data']->post->ID )) ? (wp_get_attachment_image_src( get_post_thumbnail_id( $woo_item['data']->post->ID ), 'single-post-thumbnail' )[0]) : null );
             $cartItem->LinkToItem   = get_permalink( $woo_item['data']->post->ID );
-
             $cartItem->removeNullProperties();    
 
             $items[] = $cartItem;
@@ -186,19 +185,21 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
 
 
-
-// WIP ... 
-
-
     function setCartOfCurrentUser( $p4m_cart ) {
-        /* 
-            some logic goes here to set local shopping cart DB
-            based on the passed in p4m shopping cart object 
-        */
+
+        $woo_cart = WC()->cart;
+
+        $woo_cart->empty_cart();
+
+        foreach( $p4m_cart->Items as $p4m_item ) {
+            $woo_cart->add_to_cart( $p4m_item->Sku, $p4m_item->Qty );
+        }
 
         return true;
     }
     
+
+// WIP ... 
 
     function setAddressOfCurrentUser( $which_address, $p4m_address ) {
         /*
