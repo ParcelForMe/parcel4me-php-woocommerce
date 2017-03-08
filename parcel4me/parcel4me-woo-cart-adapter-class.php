@@ -199,6 +199,10 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
     
 
+
+// WIP ... 
+
+
     function setAddressOfCurrentUser( $which_address, $p4m_address ) {
         /*
             logic here to find the address in the local DB
@@ -208,8 +212,6 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         return true;
     }
 
-
-// WIP ... 
 
     function updateShipping( $shippingServiceName, $amount, $dueDate ) {
         /*
