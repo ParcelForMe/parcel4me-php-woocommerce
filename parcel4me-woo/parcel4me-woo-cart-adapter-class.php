@@ -199,19 +199,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
     
 
-
 // WIP ... 
-
-
-    function setAddressOfCurrentUser( $which_address, $p4m_address ) {
-        /*
-            logic here to find the address in the local DB
-            and update it, or add if not exists
-        */
-
-        return true;
-    }
-
 
     function updateShipping( $shippingServiceName, $amount, $dueDate ) {
         /*
@@ -233,9 +221,37 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $r->Tax      = 10.00;
         $r->Shipping = 20.00;
         $r->Discount = 5.00;
-        $r->Total    = 112.22;
+        $r->Total    = 1324;
 
         return $r;
+    }
+
+        public function updateCartItemQuantities( $itemsUpdateArray ) {
+            /*
+            some logic to update the quantities on the cart lines
+        */
+
+        $dis = new P4M\Model\Discount();
+        $dis->Code           = 'valid_code';
+        $dis->Description    = 'A demo valid coupon code!';
+        $dis->Amount         = 0.01;
+
+        $disArray = [ $dis ];
+
+        return $disArray;
+        }
+
+
+// WIP (after demo) ... 
+
+
+    function setAddressOfCurrentUser( $which_address, $p4m_address ) {
+        /*
+            logic here to find the address in the local DB
+            and update it, or add if not exists
+        */
+
+        return true;
     }
 
 
@@ -281,34 +297,24 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
     
 
-        public function updateCartItemQuantities( $itemsUpdateArray ) {
-            /*
-            some logic to update the quantities on the cart lines
-        */
 
-        $dis = new P4M\Model\Discount();
-        $dis->Code           = 'valid_code';
-        $dis->Description    = 'A demo valid coupon code!';
-        $dis->Amount         = 0.01;
+    public function completePurchase ( $p4m_cart, $transactionId, $transationTypeCode, $authCode ) {
 
-        $disArray = [ $dis ];
+        $woo_cart = WC()->cart;
+        $woo_cart->empty_cart();
 
-        return $disArray;
-        }
-
-
-        public function completePurchase ( $p4m_cart, $transactionId, $transationTypeCode, $authCode ) {
-
-            $woo_cart = WC()->cart;
-            $woo_cart->empty_cart();
-
-            // WIP -- TODO -- create Order in Woo : https://docs.woocommerce.com/wc-apidocs/class-WC_Order.html ??
-            return true;
-        }
+        // WIP -- TODO -- create Order in Woo : https://docs.woocommerce.com/wc-apidocs/class-WC_Order.html ??
+        return true;
+    }
         
 
     function handleError($message) {
         echo '<div class="error p4m-error">'.$message.'</div>';
+    }
+
+
+    function returnProductInformation ( $sku ) {
+        
     }
 
 
