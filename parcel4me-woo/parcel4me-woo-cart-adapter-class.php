@@ -199,47 +199,54 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
     
 
-// WIP ... 
-
     function updateShipping( $shippingServiceName, $amount, $dueDate ) {
-        /*
-            some logic goes here to set these shipping amounts and 
-            possibly recalculate the tax on the current shopping cart 
-        */
+
+        $woo_cart = WC()->cart;
+
+        $woo_cart->shipping_total = $amount;
 
         return true;
     }
 
 
     function getCartTotals() {
-        /*
-            some logic goes here to fetch these values from
-            the current shopping cart 
-        */
+
+        $woo_cart = WC()->cart;
 
         $r = new stdClass();
-        $r->Tax      = 10.00;
-        $r->Shipping = 20.00;
-        $r->Discount = 5.00;
-        $r->Total    = 1324;
+        $r->Tax      = $woo_cart->get_taxes_total( false, false );
+        $r->Shipping = $woo_cart->shipping_total;
+        $r->Discount = $woo_cart->get_cart_discount_total();
+        $r->Total    = $woo_cart->cart_contents_total;
 
         return $r;
     }
 
-        public function updateCartItemQuantities( $itemsUpdateArray ) {
-            /*
-            some logic to update the quantities on the cart lines
-        */
 
+    public function updateCartItemQuantities( $itemsUpdateArray ) {
+
+        $woo_cart = WC()->cart;
+        $refresh_totals = true;
+
+        foreach( $itemsUpdateArray as $item_update ) {
+            $woo_cart->set_quantity( $item_update['ItemCode'], $item_update['Qty'], $refresh_totals );
+        }
+
+
+        // TODO : get the discounts attached to the cart and return them
+        /*
         $dis = new P4M\Model\Discount();
         $dis->Code           = 'valid_code';
         $dis->Description    = 'A demo valid coupon code!';
         $dis->Amount         = 0.01;
 
         $disArray = [ $dis ];
+        */
+        $disArray = [];
 
         return $disArray;
-        }
+    }
+
 
 
 // WIP (after demo) ... 
