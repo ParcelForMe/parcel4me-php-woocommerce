@@ -23,7 +23,7 @@ class Parcel4me_Shortcodes {
   public function __construct() {
 
     function base_uri() {
-      return plugins_url() . '/parcel4me/lib/';
+      return plugins_url() . '/parcel4me-woo/lib/';
     }
 
 
