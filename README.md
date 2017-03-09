@@ -14,4 +14,7 @@ See [the readme.txt](parcel4me/readme.txt) for more details about this plugin.
 **Note:** For auto-plugin-install *while developing* use : 
 `fsmonitor -s -p -d parcel4me-woo cp -r parcel4me-woo/* ../wordpress/wp-content/plugins/parcel4me-woo/`
 
+**Note 2:** To make an uploadable Wordpress plugin simply zip the *contents* of the `parcel4me-woo` folder and call it `parcelforme-woo.zip`.
+
+
 ------
