@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "85f1f64981e271489977ff04320aed2e",
+    "content-hash": "492bbf7fccd34659fb15006fdd8e8ebf",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -51,22 +51,22 @@
         },
         {
             "name": "krisrandall/openid-connect-with-client-credentials-php",
-            "version": "0.3.0",
+            "version": "0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/krisrandall/OpenID-Connect-PHP.git",
-                "reference": "d3f6dcddb609a54e569b11f695f25dd0cc8a38cd"
+                "reference": "791a729e0ad9eec340ad42f8af63d0c432a8b488"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/krisrandall/OpenID-Connect-PHP/zipball/d3f6dcddb609a54e569b11f695f25dd0cc8a38cd",
-                "reference": "d3f6dcddb609a54e569b11f695f25dd0cc8a38cd",
+                "url": "https://api.github.com/repos/krisrandall/OpenID-Connect-PHP/zipball/791a729e0ad9eec340ad42f8af63d0c432a8b488",
+                "reference": "791a729e0ad9eec340ad42f8af63d0c432a8b488",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "php": ">=5.2",
+                "php": ">=5.4",
                 "phpseclib/phpseclib": "2.0.1"
             },
             "type": "library",
@@ -77,25 +77,25 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Bare-bones OpenID Connect client",
-            "time": "2017-01-09T23:50:39+00:00"
+            "time": "2017-03-10T04:27:01+00:00"
         },
         {
             "name": "parcel4me/parcel4me",
-            "version": "v0.0.8",
+            "version": "v0.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ParcelForMe/parcel4me-php.git",
-                "reference": "5971312844d5608c9c9818af9ac380cd4ac0e234"
+                "reference": "3dd23f0d26ad5bd92fb83fd2e1aae0171b9225e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ParcelForMe/parcel4me-php/zipball/5971312844d5608c9c9818af9ac380cd4ac0e234",
-                "reference": "5971312844d5608c9c9818af9ac380cd4ac0e234",
+                "url": "https://api.github.com/repos/ParcelForMe/parcel4me-php/zipball/3dd23f0d26ad5bd92fb83fd2e1aae0171b9225e2",
+                "reference": "3dd23f0d26ad5bd92fb83fd2e1aae0171b9225e2",
                 "shasum": ""
             },
             "require": {
                 "firebase/php-jwt": "^4.0",
-                "krisrandall/openid-connect-with-client-credentials-php": "^0.3.0"
+                "krisrandall/openid-connect-with-client-credentials-php": "^0.3.1"
             },
             "type": "library",
             "autoload": {
@@ -114,7 +114,7 @@
                 }
             ],
             "description": "A one-click checkout and delivery package for PHP shopping carts",
-            "time": "2017-03-03T01:38:10+00:00"
+            "time": "2017-03-10T04:37:11+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
