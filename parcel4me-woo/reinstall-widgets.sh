@@ -17,6 +17,8 @@ cd lib
 git clone https://github.com/ParcelForMe/p4m-widgets/
 cd p4m-widgets
 
+git checkout --track origin/merge-new-design
+
 bower install 
 mv bower_components/* ..
 rmdir bower_components
