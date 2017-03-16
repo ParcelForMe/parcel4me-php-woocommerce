@@ -92,7 +92,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         
         $update_result = wp_update_user( $wp_user );
 
-        // TODO: maybe update addresses and payment methods
+        // TODO: NOT IMPORTANT : maybe update addresses and payment methods
 
         if ( is_wp_error( $update_result ) ) {
             error_log('P4M: Unable to update current user');
@@ -113,7 +113,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             return false;
         }
 
-        // TODO : maybe get addresses from woo commerce if possible
+        // TODO : IMPORTANT ! maybe get addresses from woo commerce if possible
 
         $consumer = new P4M\Model\Consumer();
         $consumer->GivenName  = $wp_user->first_name;
@@ -176,7 +176,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $cart->ShippingAmt  = $woo_cart->shipping_total;
         $cart->Tax          = $woo_cart->tax_total;
         $cart->Total        = $woo_cart->total;
-        $cart->PaymentType  = "DB"; // TODO : this needs more throught first before implementing
+        $cart->PaymentType  = "DB"; // TODO : NOT YET READY : this needs more throught first before implementing
         // $cart->Discounts    = ?? $woo_cart->$coupons ?? // TODO : coupon logic to do later
         $cart->Items        = $items;
         $cart->removeNullProperties();
@@ -253,6 +253,9 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
 
     function setAddressOfCurrentUser( $which_address, $p4m_address ) {
+
+        // TO DO : IMPORTANT because this is how the retailer knows where to send it !
+
         /*
             logic here to find the address in the local DB
             and update it, or add if not exists
@@ -311,6 +314,8 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $woo_cart->empty_cart();
 
         // WIP -- TODO -- create Order in Woo : https://docs.woocommerce.com/wc-apidocs/class-WC_Order.html ??
+        // TODO : IMPORTANT : can ask Matt about the workflow here (with Michael at the same time)
+
         return true;
     }
         
@@ -322,6 +327,15 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
     function returnProductInformation ( $sku ) {
         
+        // TODO : IMPORTANT : ALSO THIS IS A NEW ENDPOINT AND NEEDS TO BE IMPLMENTED ALL THE WAY DOWN .. \
+
+        /*
+         
+         . validate the access token 
+         . lookup the product in the retailer DB 
+         . return as much info as possible based on upcoming p4m product model 
+
+        */
     }
 
 
