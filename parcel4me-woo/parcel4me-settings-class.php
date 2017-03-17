@@ -51,7 +51,7 @@ class Parcel4me_Settings {
         add_settings_field(
           'p4m_field_p4moauth_secret',
           __( 'Client Secret', 'p4m' ),
-          'text_input_field_cb',
+          'test_p4moauth_field_cb',
           'p4m',
           'p4m_section_p4moauth',
           [
@@ -84,7 +84,7 @@ class Parcel4me_Settings {
         add_settings_field(
           'p4m_field_gfsoauth_secret',
           __( 'Client Secret', 'p4m' ),
-          'text_input_field_cb',
+          'test_gfsoauth_field_cb',
           'p4m',
           'p4m_section_gfsoauth',
           [
@@ -157,7 +157,22 @@ class Parcel4me_Settings {
       * register our p4m_settings_init to the admin_init action hook
       */
       add_action( 'admin_init', 'p4m_settings_init' );
-      
+
+
+
+
+      /** 
+      * handle ajax callbacks for testing OIDC connections 
+      */
+      add_action( 'wp_ajax_test_oauth', 'test_oauth' );
+
+      function test_oauth() {
+        $res = $GLOBALS['parcel4me_woo']->p4m_shopping_cart_adapter->testOidcConnection( $_POST['which'], $_POST['client_id'], $_POST['client_secret'] );
+        echo $res; 
+        wp_die(); // this is required to terminate immediately and return a proper response
+      }
+
+
 
       /**
       * custom option and settings:
@@ -227,6 +242,121 @@ class Parcel4me_Settings {
           type="text" 
           value="<?php echo $options[ $args['label_for'] ] ?>" 
         />
+        <?php
+      }
+
+
+
+      function test_p4moauth_field_cb( $args ) {
+        text_input_field_cb( $args );
+        ?>
+        <script type="text/javascript" >
+          jQuery(document).ready(function($) {
+
+            // JS Logic for the P4M OAuth
+            jQuery('#test_p4moauth_field_cb_link').click(function() { 
+
+              var data = {
+                'action': 'test_oauth',
+                'which': 'p4m',
+                'client_id': jQuery('[name="p4m_options[p4m_field_p4moauth_id]"]').val(),
+                'client_secret': jQuery('[name="p4m_options[p4m_field_p4moauth_secret]"]').val()
+              };
+
+              // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+              jQuery('#test_p4moauth_field_cb_result').html('checking ...');
+              jQuery('#test_p4moauth_field_cb_result').css( {'color':'blue'} );
+
+              jQuery.post(ajaxurl, data, function(response) {
+                jQuery('#test_p4moauth_field_cb_result').html(response);
+                if ('success'==response) {
+                  jQuery('#test_p4moauth_field_cb_result').css( {'color':'green'} );
+                } else {
+                  jQuery('#test_p4moauth_field_cb_result').css( {'color':'red'} );
+                }
+              });
+
+            });
+
+            function show_or_hide_test_p4moauth_field_cb_link() {
+              if ( (jQuery('[name="p4m_options[p4m_field_p4moauth_id]"]').val()>'') && 
+                   (jQuery('[name="p4m_options[p4m_field_p4moauth_secret]"]').val()>'') ) 
+              {
+                jQuery('#test_p4moauth_field_cb_link').show();
+              } else {
+                jQuery('#test_p4moauth_field_cb_link').hide();
+              }
+              jQuery('#test_p4moauth_field_cb_result').html('');
+            }
+
+            jQuery('[name="p4m_options[p4m_field_p4moauth_id]"]').keyup( show_or_hide_test_p4moauth_field_cb_link );
+            jQuery('[name="p4m_options[p4m_field_p4moauth_secret]"]').keyup( show_or_hide_test_p4moauth_field_cb_link );
+
+          });
+        </script>
+        
+        <span class="widget-control-actions">
+          &nbsp;&nbsp;
+          <a href="#" id="test_p4moauth_field_cb_link">Test</a>
+          <span id="test_p4moauth_field_cb_result"></span> 
+        </span>
+        <?php
+      }
+
+
+      function test_gfsoauth_field_cb( $args ) {
+        text_input_field_cb( $args );
+        ?>
+        <script type="text/javascript" >
+          jQuery(document).ready(function($) {
+
+            // JS Logic for the GFS OAuth
+            jQuery('#test_gfsoauth_field_cb_link').click(function() { 
+
+              var data = {
+                'action': 'test_oauth',
+                'which': 'gfs',
+                'client_id': jQuery('[name="p4m_options[p4m_field_gfsoauth_id]"]').val(),
+                'client_secret': jQuery('[name="p4m_options[p4m_field_gfsoauth_secret]"]').val()
+              };
+
+              // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+              jQuery('#test_gfsoauth_field_cb_result').html('checking ...');
+              jQuery('#test_gfsoauth_field_cb_result').css( {'color':'blue'} );
+
+              jQuery.post(ajaxurl, data, function(response) {
+                jQuery('#test_gfsoauth_field_cb_result').html(response);
+                if ('success'==response) {
+                  jQuery('#test_gfsoauth_field_cb_result').css( {'color':'green'} );
+                } else {
+                  jQuery('#test_gfsoauth_field_cb_result').css( {'color':'red'} );
+                }
+              });
+
+            });
+
+            function show_or_hide_test_gfsoauth_field_cb_link() {
+              if ( (jQuery('[name="p4m_options[p4m_field_gfsoauth_id]"]').val()>'') && 
+                   (jQuery('[name="p4m_options[p4m_field_gfsoauth_secret]"]').val()>'') ) 
+              {
+                jQuery('#test_gfsoauth_field_cb_link').show();
+              } else {
+                jQuery('#test_gfsoauth_field_cb_link').hide();
+              }
+              jQuery('#test_gfsoauth_field_cb_result').html('');
+            }
+
+            jQuery('[name="p4m_options[p4m_field_gfsoauth_id]"]').keyup( show_or_hide_test_gfsoauth_field_cb_link );
+            jQuery('[name="p4m_options[p4m_field_gfsoauth_secret]"]').keyup( show_or_hide_test_gfsoauth_field_cb_link );
+
+          });
+        </script>
+        
+        <span class="widget-control-actions">
+          &nbsp;&nbsp;
+          <a href="#" id="test_gfsoauth_field_cb_link">Test</a>
+          <span id="test_gfsoauth_field_cb_result"></span> 
+        </span>
         <?php
       }
 

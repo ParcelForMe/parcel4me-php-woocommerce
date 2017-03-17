@@ -40,7 +40,8 @@ class Parcel4me_Woo {
     if ( is_ssl() ) { }
 
   }
- 
+
+
 
  
   /**
@@ -62,8 +63,7 @@ class Parcel4me_Woo {
     wp_enqueue_style( 'p4m_settings_stylesheet', 
                       plugins_url( 'assets/peli-settings-style.css', __FILE__ )
     );
-
-
+  
     // Set the config
     $options = get_option( 'p4m_options' );
     $parcel4me_shop_config = array(
