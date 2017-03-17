@@ -59,6 +59,10 @@ class Parcel4me_Woo {
       register_widget( 'Parcel4me_Widget_Signup' );
     });
 
+    wp_enqueue_style( 'p4m_settings_stylesheet', 
+                      plugins_url( 'assets/peli-settings-style.css', __FILE__ )
+    );
+
 
     // Set the config
     $options = get_option( 'p4m_options' );

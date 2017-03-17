@@ -280,7 +280,8 @@ class Parcel4me_Settings {
           'P4M Settings',
           'manage_options',
           'p4m',
-          'p4m_options_page_html'
+          'p4m_options_page_html',
+          plugins_url( 'assets/peli-small.png', __FILE__ )
         );
       }
       
@@ -312,6 +313,7 @@ class Parcel4me_Settings {
         // show error/update messages
         settings_errors( 'p4m_messages' );
         ?>
+
         <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
