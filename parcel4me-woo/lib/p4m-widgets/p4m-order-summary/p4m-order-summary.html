@@ -1,0 +1,196 @@
+﻿<link rel="import" href="../p4m-card/p4m-card.html" />
+<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../p4m-spinner/p4m-spinner.html" />
+
+
+<dom-module id="p4m-order-summary">
+
+    <template>
+        <div id="p4mContainer" class$="{{_topClass}}">
+            <h4>Order Summary</h4>
+            <div class="p4m-table vertical layout">
+                <div class="p4m-row horizontal layout">
+                    <div class="p4m-cell detail-col flex-2 self-start">{{_cartItemCount}} {{_collectiveNoun}}: {{_cartDescription}}</div>
+                    <div class="p4m-cell cost-col flex-1 layout end-justified self-start">{{currencySymbol}}{{_cartItemsTotalPriceString}}</div>
+                </div>
+                <div class="p4m-row horizontal layout">
+                    <div class="p4m-cell detail-col flex-2 self-center">Delivery via {{cartData.ServiceName}}</div>
+                    <div class="p4m-cell cost-col flex-1 layout end-justified self-center">{{currencySymbol}}{{_shipping}}</div>
+                </div>
+                <div class="p4m-row horizontal layout">
+                    <div class="p4m-cell detail-col flex-2 self-center">Tax</div>
+                    <div class="p4m-cell cost-col flex-1 layout end-justified self-center">{{currencySymbol}}{{_tax}}</div>
+                </div>
+                <div class="p4m-row horizontal layout" id="coupon">
+                    <div class="p4m-cell detail-col flex-1 self-center">Coupon</div>
+                    <div class="p4m-cell cost-col flex-2 layout end-justified self-center"><p4m-discount-input on-discount="onDiscount"></p4m-discount-input>
+                    </div>
+                </div>
+                <div class="p4m-row horizontal layout" id="discount">
+                    <div class="p4m-cell detail-col flex-2 self-center">Discount</div>
+                    <div class="p4m-cell cost-col flex-1 layout end-justified self-center">&ndash;&nbsp;{{currencySymbol}}{{_discount}}</div>
+                </div>
+                <div class="p4m-row horizontal layout total">
+                    <div class="p4m-cell detail-col flex-2 self-center">Total</div>
+                    <div class="p4m-cell cost-col flex-1 layout end-justified self-center">{{currencySymbol}}{{_total}}</div>
+                </div>
+            </div>
+            <p4m-spinner id="spinner" species="shuffler"></p4m-spinner>
+
+        </div>
+    </template>
+
+    <style>
+        .loading div {
+            color:#D0D0D0!important;
+        }
+    </style>
+
+    <script>
+    //
+        Polymer({
+            is: "p4m-order-summary",
+
+            properties: {
+                cartData: {
+                    type: Object,
+                    notify: true,
+                    observer: "onCartDataModified"
+                },
+                currencySymbol: {
+                    type: String,
+                    value: '£'
+                },
+                useSpinner: {
+                    type: Object,
+                    value: false
+                },
+                _cartItemCount: {
+                    type: Number,
+                    notify: true,
+                    value: 0
+                },
+                _cartItemsTotalPrice: {
+                    type: Number,
+                    notify: true
+                },
+                _cartItemsTotalPriceString: {
+                    type: String
+                },
+                _cartDescription: {
+                    type: Number,
+                    notify: true,
+                    value: ''
+                },
+                _tax: {
+                    type: String
+                },
+                _discount: {
+                    type: Number,
+                    value: 0
+                },
+                _topClass: {
+                    type: String,
+                    value: ""
+                }
+            },
+            observers: [
+                "onCartDataModified(cartData.Items.*)",
+                "onCartDataModified(cartData.Discounts)"
+
+
+            ],
+            ready: function()
+            {
+                this.update.bind(this)();
+            },
+
+            update: function () {
+                if (this.cartData) {
+                    this._updateItemCount();
+                    this._updateCartDescription();
+                    this._updateDiscount();
+                    this._updateCurrencyAmounts();
+                    this._updateTemplate();                   
+                }               
+            },
+
+            hasDiscount: function () {
+                 return true;
+                //debugger;
+                //return (this.cartData && this.cartData.Discounts.length);
+            },
+
+            _updateItemCount: function() {
+                this._cartItemCount = 0;
+                this._cartItemsTotalPrice = 0;
+                var self = this;
+                this.cartData.Items.forEach(function (item) {
+                    self._cartItemCount += Number(item.Qty);
+                    self._cartItemsTotalPrice += Number(item.Qty) * Number(item.Price);
+                });
+                self._cartItemsTotalPriceString = self._cartItemsTotalPrice.toFixed(2);
+                self._collectiveNoun = this._cartItemCount > 1 ? "items" : "item";
+            },
+
+            _updateCartDescription: function() {
+                this._cartDescription = null;
+                var self = this;
+                this.cartData.Items.forEach(function (item) {
+                    if (self._cartDescription) {
+                        self._cartDescription += ", ";
+                    }
+                    else self._cartDescription = "";
+                    self.set('_cartDescription', self._cartDescription + item.Desc);
+                });
+            },
+
+            _updateDiscount: function () {
+                if (this.cartData.Discounts) {
+                    this.set('_discount', this.cartData.Discounts.reduce(((total, item) => total + item.Amount), 0));
+                    this.set('_discountDescription', this.cartData.Discounts.length ? this.cartData.Discounts[0].Description : "None");
+                }
+
+            },
+
+            _updateCurrencyAmounts: function () {
+                this.set('_tax', this.cartData.Tax.toFixed(2));
+                this.set('_discount', Number(this._discount||0).toFixed(2));
+                this.set('_shipping', Number(this.cartData.ShippingAmt).toFixed(2));
+                this.set('_total',  Number(this.cartData.Total).toFixed(2));
+                
+            },
+
+            _updateTemplate: function() {
+               // this.$.discountTemplate.render();
+            },
+
+            onCartDataModified: function (e) {
+                this.update();
+            },
+         
+            showAsLoaded: function () {
+                this.set('_topClass', "");
+                if (this.useSpinner) {
+                    this.$.spinner.active = false;
+                    this.$.spinner.classList.add('hidden');
+                    this.$.p4mContainer.classList.remove('loading');
+                }
+
+
+            },
+
+            showAsLoading: function () {
+                this.set('_topClass', "loading");
+                if (this.useSpinner) {
+                    this.$.spinner.active = true;
+                    this.$.spinner.classList.remove('hidden');
+                    this.$.p4mContainer.classList.add('loading');
+                }
+
+
+            }
+
+        });
+    </script>
+</dom-module>

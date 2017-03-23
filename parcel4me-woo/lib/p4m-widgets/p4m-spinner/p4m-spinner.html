@@ -1,0 +1,175 @@
+<link rel="import" href="../../polymer/polymer.html" />
+<link rel="import" href="../../paper-progress/paper-progress.html" />
+
+<dom-module id="p4m-spinner">
+
+    <template>
+        <div id="container">
+            <template is="dom-if" if="{{_ellipsis}}">
+                <div class="ellipsis spinner">
+                  <div class="bounce1"></div>
+                  <div class="bounce2"></div>
+                  <div class="bounce3"></div>
+                </div>
+            </template>
+            <template is="dom-if" if="{{_shuffler}}">
+                <div class="shuffler spinner"></div>
+            </template>
+            <template is="dom-if" if="{{_progress}}">
+                <paper-progress indeterminate class="slow"></paper-progress>
+            </template>
+        </div>
+    </template>
+
+    <style>
+        /* ---- Ellipsis */
+        .spinner.ellipsis {
+          width: 70px;
+          text-align: center;
+          margin-top:6px;
+        }
+
+        .spinner.ellipsis > div {
+          width: 9px;
+          height: 9px;
+          background-color: white;
+
+          border-radius: 100%;
+          display: inline-block;
+          -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+          animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        }
+
+        .spinner.ellipsis .bounce1 {
+          -webkit-animation-delay: -0.32s;
+          animation-delay: -0.32s;
+        }
+
+        .spinner.ellipsis .bounce2 {
+          -webkit-animation-delay: -0.16s;
+          animation-delay: -0.16s;
+        }
+
+        /* ---- Shuffler */
+        .spinner.shuffler {
+          width: 40px;
+          height: 40px;
+          background-color: rgba(68, 144, 68, 1.0);
+
+          margin: 100px auto;
+          -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+          animation: sk-rotateplane 1.2s infinite ease-in-out;
+        }
+
+        /* ---- General effects */
+
+        @-webkit-keyframes sk-rotateplane {
+          0% { -webkit-transform: perspective(120px) }
+          50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+          100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+        }
+
+        @keyframes sk-rotateplane {
+          0% { 
+            transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+            -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
+          } 50% { 
+            transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+            -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
+          } 100% { 
+            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+            -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+          }
+        }
+
+        @-webkit-keyframes sk-bouncedelay {
+          0%, 80%, 100% { -webkit-transform: scale(0) }
+          40% { -webkit-transform: scale(1.0) }
+        }
+
+        @keyframes sk-bouncedelay {
+          0%, 80%, 100% { 
+            -webkit-transform: scale(0);
+            transform: scale(0);
+          } 40% { 
+            -webkit-transform: scale(1.0);
+            transform: scale(1.0);
+          }
+        }
+
+
+        /* ---- Progress */
+
+        p4m-spinner[species="progress"] {
+          position: absolute;
+          bottom: 0;
+        }
+        p4m-spinner[species="progress"] #container {
+          padding-bottom: 0;
+        }
+        p4m-spinner[species="progress"] #container #progressContainer {
+          background: rgba(255,255,255,0.25);
+        }
+        p4m-spinner[species="progress"] #container #progressContainer #secondaryProgress {
+          background: transparent;
+        }
+        p4m-spinner[species="progress"] #container #progressContainer #primaryProgress {
+            background: #37a553;
+        }
+
+
+    </style>
+
+    <script>
+    //
+        Polymer({
+            is: "p4m-spinner",
+
+            properties: {
+                species: {
+                    type: String,
+                    value: "ellipsis",
+                    observer: "changeSpecies"
+                },
+                active: {
+                    type: Object,
+                    value: false,
+                    observer: "renderMe"
+                },
+                _ellipsis: {
+                    type: Object,
+                    value: false
+                },
+                _shuffler: {
+                    type: Object,
+                    value: false
+                },
+                _progress: {
+                    type: Object,
+                    value: false
+                }
+            },
+
+            ready: function()
+            {
+                this.changeSpecies();
+                this.renderMe();               
+            },
+
+            changeSpecies: function() {
+                this._ellipsis = (this.species.toLowerCase() == "ellipsis");
+                this._shuffler = (this.species.toLowerCase() == "shuffler");
+                this._progress = (this.species.toLowerCase() == "progress");
+            },
+
+            renderMe: function() {
+                if (this.active) {
+                   this.$.container.classList.remove('hidden');                  
+                }
+                else {
+                  this.$.container.classList.add('hidden');  
+                }
+            }
+        });
+    </script>
+</dom-module>

@@ -1,0 +1,46 @@
+{
+    "Success": true,
+    "Error": null,
+    "Cart" : {
+        "SessionId"	    : "SessionA1",
+        "Reference"	    : "ORD01",
+        "Currency"	    : "GBP",    
+        "Tax"             : 10.00,
+        "Total"           : 100.00,
+        "PaymentType"       : "DB",
+        "Items"	        : [
+            {
+                "LineId"          : 1,
+                "Make"            : "Classic",
+                "Sku"             : "0123",
+                "Desc"            : "Short (Opposite of Tall)",
+                "Qty"             : 1.0,
+                "Price"           : 40.0,
+                "LinkToImage"     : "http://fillmurray.com/128/128",
+                "LinkToItem"      : "http://www.123rf.com/photo_22299342_vector-illustration-of-denim-shorts-front-and-back-views.html",
+                "Tags"            : "short,shorts",
+                "SiteReference"   : "la la"
+            },
+            {
+                "LineId"          : 2,
+                "Make"            : "Sunny",
+                "Sku"             : "0123",
+                "Desc"            : "Light (Opposite of Dark)",
+                "Qty"             : 1.0,
+                "Price"           : 30.0,
+                "LinkToImage"     : "http://fillmurray.com/128/128",
+                "LinkToItem"      : "http://weknowyourdreams.com/light.html",
+                "Tags"            : "sun,shadow",
+                "SiteReference"   : "la de dah"
+            }
+        ],
+        "Discounts"	    : [
+            {
+                "CartId"          : "00000001",
+                "Code"            : "AAA",
+                "Description"     : "Valid Discount Code",
+                "Amount"          : 5.00
+            }
+        ]
+    }
+}

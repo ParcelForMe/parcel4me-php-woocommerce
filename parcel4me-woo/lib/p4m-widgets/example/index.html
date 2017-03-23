@@ -1,0 +1,39 @@
+<html>
+
+    <head>
+        <title>P4M Stub</title>
+
+        <script src="/lib/webcomponentsjs/webcomponents.min.js"></script>
+
+        <link rel="import" href="/lib/p4m-widgets/p4m-login/p4m-login.html" />
+        <link rel="import" href="/lib/p4m-widgets/p4m-register/p4m-register.html">
+        <link rel="import" href="/lib/p4m-widgets/p4m-checkout/p4m-checkout.html">
+
+    </head>
+
+    <body>
+    
+        <div style="padding:20px; background:#eeeeee;">
+            
+            <h1>Adrian's Antique Antonyms (Simple Shop)</h1>
+            <h1>P4M Widget Demo</h1>
+
+            <small>Use "AAA" discount code for a $5 discount (any other code is invalid)</small>
+
+            <br/><h2>p4m-register</h2>
+            <p4m-register></p4m-register>
+
+            <br/><h2>p4m-login</h2>
+            <p4m-login id-srv-url="https://dev.parcelfor.me:44333" 
+                        client-id="10006" 
+                        redirect-url="http://localhost:8080/p4m/getP4MAccessToken" 
+                        logout-form="logoutForm">
+            </p4m-login>
+
+            <br/><h2>p4m-checkout : <a href="/p4m/checkout">GO TO CHECKOUT</a></h2>
+
+        </div>
+
+    </body>
+
+</html>

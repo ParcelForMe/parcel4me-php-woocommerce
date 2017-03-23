@@ -1,0 +1,172 @@
+<link rel="import" href="../../polymer/polymer.html" />
+<link rel="stylesheet" href="../p4m-shared/p4m.css" />
+
+<dom-module id="p4m-purchase-btn">
+
+    <template>
+        <div id="p4mPurchaseBtnContainer" class$="{{_topClass}}">     
+            <button on-click="onClick" class$="button-container {{_btnClass}} payWith_{{_paymentType}}">{{buttonText}}</button>         
+        </div>
+    </template>
+
+    <script>
+        var States = {
+            CVV_NEEDED: 0,
+            NOT_PURCHASED: 1,
+            PURCHASING: 2,
+            FAILED_PURCHASE: 3,
+            PURCHASED: 4
+        }
+    //
+        Polymer({
+            is: "p4m-purchase-btn",
+
+            properties: {
+
+                btnMsgNotPurchased: {
+                    type: String,
+                    value: "Buy now"
+                },
+                btnMsgNeedCvv: {
+                    type: String,
+                    value: "Enter CVV"
+                },
+                btnMsgBuying: {
+                    type: String,
+                    value: "Please wait"
+                },
+                btnMsgComplete: {
+                    type: String,
+                    value: "Complete"
+                },
+                btnMsgNotValid: {
+                    type: String,
+                    value: "Cart empty"
+                },
+                btnMsgFailed: {
+                    type: String,
+                    value: "Try again"
+                },
+                msgFailedPayment: {
+                    type: String,
+                    value: "Something went wrong. Please try again."
+                },
+                _state: {
+                    type: String,
+                    notify: true
+                },
+                _paymentType: {
+                    type: String,
+                    notify: true
+                }
+ 
+            },
+
+            observers: [
+                "onStateChange(_state)"
+            ],
+
+            ready: function ()
+            {
+                window.addEventListener('p4mPaymentState', this.onPaymentStateEvent.bind(this), false);
+                window.addEventListener('p4mPaymentType', this.onPaymentTypeEvent.bind(this), false);
+                
+                this.load();
+            },
+
+            onClick: function() {
+                this.fire('buy', {paymentType: this._paymentType});
+            },
+
+
+            onPaymentStateEvent: function(e) {
+                this.set('_state', e.detail);
+
+            },
+
+            onPaymentTypeEvent: function(e) {
+                this.set('_paymentType', e.detail);
+            },
+
+            onStateChange: function () {
+                this.updateUi();
+            },
+
+
+            load: function () {
+                //Check to see if the user is logged 
+                this._state = States.CVV_NEEDED;                    
+            },
+
+            updateUi: function () {
+                
+                if (this._state == States.CVV_NEEDED) {
+                    this.showAsCvvRequired();
+                }
+                else if (this._state == States.NOT_PURCHASED) {
+                    this.showAsNotPurchased();
+                }
+                else if (this._state == States.PURCHASING) {
+                    this.showAsBuying();
+                }
+                else if (this._state == States.PURCHASED) {
+                    this.showAsCompleted();                  
+                }
+                else if (this._state == States.FAILED_PURCHASE) {
+                    this.showAsFailed();
+                }
+            },
+
+
+            setLoadingState: function(loading) {
+                if (loading) {                 
+                    this._topClass = "loading";
+                }
+                else {
+                    this._topClass = "active";
+                }
+            },
+
+            showAsNotPurchased: function() {
+                this.buttonText = this.btnMsgNotPurchased;
+                this.setLoadingState(false);
+
+            },
+
+            showAsNotValid: function () {
+                this.buttonText = this.btnMsgNotValid; //"Cart empty";
+                this.setLoadingState(false);
+                this.set('_topClass', 'invalid');
+            },
+
+            showAsCvvRequired: function() {
+                this.buttonText = this.btnMsgNotPurchased; //"Enter CVV";
+                this.setLoadingState(false);
+                this.set('_topClass', 'invalid missing-cvv');
+            },
+
+            showAsBuying: function () {
+                this.buttonText = this.btnMsgBuying;//"Please wait...";
+                this.setLoadingState(true);
+                this.set('_topClass', "buying");
+            },
+
+            showAsCompleted: function () {
+                this.buttonText = this.btnMsgComplete; //"Purchase complete";
+                this.setLoadingState(false);
+                this.set('_topClass', "complete");
+            },
+
+            showAsFailed: function () {
+                this.buttonText = this.btnMsgFailed;
+                this.setLoadingState(false);
+                this.set('_topClass', "failed");
+            },
+
+            requestPaymentMethod: function () {
+                //This tells p4m-checkout (or other provider) to ask the user for a payment method, e.g by switching to the payment method tab
+                this.fire('request-payment-method');
+            }
+        });
+    </script>
+</dom-module>
