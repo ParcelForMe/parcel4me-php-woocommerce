@@ -1,0 +1,20 @@
+{
+    "name": "parcel4me/parcel4me",
+    "description": "A one-click checkout and delivery package for PHP shopping carts",
+    "require": {
+        "firebase/php-jwt": "^4.0",
+        "krisrandall/openid-connect-with-client-credentials-php": "^0.3.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "krisrandall",
+            "email": "kris@cocreations.com.au"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "P4M": "src/parcel4me"
+        }
+    }
+}
