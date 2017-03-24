@@ -27,6 +27,7 @@ class P4M_Shop_Urls
         // Parcel 4 Me API endpoints
 
         $p4m_api_server = Settings::getPublic('Server:P4M_API_SERVER');
+        $endPoints['alreadyRegistered']         = $p4m_api_server . '/alreadyRegistered';
         $endPoints['registerConsumer']          = $p4m_api_server . '/registerConsumer';
         $endPoints['consumer']                  = $p4m_api_server . '/consumer';
         $endPoints['consumerExtras']            = $p4m_api_server . '/consumerExtras';

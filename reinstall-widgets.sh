@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd parcel4me-woo
+
 echo
 echo "About to remove the current version of the P4M widgets ..."
 echo "Press any key to proceed"
