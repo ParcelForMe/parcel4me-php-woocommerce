@@ -203,6 +203,8 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         $woo_cart = WC()->cart;
 
+        // TODO : fix this -- it doesn't work -- woo requires that we create an actual shipping method and set that on the cart
+
         $woo_cart->shipping_total = $amount;
 
         return true;
@@ -248,28 +250,13 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
 
 
-
-// WIP (after demo) ... 
-
-
-    function setAddressOfCurrentUser( $which_address, $p4m_address ) {
-
-        // TO DO : IMPORTANT because this is how the retailer knows where to send it !
-
-        /*
-            logic here to find the address in the local DB
-            and update it, or add if not exists
-        */
-
-        return true;
-    }
-
-
     function updateWithDiscountCode( $discountCode ) {
         /* 
             some logic goes here to check if this discount code is valid,
             if not throw an error, if so then apply it to the cart and return the discount details 
         */
+
+        // TODO !
 
         $dis = new P4M\Model\Discount();
 
@@ -292,6 +279,8 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             throw error if it is not on there
         */
 
+        // TODO !
+
         $dis = new P4M\Model\Discount();
 
         if ($discountCode != 'valid_code') // special discount code "valid_code" works, else fails
@@ -307,14 +296,102 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
     
 
+    public function completePurchase ( $purchase_data ) {
+        
+        $p4m_cart           = $purchase_data->Cart; 
+        $transactionId      = $purchase_data->Id;
+        $transationTypeCode = $purchase_data->TransactionTypeCode; 
+        $authCode           = $purchase_data->AuthCode;
 
-    public function completePurchase ( $p4m_cart, $transactionId, $transationTypeCode, $authCode ) {
+        $wp_user = wp_get_current_user();
 
-        $woo_cart = WC()->cart;
-        $woo_cart->empty_cart();
+        $cart = WC()->cart;
+
+        if ( $cart->is_empty() ) {
+            throw new Exception( sprintf( __( 'Sorry, your session has expired. <a href="%s" class="wc-backward">Return to shop</a>', 'woocommerce' ), esc_url( wc_get_page_permalink( 'shop' ) ) ) );
+        }
+
+        // Prevent timeout
+        @set_time_limit(0);
+        
+        $checkout = WC()->checkout();
+
+        $order_id = $checkout->create_order();
+        $order = wc_get_order( $order_id );
+        update_post_meta($order_id, '_customer_user', get_current_user_id()); // set user on the order
+
+        if (property_exists($purchase_data, 'DeliverTo') && $purchase_data->DeliverTo) {
+            $p4m_ad = $purchase_data->DeliverTo;
+            $address = array(
+                'first_name' => $wp_user->first_name,
+                'last_name'  => $wp_user->last_name,
+                'company'    => $p4m_ad->CompanyName,
+                'email'      => $wp_user->email,
+                'phone'      => $p4m_ad->Phone,
+                'address_1'  => $p4m_ad->Street1,
+                'address_2'  => $p4m_ad->Street2, 
+                'city'       => $p4m_ad->City,
+                'state'      => $p4m_ad->State,
+                'postcode'   => $p4m_ad->PostCode,
+                'country'    => $p4m_ad->CountryCode
+            );
+            $order->set_address( $address, 'shipping' );
+
+            // set BillTo address to the same if it is null
+            if ( property_exists($purchase_data, 'BillTo') && (null==$purchase_data->BillTo) ) {
+                $order->set_address( $address, 'billing' );
+            }
+
+        }
+
+        if (property_exists($purchase_data, 'BillTo') && $purchase_data->BillTo) {
+            $p4m_ad = $purchase_data->BillTo;
+            $address = array(
+                'first_name' => $wp_user->first_name,
+                'last_name'  => $wp_user->last_name,
+                'company'    => $p4m_ad->CompanyName,
+                'email'      => $wp_user->email,
+                'phone'      => $p4m_ad->Phone,
+                'address_1'  => $p4m_ad->Street1,
+                'address_2'  => $p4m_ad->Street2, 
+                'city'       => $p4m_ad->City,
+                'state'      => $p4m_ad->State,
+                'postcode'   => $p4m_ad->PostCode,
+                'country'    => $p4m_ad->CountryCode
+            );
+            $order->set_address( $address, 'billing' );
+        }
+
+
+        $order->calculate_totals();
+
+        $order->payment_complete(); 
+
+        $cart->empty_cart();
+
+
+        /*
+        AS A FIRST PROOF OF CONCEPT I AM ATTEMPTING TO JUST GET AN ORDER TO SAVE
+        WITHOUT SHIPPING AND PAYMENT DETAILS 
+
+        TODO : SHIPPING AND PAYMENT DETAILS FOR p4m VIA CORRECT woocommerce plugin/module MECHANISM
+        *
+
+        // SEE THIS FOR MORE INFO : https://docs.woocommerce.com/wc-apidocs/source-class-WC_Checkout.html#350
+
+        update_post_meta( $order->id, '_payment_method', 'ideal' );
+        update_post_meta( $order->id, '_payment_method_title', 'iDeal' );
+
+        $order->payment_complete( $transactionId );
+
+        //$woo_cart = WC()->cart;
+        //$woo_cart->empty_cart();
 
         // WIP -- TODO -- create Order in Woo : https://docs.woocommerce.com/wc-apidocs/class-WC_Order.html ??
         // TODO : IMPORTANT : can ask Matt about the workflow here (with Michael at the same time)
+
+        */
+
 
         return true;
     }

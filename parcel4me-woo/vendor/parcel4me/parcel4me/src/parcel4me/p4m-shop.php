@@ -25,13 +25,12 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     abstract public function setCurrentUserDetails( $p4m_consumer );
     abstract public function getCartOfCurrentUser();
     abstract public function setCartOfCurrentUser( $p4m_cart );
-    abstract public function setAddressOfCurrentUser( $which_address, $p4m_address );
     abstract public function updateShipping( $shippingServiceName, $amount, $dueDate );
     abstract public function getCartTotals();
     abstract public function updateWithDiscountCode( $discountCode );
     abstract public function updateRemoveDiscountCode( $discountCode );
     abstract public function updateCartItemQuantities( $itemsUpdateArray );
-    abstract public function completePurchase ( $p4m_cart, $transactionId, $transationTypeCode, $authCode );
+    abstract public function completePurchase ( $purchase_data );
     abstract public function handleError( $message );
 
 
@@ -65,6 +64,24 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         // close this popped up window
         echo '<script>window.close();</script>';
+    }
+
+
+    public function processRefund( $transactionId, $amount ) {
+
+        $rob = $this->apiHttp( 'POST',  P4M_Shop_Urls::endPoint('refund'), $transactionId.'/'.$amount );
+
+        if (!$rob->Success) {
+            return true;
+        } else {
+            return $rob->Error;
+        } 
+
+    }
+
+
+    public function reverseTransaction( $transactionId ) {
+
     }
 
 
@@ -780,10 +797,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 
                 if ( (!property_exists($rob, 'ACSUrl')) || (!$rob->ACSUrl) ) {
 
-                    if (property_exists($rob, 'DeliverTo') && $rob->DeliverTo)  $this->setAddressOfCurrentUser('prefDelivery', $rob->DeliverTo);
-                    if (property_exists($rob, 'BillTo') && $rob->BillTo)        $this->setAddressOfCurrentUser('billing',      $rob->BillTo);
-
-                    $this->completePurchase( $rob->Cart, $rob->Id, $rob->TransactionTypeCode, $rob->AuthCode );
+                    $this->completePurchase( $rob );
 
                     $resultObject->RedirectUrl = Settings::getPublic( 'RedirectURl:PaymentDone' );
                 
@@ -800,7 +814,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             } catch (\Exception $e) {
                 $resultObject->Success     = false;
                 $resultObject->Error       = $e->getMessage();
-                $resultObject->RedirectUrl = $this->localErrorPageUrl($e->getMessage());
+                error_log('Error in p4m-shop.php purchase() '.$e->getMessage());
             }
 
         }
@@ -862,10 +876,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
             if ($rob->Success) {
 
-                if (property_exists($rob, 'DeliverTo') && $rob->DeliverTo)  $this->setAddressOfCurrentUser('prefDelivery', $rob->DeliverTo);
-                if (property_exists($rob, 'BillTo') && $rob->BillTo)        $this->setAddressOfCurrentUser('billing',      $rob->BillTo);
-
-                $this->completePurchase( $rob->Cart, '3DSecure', '3DSecure', '3DSecure');
+                $this->completePurchase( $rob );
                 
                 $this->redirectTo(Settings::getPublic( 'RedirectURl:PaymentDone' ));
             } else {
@@ -939,6 +950,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         }
 
     }
+
 
 
 }

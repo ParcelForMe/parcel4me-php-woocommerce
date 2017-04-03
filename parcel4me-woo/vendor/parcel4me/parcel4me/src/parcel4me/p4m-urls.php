@@ -35,6 +35,8 @@ class P4M_Shop_Urls
         $endPoints['paypalSetup']               = $p4m_api_server . '/paypalSetup';
         $endPoints['cart']                      = $p4m_api_server . '/cart';
         $endPoints['purchase']                  = $p4m_api_server . '/purchase';
+        $endPoints['refund']                    = $p4m_api_server . '/refund';
+        
 
         // Global Freight Solutions (GFS) endpoints
                 

@@ -81,6 +81,28 @@ class Parcel4me_Woo {
     $this->p4m_shopping_cart_adapter = new Parcel4me_Woo_Cart_Adapter( $parcel4me_shop_config );
 
 
+    /*
+    public function process_refund( $order_id, $amount = null ) {
+    
+      $order = wc_get_order( $order_id );
+      $transactionId = $order->get_transaction_id();
+
+      if ( null == $amount ) {
+        $amount = $order->get_total();
+      }
+
+      $result = $this->processRefund( $transactionId, $amount );
+    
+      if ( !$result ) {
+        return new WP_Error
+      }
+
+      return true;
+    
+    }
+    */
+
+
   }
 
 }

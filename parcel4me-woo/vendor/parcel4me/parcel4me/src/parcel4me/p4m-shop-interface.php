@@ -70,14 +70,6 @@ interface P4M_Shop_Interface {
 
 
     /**
-        update (or create) an address in the local database
-        pass in either "billing" or "prefDelivery" 
-        (the address record then corresponds to the PrefDeliveryAddressId and BillingAddressId on the Consumer)
-    */
-    public function setAddressOfCurrentUser( $which_address, $p4m_address );
-
-
-    /**
         update the shipping and tax on the current local cart   
     */
     public function updateShipping( $shippingServiceName, $amount, $dueDate );
@@ -122,13 +114,15 @@ interface P4M_Shop_Interface {
 
     /**
         close the cart and do any other required processing
-        Params :
-            Cart	The P4M Cart including items and discounts
-            Id	The transaction Id
-            TransactionTypeCode	"DB" debit, "PA" payment authorization
-            AuthCode	PSP authorization code used for refunds, etc
+        Important properties of the $purchase_data :
+            ->Cart	The P4M Cart including items and discounts
+            ->Id	The transaction Id
+            ->TransactionTypeCode	"DB" debit, "PA" payment authorization
+            ->AuthCode	PSP authorization code used for refunds, etc
+            ->DeliverTo   P4M Address for delivery
+            ->BillTo      P4M Address for billing
     */
-    public function completePurchase ( $p4m_cart, $transactionId, $transationTypeCode, $authCode );
+    public function completePurchase ( $purchase_data );
 
 
     /**
