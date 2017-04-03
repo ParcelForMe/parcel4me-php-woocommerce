@@ -153,12 +153,14 @@ class Parcel4me_Settings {
       }
       
 
+
       /**
       * register our p4m_settings_init to the admin_init action hook
       */
-      add_action( 'admin_init', 'p4m_settings_init' );
-
-
+      // check that WooCommerce is enabled 
+      if ( Parcel4me_Settings::woocommerce_enabled() ) {
+        add_action( 'admin_init', 'p4m_settings_init' );
+      }
 
 
       /** 
@@ -178,7 +180,6 @@ class Parcel4me_Settings {
       * custom option and settings:
       * callback functions
       */
-      
       
       // section callbacks can accept an $args parameter, which is an array.
       // $args have the following keys defined: title, id, callback.
@@ -442,35 +443,54 @@ class Parcel4me_Settings {
   
         // show error/update messages
         settings_errors( 'p4m_messages' );
+
+        if ( Parcel4me_Settings::woocommerce_enabled() ) {
         ?>
 
         <div class="wrap">
-        <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+          <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
-        <p>
-          To enable <a href="http://parcelfor.me" target="_blank">ParcelForMe</a> you must configure all the following settings
-          and add the <b>[p4m-login]</b> and <b>[p4m-signup]</b> shortcodes to your site.
-        </p>
-        
-        <form action="options.php" method="post">
-        <?php
-        // output security fields for the registered setting "p4m"
-        settings_fields( 'p4m' );
-        // output setting sections and their fields
-        // (sections are registered for "p4m", each field is registered to a specific section)
-        do_settings_sections( 'p4m' );
-        // output save settings button
-        submit_button( 'Save Settings' );
-        ?>
-        </form>
+          <p>
+            To enable <a href="http://parcelfor.me" target="_blank">ParcelForMe</a> you must configure all the following settings
+            and add the <b>[p4m-login]</b> and <b>[p4m-signup]</b> shortcodes to your site.
+          </p>
+          
+          <form action="options.php" method="post">
+          <?php
+          // output security fields for the registered setting "p4m"
+          settings_fields( 'p4m' );
+          // output setting sections and their fields
+          // (sections are registered for "p4m", each field is registered to a specific section)
+          do_settings_sections( 'p4m' );
+          // output save settings button
+          submit_button( 'Save Settings' );
+          ?>
+          </form>
         </div>
         <?php
+        } else {
+        ?>
+        <div class="wrap">
+          <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+
+          <h3>
+            To use <a href="http://parcelfor.me" target="_blank">ParcelForMe</a> for 
+            <a href="https://woocommerce.com/" target="_blank">WooCommerce</a>, 
+            you must first have the WooCommerce Plugin installed and activated
+          </h3>
+          
+        </div>
+        <?php 
+        }
       }
 
     }
 
   }
 
+  static function woocommerce_enabled() {
+    return in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) );
+  }
 
 }
 

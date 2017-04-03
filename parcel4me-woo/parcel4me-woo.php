@@ -30,6 +30,21 @@ class Parcel4me_Woo {
   
   public function __construct() {
 
+
+    $shorts = new Parcel4me_Shortcodes();
+    $config = new Parcel4me_Settings();
+    $w_logi = new Parcel4me_Widget_Login();
+    $w_sign = new Parcel4me_Widget_Signup();
+    add_action( 'widgets_init', function(){
+      register_widget( 'Parcel4me_Widget_Login' );
+      register_widget( 'Parcel4me_Widget_Signup' );
+    });
+
+    wp_enqueue_style( 'p4m_settings_stylesheet', 
+                      plugins_url( 'assets/peli-settings-style.css', __FILE__ )
+    );
+
+    
     // called only after woocommerce has finished loading
     add_action( 'woocommerce_init', array( $this, 'woocommerce_loaded' ) );
 
@@ -49,20 +64,6 @@ class Parcel4me_Woo {
    * For instance, if you need access to the $woocommerce global
    */
   public function woocommerce_loaded() {
-
-
-    $shorts = new Parcel4me_Shortcodes();
-    $config = new Parcel4me_Settings();
-    $w_logi = new Parcel4me_Widget_Login();
-    $w_sign = new Parcel4me_Widget_Signup();
-    add_action( 'widgets_init', function(){
-      register_widget( 'Parcel4me_Widget_Login' );
-      register_widget( 'Parcel4me_Widget_Signup' );
-    });
-
-    wp_enqueue_style( 'p4m_settings_stylesheet', 
-                      plugins_url( 'assets/peli-settings-style.css', __FILE__ )
-    );
   
     // Set the config
     $options = get_option( 'p4m_options' );
