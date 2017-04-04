@@ -17,8 +17,8 @@ require_once __DIR__.'/parcel4me-settings-class.php';
 require_once __DIR__.'/parcel4me-shortcodes-class.php';
 require_once __DIR__.'/parcel4me-woo-cart-adapter-class.php';
 require_once __DIR__.'/parcel4me-widgets.php';
-
 require_once __DIR__.'/parcel4me-routes.php';
+require_once __DIR__.'/parcel4me-payment-gateway.php';
 
 
 if (session_id() == "") session_start(); // this is important for the P4M_Shop->getCurrentSessionId() to work !!
@@ -44,7 +44,7 @@ class Parcel4me_Woo {
                       plugins_url( 'assets/peli-settings-style.css', __FILE__ )
     );
 
-    
+
     // called only after woocommerce has finished loading
     add_action( 'woocommerce_init', array( $this, 'woocommerce_loaded' ) );
 
@@ -80,6 +80,14 @@ class Parcel4me_Woo {
     /// Define the Instance :
     // NB : must be called $p4m_shopping_cart_adapter
     $this->p4m_shopping_cart_adapter = new Parcel4me_Woo_Cart_Adapter( $parcel4me_shop_config );
+
+
+    // Also setup a P4M Payment Gateway option 
+    function wc_add_p4m_payment_gateway_to_gateways( $gateways ) {
+        $gateways[] = 'P4M_Payment_Gateway';
+        return $gateways;
+    }
+    add_filter( 'woocommerce_payment_gateways', 'wc_add_p4m_payment_gateway_to_gateways' );
 
 
     /*

@@ -318,7 +318,12 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         $order_id = $checkout->create_order();
         $order = wc_get_order( $order_id );
+
         update_post_meta($order_id, '_customer_user', get_current_user_id()); // set user on the order
+
+        update_post_meta( $order_id, '_payment_method', 'p4m_payment_gateway' );
+        update_post_meta( $order_id, '_payment_method_title', 'Parcel For Me Payment' );
+
 
         if (property_exists($purchase_data, 'DeliverTo') && $purchase_data->DeliverTo) {
             $p4m_ad = $purchase_data->DeliverTo;
@@ -362,36 +367,10 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             $order->set_address( $address, 'billing' );
         }
 
-
         $order->calculate_totals();
-
-        $order->payment_complete(); 
+        $order->payment_complete( $transactionId ); 
 
         $cart->empty_cart();
-
-
-        /*
-        AS A FIRST PROOF OF CONCEPT I AM ATTEMPTING TO JUST GET AN ORDER TO SAVE
-        WITHOUT SHIPPING AND PAYMENT DETAILS 
-
-        TODO : SHIPPING AND PAYMENT DETAILS FOR p4m VIA CORRECT woocommerce plugin/module MECHANISM
-        *
-
-        // SEE THIS FOR MORE INFO : https://docs.woocommerce.com/wc-apidocs/source-class-WC_Checkout.html#350
-
-        update_post_meta( $order->id, '_payment_method', 'ideal' );
-        update_post_meta( $order->id, '_payment_method_title', 'iDeal' );
-
-        $order->payment_complete( $transactionId );
-
-        //$woo_cart = WC()->cart;
-        //$woo_cart->empty_cart();
-
-        // WIP -- TODO -- create Order in Woo : https://docs.woocommerce.com/wc-apidocs/class-WC_Order.html ??
-        // TODO : IMPORTANT : can ask Matt about the workflow here (with Michael at the same time)
-
-        */
-
 
         return true;
     }

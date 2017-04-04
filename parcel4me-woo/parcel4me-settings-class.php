@@ -405,7 +405,7 @@ class Parcel4me_Settings {
       function p4m_options_page() {
         // add top level menu page
         add_menu_page(
-          'ParcelForMe Settings',
+          'Parcel For Me Settings',
           'P4M Settings',
           'manage_options',
           'p4m',
@@ -449,7 +449,7 @@ class Parcel4me_Settings {
           <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
           <p>
-            To enable <a href="http://parcelfor.me" target="_blank">ParcelForMe</a> you must configure all the following settings
+            To enable <a href="http://parcelfor.me" target="_blank">Parcel For Me</a> you must configure all the following settings
             and add the <b>[p4m-login]</b> and <b>[p4m-signup]</b> shortcodes to your site.
           </p>
           
