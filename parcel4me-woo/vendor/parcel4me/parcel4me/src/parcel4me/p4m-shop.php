@@ -67,11 +67,32 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     }
 
 
-    public function processRefund( $transactionId, $amount ) {
+    public function processPaymentRefund( $transactionId, $amount ) {
 
-        $rob = $this->apiHttp( 'POST',  P4M_Shop_Urls::endPoint('refund'), $transactionId.'/'.$amount );
+        // Obtain a credentials token 
+        $oidc = new \OpenIDConnectClient( P4M_Shop_Urls::endPoint('oauth2_base_url'),
+                                          Settings::getPublic('OpenIdConnect:ClientId'),
+                                          Settings::getPublic('OpenIdConnect:ClientSecret') );
+        $oidc->providerConfigParam(array('token_endpoint'=>P4M_Shop_Urls::endPoint('connect_token')));
+        $oidc->addScope('p4mRetail');
+        $oidc->addScope('p4mApi');
 
-        if (!$rob->Success) {
+        $oidc->setCertPath( dirname(__FILE__) . "/cert/cacert.pem" );  
+        
+        $clientCredentials = $oidc->requestClientCredentialsToken();
+
+        // check that it has the properties "access_token" and "token_type"
+        if ( (!property_exists($clientCredentials, 'token_type')) ||
+                (!property_exists($clientCredentials, 'access_token')) 
+        ) {
+            $this->somethingWentWrong('Invalid OAUTH2 Client Credentials returned :'.json_encode($clientCredentials));
+        }
+
+        $this->setBearerToken($clientCredentials->access_token);
+        $rob = $this->apiHttp( 'POST',  P4M_Shop_Urls::endPoint('refund', '/'.$transactionId.'/'.$amount ));
+
+        // returns true or an error message
+        if ($rob->Success) {
             return true;
         } else {
             return $rob->Error;
@@ -257,9 +278,9 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         // Obtain a credentials token 
 
-        $oidc = new \OpenIDConnectClient(P4M_Shop_Urls::endPoint('oauth2_base_url'),
-                                            ('OpenIdConnect:ClientId'),
-                                            ('OpenIdConnect:ClientSecret') );
+        $oidc = new \OpenIDConnectClient( P4M_Shop_Urls::endPoint('oauth2_base_url'),
+                                          Settings::getPublic('OpenIdConnect:ClientId'),
+                                          Settings::getPublic('OpenIdConnect:ClientSecret') );
         $oidc->providerConfigParam(array('token_endpoint'=>P4M_Shop_Urls::endPoint('connect_token')));
         $oidc->addScope('p4mRetail');
         $oidc->addScope('p4mApi');
