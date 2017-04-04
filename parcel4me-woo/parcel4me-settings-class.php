@@ -157,11 +157,9 @@ class Parcel4me_Settings {
       /**
       * register our p4m_settings_init to the admin_init action hook
       */
-      // check that WooCommerce is enabled 
-      if ( Parcel4me_Settings::woocommerce_enabled() ) {
-        add_action( 'admin_init', 'p4m_settings_init' );
-      }
-
+      add_action( 'admin_init', 'p4m_settings_init' );
+      
+      
 
       /** 
       * handle ajax callbacks for testing OIDC connections 
