@@ -7,7 +7,7 @@
     <template>
         <div id="container">
             <template is="dom-repeat" items="{{cartData.Items}}">
-                <p4m-cart-card currency="{{cartData.Currency}}" cart-item-data="{{item}}"></p4m-cart-card>
+                <p4m-cart-card allow-editing="{{allowEditing}}" currency="{{cartData.Currency}}" cart-item-data="{{item}}"></p4m-cart-card>
             </template>
         </div>
         
@@ -36,6 +36,11 @@
                 changes: {
                     type: Object,
                     value: {}
+                },
+                allowEditing: {
+                    type: Object,
+                    value: true,
+                    notify: true
                 }
             },
             observers: [
@@ -52,6 +57,12 @@
 
             clearChanges: function() {
                 this.changes = {};
+            },
+
+            toggleEditing: function(allow) {
+                this.set('allowEditing', allow);
+                this.set('topClass', allow?'p4m_enabled':'p4m_disabled');
+                
             },
 
             onCartDataChange: function (e) {

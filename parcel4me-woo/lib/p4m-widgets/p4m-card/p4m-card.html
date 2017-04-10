@@ -28,7 +28,7 @@
                         </div>   
                         <div class="card-description creditcard">
                             <span>{{cardData.Description}}</span><i class="p4micon-credit-card"></i></div>   
-                        <div class="inputs"><input is="iron-input" type="text" id="cvvField" tabindex="code" bind-value="{{cvv}}" allowed-pattern="[0-9]" prevent-invalid-input placeholder="CVV" />
+                        <div class="inputs instruction tooltip-right" data-tooltip="Enter the Check Digits on the back of your card" tabindex="0"><input is="iron-input" type="text" id="cvvField" bind-value="{{cvv}}" allowed-pattern="[0-9]" prevent-invalid-input placeholder="CVV"/>
                         </div>                  
                     </div>
                 </div>
@@ -93,8 +93,9 @@
         .card-description {
             letter-spacing: 3px;
         }
-
-        
+        .inputs {
+            width: 54px;
+        }
 
       
         #container.card-list-item {

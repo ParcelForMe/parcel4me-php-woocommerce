@@ -424,112 +424,112 @@ left: 0;
 }
 
 .p4micon-peli:before {
-    content: "\e900";
+  content: "\e900";
 }
 .p4micon-calendar:before {
-    content: "\e901";
+  content: "\e901";
 }
 .p4micon-schedule:before {
-    content: "\e902";
+  content: "\e902";
 }
 .p4micon-profile:before {
-    content: "\e903";
+  content: "\e903";
 }
 .p4micon-settings:before {
-    content: "\e904";
+  content: "\e904";
 }
 .p4micon-settings2:before {
-    content: "\e905";
+  content: "\e905";
 }
 .p4micon-logout:before {
-    content: "\e906";
+  content: "\e906";
 }
 .p4micon-like:before {
-    content: "\e907";
+  content: "\e907";
 }
 .p4micon-like-fill:before {
-    content: "\e908";
+  content: "\e908";
 }
 .p4micon-search:before {
-    content: "\e909";
+  content: "\e909";
 }
 .p4micon-chevron-down:before {
-    content: "\e90a";
+  content: "\e90a";
 }
 .p4micon-chevron-up:before {
-    content: "\e90b";
+  content: "\e90b";
 }
 .p4micon-chevron-left:before {
-    content: "\e90c";
+  content: "\e90c";
 }
 .p4micon-chevron-right:before {
-    content: "\e90d";
+  content: "\e90d";
 }
 .p4micon-subtract-circle:before {
-    content: "\e90e";
+  content: "\e90e";
 }
 .p4micon-add:before {
-    content: "\e90f";
+  content: "\e90f";
 }
 .p4micon-add-sml:before {
-    content: "\e910";
+  content: "\e910";
 }
 .p4micon-add-circle:before {
-    content: "\e911";
+  content: "\e911";
 }
 .p4micon-check:before {
-    content: "\e912";
+  content: "\e912";
 }
 .p4micon-check-circle:before {
-    content: "\e913";
+  content: "\e913";
 }
 .p4micon-check-square:before {
-    content: "\e914";
+  content: "\e914";
 }
 .p4micon-check-circle-fill:before {
-    content: "\e915";
+  content: "\e915";
 }
 .p4micon-delete:before {
-    content: "\e916";
+  content: "\e916";
 }
 .p4micon-delete-sml:before {
-    content: "\e917";
+  content: "\e917";
 }
 .p4micon-delete-circle:before {
-    content: "\e918";
+  content: "\e918";
 }
 .p4micon-refresh:before {
-    content: "\e919";
+  content: "\e919";
 }
 .p4micon-map-marker:before {
-    content: "\e91a";
+  content: "\e91a";
 }
 .p4micon-map-with-marker:before {
-    content: "\e91b";
+  content: "\e91b";
 }
 .p4micon-compass:before {
-    content: "\e91c";
+  content: "\e91c";
 }
 .p4micon-heart:before {
-    content: "\e91d";
+  content: "\e91d";
 }
 .p4micon-heart-fill:before {
-    content: "\e91e";
+  content: "\e91e";
 }
 .p4micon-cart-empty:before {
-    content: "\e91f";
+  content: "\e91f";
 }
 .p4micon-credit-card:before {
-    content: "\e920";
+  content: "\e920";
 }
 .p4micon-coupon:before {
-    content: "\e921";
+  content: "\e921";
 }
 .p4micon-coupon2:before {
-    content: "\e922";
+  content: "\e922";
 }
 .p4micon-paperclip:before {
-    content: "\e923";
+  content: "\e923";
 }
 .p4micon-list:before {
   content: "\e924";
@@ -540,6 +540,16 @@ left: 0;
 .p4micon-edit-circle:before {
   content: "\e926";
 }
+.p4micon-share:before {
+  content: "\e927";
+}
+.p4micon-map-marker-selected:before {
+  content: "\e928";
+}
+.p4micon-map-marker-selected-fill:before {
+  content: "\e929";
+}
+
 
 
 //////////////////////////////////////////////////
@@ -762,6 +772,7 @@ a, a:visited {
 // END - Pulse Animation
 
 
+
 // Progress indicator
 p4m-spinner[species='progress'] {
     position: absolute;
@@ -786,6 +797,212 @@ p4m-spinner[species='progress'] {
         }
     }
 }
+
+
+
+
+// Tooltips
+[data-tooltip] {
+  position: relative;
+  &:before,
+  &:after {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    margin-top: 0;
+    z-index: 2;
+    transition: all 0.2s ease 0s;
+    margin-top: 0;
+  }
+  /* Show tooltip content on hover - Centred bove content by default */
+  &:before {
+    content: attr(data-tooltip);
+    height: 24px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    margin-bottom: -8px;
+    padding: 0 7px;
+    @include border-radius (0px);
+    background-color: #000;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1.2;
+    white-space: nowrap;
+    transform: translateX(-50%) translateY(0);
+    z-index: 1;
+    // Failed Experiment to wrap lines at a certain number of characters
+    // max-width: 24ch;
+    // white-space: normal;
+  }
+  /* Show tooltip content on hover */
+  &:after {
+    display: flex;
+    position: absolute;
+    transition: all 0.2s ease 0s;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -5px;
+    margin-bottom: -12px;
+    width: 0;
+    border-top: 4px solid #555;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+  }
+  /* Float up animation & quick hide animation when mouseout */
+  &:hover:before, 
+  &:hover:after {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.2s ease 1s;
+  }
+  &:hover:before {
+    box-shadow: 0 3px 5px rgba(100,100,100,0.4);
+    margin-bottom: -5px;
+  }
+  &:hover:after {
+    margin-bottom: -9px !important;
+  }
+
+
+  // Positioning options
+  &.tooltip-topleft {
+    &:before {
+      transform: translateX(-90%) translateY(0);
+    }
+  }
+  &.tooltip-topright {
+    &:before {
+      transform: translateX(-10%) translateY(0);
+    }
+  }
+  &.tooltip-left {
+    &:before {
+      transform: translateX(-100%) translateY(0);
+      margin-bottom: 0 !important;
+      bottom: 0;
+      left: initial;
+      left: -1px;
+    }
+    &:hover:before {
+      left: -4px;
+    }
+    &:after {
+      // transform: rotate(90deg) translateX(0%);
+      transform: initial;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-left: 4px solid #555;
+      border-right: none;
+      right: initial;
+      left: -1px;
+      top: calc(50% - 2px);
+      bottom: initial !important;      
+      margin-bottom: initial !important;
+      margin-left: initial;
+      margin-right: initial;
+      margin-top: -2px;
+    }
+    &:hover:after {
+      left: -4px;
+      margin-bottom: initial !important;
+    }
+  }
+  &.tooltip-right {
+    &:before {
+      transform: translateX(100%) translateY(0);
+      margin-bottom: 0 !important;
+      bottom: 0;
+      left: initial;
+      right: -6px;
+    }
+    &:hover:before {
+      right: -9px;
+    }
+    &:after {
+      // transform: rotate(90deg) translateX(0%);
+      transform: initial;
+      border-top: 4px solid transparent;
+      border-bottom: 4px solid transparent;
+      border-right: 4px solid #555;
+      border-left: none;
+      left: initial;
+      right: -6px;
+      top: calc(50% - 2px);
+      bottom: initial !important;      
+      margin-bottom: initial !important;
+      margin-right: initial !important;
+      margin-top: -2px;
+    }
+    &:hover:after {
+      right: -9px;
+      margin-bottom: initial !important;
+    }
+  }
+
+
+  // Error Messages & Instruction Messages
+  &.instruction {
+    &:before {
+      font-style: italic;
+      font-weight: 300;
+      background: #37a553;
+    }
+    &:after {
+      border-top-color: #37a553;
+    }
+    &:active:before, 
+    &:active:after {
+      visibility: visible;
+      opacity: 1;
+      transition: all 0.2s ease 1s;
+    }
+
+    &.tooltip-right {
+      &:after {
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-right-color: #37a553;
+        border-left: none;
+
+        // border-top: none;
+        // border-bottom: none;
+        // border-right: none;
+        // border-left: none;
+        // content: "\25BC";
+        // color: #37a553;
+        // width: 8px;
+        // height: 8px;
+        // display: flex;
+        // overflow: visible;
+        // font-size: 8px;
+        // text-shadow: 0 2px 2px rgba(0,0,0,0.5);
+      }
+    }
+    &.tooltip-left {
+      &:after {
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left-color: #37a553;
+        border-right: none;
+      }
+    }
+
+  }
+}
+
+//---------------------------------------------
+
+
+
 #pageStandard, #pageCalendar, #pageDroppoints, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
     position: relative;
     padding: 10px;
@@ -873,6 +1090,7 @@ i.payment-method-logo {height: 32px; width: 130px;display: flex;}
 p4m-register, p4m-login, p4m-checkout {
 	font-family: $p4m-font;
 	font-size: 16px;
+  line-height: normal;
 	color: $grey-b4;
 }
 
@@ -974,6 +1192,11 @@ p4m-card {
                         align-items: flex-end;
                         justify-content: space-between;
                     }
+                    .inputs {
+                      display: flex;
+                      align-items: center;
+                      margin-top: 4px;
+                    }
                 }
                 .card-name {
                     height: 24px;
@@ -1016,7 +1239,6 @@ p4m-card {
     }
     .show-cvv #cvvField {
         display: block;
-        margin-top: 4px;
         width: 54px;
         border-radius: 3px;
         border: 2px solid $grey-h6;
@@ -1089,7 +1311,8 @@ p4m-checkout {
 	    transition-duration: 0.5s;
 	}
 	&.disabled {
-	    background-color: rgba(200, 200, 200, 0.5);
+	    // background-color: rgba(200, 200, 200, 0.5);
+      opacity:.5;
 	    cursor: not-allowed;
 	}
 	&.gfs-mini-button {
@@ -1137,7 +1360,9 @@ p4m-checkout {
 		// }
 	}
 	&.disabled {
-        background-color: rgba(100, 100, 100, 1.0);
+      // background-color: rgba(100, 100, 100, 1.0);
+      opacity:.5;
+      cursor: not-allowed;
 	}
     &.white {
         background-color: $p4m-green;
@@ -1217,6 +1442,9 @@ i.link {
     font-size: 24px;
     color:$grey-h2;
 }
+i[class*="selected"] {
+    color: $p4m-green;
+}
 
 
 // Modals 
@@ -1233,10 +1461,10 @@ paper-dialog {
 .p4m-label { color: darkgreen }
 // used in the p4m-register widget 
 .corners-5px {
-	@include border-radius( 5px );
+    @include border-radius( 5px );
 }
 .corners-24px {
-	@include border-radius( 24px );
+    @include border-radius( 24px );
 }
 .corners-top-5px {
     @include border-radius-separate( 5px, 5px, 0, 0 );
@@ -1754,6 +1982,14 @@ p4m-checkout {
             border-bottom: 2px solid #eaeaea;
         }
     }
+
+    #inspectingDropPointPanel .dp-day-name, #inspectingDropPointPanel .dp-day-time-slot {
+      font-size: 11px;
+      line-height: 11px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
     #selectedDropPointPanel .content-container {
         // background: #f8f8f8;
         /* border-radius: 5px; */
@@ -2014,7 +2250,8 @@ p4m-checkout {
     .dpProviderName {
 	    display: flex;
 	    font-weight: 600;
-	    line-height: 15px;
+      font-size: 16px;
+	    line-height: 16px;
 	    align-items: center;
 	    .dpProviderLogo {
 	    	width: 24px;
@@ -2407,23 +2644,26 @@ p4m-checkout {
     }
 
     .select-payment-type {
-        height: 48px;
+        height: 42px;
         #tabsContainer {
-            overflow: visible;
+            overflow: visible !important;
         }
         paper-tab {
             color: $grey-b4;
             background: $white;
-            margin: 2px 12px 5px 0;
+            margin: 0 12px 0 0;
             border-radius: 5px;
             width: 92px;
-            height: 36px !important;
+            height: 42px !important;
+            box-sizing: border-box;
             padding: 0;
             flex: initial;
             border: 2px solid #fff;
             @include transition();
+            overflow: visible;
             * {
                 font-size: 36px;
+                height: 36px;
             }
             &:hover {
                 box-shadow:rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
@@ -2447,7 +2687,7 @@ p4m-checkout {
 		}
 		p4m-cart-card {
 			#container {
-				padding: .5rem;
+				padding: 10px;
 				box-sizing: border-box;
 				position: relative;
 				&:after {
@@ -2467,11 +2707,12 @@ p4m-checkout {
                 }
 			}
 		}
-		#image img {
+		img#image  {
 			max-width: 64px;
 		}
 		#details {
-			padding: .5rem;
+			padding: 10px;
+            flex-direction: column;
 			> div {
 				margin-bottom: 3px;
 			}
@@ -2713,8 +2954,7 @@ p4m-address {
 footer.p4m-checkout {
     p4m-purchase-btn#p4mPurchaseBtn {
         display: flex;
-        flex: initial;
-        width: 240px;
+        flex: 1;
         #p4mPurchaseBtnContainer {
             display: flex;
             flex: 1;
@@ -2744,7 +2984,7 @@ footer.p4m-checkout {
                     align-items: center;
                     @include transition();
                 }
-                &.payWith_card {
+                &.payWith_, &.payWith_card {
                     &:after {
                         content: '\e920';
                         font-family: 'p4m' !important;
@@ -2772,6 +3012,17 @@ footer.p4m-checkout {
                         background-position: center center;
                     }
                 }
+            }
+            &.invalid {
+              button, button:hover {
+                &:not(.payWith_paypal) {
+                  // background: #aaa;
+                  // border-color: #aaa;
+                  // color: #eaeaea;
+                  opacity:.5;
+                  cursor: not-allowed;
+                }
+              }
             }
         }
     }

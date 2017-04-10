@@ -522,6 +522,15 @@ body.fullbleed {
 .p4micon-edit-circle:before {
   content: "\e926"; }
 
+.p4micon-share:before {
+  content: "\e927"; }
+
+.p4micon-map-marker-selected:before {
+  content: "\e928"; }
+
+.p4micon-map-marker-selected-fill:before {
+  content: "\e929"; }
+
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-BlaIta-webfont.eot");
@@ -702,6 +711,143 @@ p4m-spinner[species='progress'] {
           background: #37a553;
           height: 3px; }
 
+[data-tooltip] {
+  position: relative;
+  /* Show tooltip content on hover - Centred bove content by default */
+  /* Show tooltip content on hover */
+  /* Float up animation & quick hide animation when mouseout */ }
+  [data-tooltip]:before, [data-tooltip]:after {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    margin-top: 0;
+    z-index: 2;
+    transition: all 0.2s ease 0s;
+    margin-top: 0; }
+  [data-tooltip]:before {
+    content: attr(data-tooltip);
+    height: 24px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 150%;
+    left: 50%;
+    margin-bottom: -8px;
+    padding: 0 7px;
+    -webkit-border-radius: 0px;
+    -khtml-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    border-radius: 0px;
+    background-color: #000;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    font-size: 11px;
+    font-style: italic;
+    line-height: 1.2;
+    white-space: nowrap;
+    transform: translateX(-50%) translateY(0);
+    z-index: 1; }
+  [data-tooltip]:after {
+    display: flex;
+    position: absolute;
+    transition: all 0.2s ease 0s;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -5px;
+    margin-bottom: -12px;
+    width: 0;
+    border-top: 4px solid #555;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0; }
+  [data-tooltip]:hover:before, [data-tooltip]:hover:after {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.2s ease 1s; }
+  [data-tooltip]:hover:before {
+    box-shadow: 0 3px 5px rgba(100, 100, 100, 0.4);
+    margin-bottom: -5px; }
+  [data-tooltip]:hover:after {
+    margin-bottom: -9px !important; }
+  [data-tooltip].tooltip-topleft:before {
+    transform: translateX(-90%) translateY(0); }
+  [data-tooltip].tooltip-topright:before {
+    transform: translateX(-10%) translateY(0); }
+  [data-tooltip].tooltip-left:before {
+    transform: translateX(-100%) translateY(0);
+    margin-bottom: 0 !important;
+    bottom: 0;
+    left: initial;
+    left: -1px; }
+  [data-tooltip].tooltip-left:hover:before {
+    left: -4px; }
+  [data-tooltip].tooltip-left:after {
+    transform: initial;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 4px solid #555;
+    border-right: none;
+    right: initial;
+    left: -1px;
+    top: calc(50% - 2px);
+    bottom: initial !important;
+    margin-bottom: initial !important;
+    margin-left: initial;
+    margin-right: initial;
+    margin-top: -2px; }
+  [data-tooltip].tooltip-left:hover:after {
+    left: -4px;
+    margin-bottom: initial !important; }
+  [data-tooltip].tooltip-right:before {
+    transform: translateX(100%) translateY(0);
+    margin-bottom: 0 !important;
+    bottom: 0;
+    left: initial;
+    right: -6px; }
+  [data-tooltip].tooltip-right:hover:before {
+    right: -9px; }
+  [data-tooltip].tooltip-right:after {
+    transform: initial;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-right: 4px solid #555;
+    border-left: none;
+    left: initial;
+    right: -6px;
+    top: calc(50% - 2px);
+    bottom: initial !important;
+    margin-bottom: initial !important;
+    margin-right: initial !important;
+    margin-top: -2px; }
+  [data-tooltip].tooltip-right:hover:after {
+    right: -9px;
+    margin-bottom: initial !important; }
+  [data-tooltip].instruction:before {
+    font-style: italic;
+    font-weight: 300;
+    background: #37a553; }
+  [data-tooltip].instruction:after {
+    border-top-color: #37a553; }
+  [data-tooltip].instruction:active:before, [data-tooltip].instruction:active:after {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.2s ease 1s; }
+  [data-tooltip].instruction.tooltip-right:after {
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-right-color: #37a553;
+    border-left: none; }
+  [data-tooltip].instruction.tooltip-left:after {
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left-color: #37a553;
+    border-right: none; }
+
 #pageStandard, #pageCalendar, #pageDroppoints, #mapContainer, #dropPointListContainer, #selectedDropPointPanel {
   position: relative;
   padding: 10px; }
@@ -783,6 +929,7 @@ i.payment-method-logo {
 p4m-register, p4m-login, p4m-checkout {
   font-family: "Lato", sans-serif;
   font-size: 16px;
+  line-height: normal;
   color: #555; }
 
 p4m-register h1, p4m-register h2, p4m-register h3, p4m-register h4, p4m-register h5, p4m-register h6, p4m-login h1, p4m-login h2, p4m-login h3, p4m-login h4, p4m-login h5, p4m-login h6, p4m-checkout h1, p4m-checkout h2, p4m-checkout h3, p4m-checkout h4, p4m-checkout h5, p4m-checkout h6 {
@@ -871,6 +1018,10 @@ p4m-card {
             width: 100%;
             align-items: flex-end;
             justify-content: space-between; }
+          p4m-card > div#container .card-panel .card-body .card-content .inputs {
+            display: flex;
+            align-items: center;
+            margin-top: 4px; }
         p4m-card > div#container .card-panel .card-body .card-name {
           height: 24px;
           line-height: inherit;
@@ -903,7 +1054,6 @@ p4m-card {
     display: none; }
   p4m-card .show-cvv #cvvField {
     display: block;
-    margin-top: 4px;
     width: 54px;
     border-radius: 3px;
     border: 2px solid #e0e0e0; }
@@ -950,7 +1100,7 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
     color: #FFFFFF;
     transition-duration: 0.5s; }
   .gfs-button.disabled {
-    background-color: rgba(200, 200, 200, 0.5);
+    opacity: .5;
     cursor: not-allowed; }
   .gfs-button.gfs-mini-button {
     margin-left: 2px;
@@ -990,7 +1140,8 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
       background-color: rgba(255, 255, 255, 0.8);
       color: #2aa54f; }
   .p4m-button.disabled {
-    background-color: #646464; }
+    opacity: .5;
+    cursor: not-allowed; }
   .p4m-button.white {
     background-color: #37a553;
     color: #fff;
@@ -1052,6 +1203,9 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
 i.link {
   font-size: 24px;
   color: #c5c5c5; }
+
+i[class*="selected"] {
+  color: #37a553; }
 
 paper-dialog {
   background: #37a553;
@@ -1471,6 +1625,11 @@ p4m-checkout {
       padding: 0 0 1em 0;
       margin: .65em 1em;
       border-bottom: 2px solid #eaeaea; }
+  p4m-checkout #inspectingDropPointPanel .dp-day-name, p4m-checkout #inspectingDropPointPanel .dp-day-time-slot {
+    font-size: 11px;
+    line-height: 11px;
+    padding-top: 0;
+    padding-bottom: 0; }
   p4m-checkout #selectedDropPointPanel .content-container {
     /* border-radius: 5px; */
     /* border: 2px solid #37a553; */
@@ -1645,7 +1804,8 @@ p4m-checkout {
   p4m-checkout .dpProviderName {
     display: flex;
     font-weight: 600;
-    line-height: 15px;
+    font-size: 16px;
+    line-height: 16px;
     align-items: center; }
     p4m-checkout .dpProviderName .dpProviderLogo {
       width: 24px;
@@ -1924,16 +2084,17 @@ p4m-checkout {
     p4m-checkout #cardPage #cardList p4m-card > div#container .card-panel {
       margin-right: 8px; }
   p4m-checkout .select-payment-type {
-    height: 48px; }
+    height: 42px; }
     p4m-checkout .select-payment-type #tabsContainer {
-      overflow: visible; }
+      overflow: visible !important; }
     p4m-checkout .select-payment-type paper-tab {
       color: #555;
       background: #fff;
-      margin: 2px 12px 5px 0;
+      margin: 0 12px 0 0;
       border-radius: 5px;
       width: 92px;
-      height: 36px !important;
+      height: 42px !important;
+      box-sizing: border-box;
       padding: 0;
       flex: initial;
       border: 2px solid #fff;
@@ -1942,9 +2103,11 @@ p4m-checkout {
       -moz-transition: all 0.15s ease-in-out 0s;
       -ms-transition: all 0.15s ease-in-out 0s;
       -o-transition: all 0.15s ease-in-out 0s;
-      transition: all 0.15s ease-in-out 0s; }
+      transition: all 0.15s ease-in-out 0s;
+      overflow: visible; }
       p4m-checkout .select-payment-type paper-tab * {
-        font-size: 36px; }
+        font-size: 36px;
+        height: 36px; }
       p4m-checkout .select-payment-type paper-tab:hover {
         box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px; }
       p4m-checkout .select-payment-type paper-tab[aria-selected="true"] {
@@ -1955,7 +2118,7 @@ p4m-checkout {
     height: 260px;
     box-sizing: border-box; }
   p4m-checkout p4m-cart p4m-cart-card #container {
-    padding: .5rem;
+    padding: 10px;
     box-sizing: border-box;
     position: relative; }
     p4m-checkout p4m-cart p4m-cart-card #container:after {
@@ -1969,10 +2132,11 @@ p4m-checkout {
     p4m-checkout p4m-cart p4m-cart-card #container #quantity input {
       width: 40px;
       text-align: right; }
-  p4m-checkout p4m-cart #image img {
+  p4m-checkout p4m-cart img#image {
     max-width: 64px; }
   p4m-checkout p4m-cart #details {
-    padding: .5rem; }
+    padding: 10px;
+    flex-direction: column; }
     p4m-checkout p4m-cart #details > div {
       margin-bottom: 3px; }
     p4m-checkout p4m-cart #details #price {
@@ -2140,8 +2304,7 @@ p4m-address .buttons {
 
 footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
   display: flex;
-  flex: initial;
-  width: 240px; }
+  flex: 1; }
   footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer {
     display: flex;
     flex: 1;
@@ -2180,7 +2343,7 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
         -ms-transition: all 0.15s ease-in-out 0s;
         -o-transition: all 0.15s ease-in-out 0s;
         transition: all 0.15s ease-in-out 0s; }
-      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_card:after {
+      footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_:after, footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer button.payWith_card:after {
         content: '\e920';
         font-family: 'p4m' !important;
         speak: none;
@@ -2202,3 +2365,6 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
         background-size: 72px auto;
         background-repeat: no-repeat;
         background-position: center center; }
+    footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:not(.payWith_paypal), footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:hover:not(.payWith_paypal) {
+      opacity: .5;
+      cursor: not-allowed; }

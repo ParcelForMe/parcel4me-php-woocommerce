@@ -19831,6 +19831,12 @@
 		"oAP": "\/example\/static_api\/templates\/checkout.html",
 		"oF": 0
 		},
+	"\/gfs-calendar\/gfs-calendar.html": {
+		"ft": 8192,
+		"oA": 2,
+		"oAP": "\/gfs-calendar\/gfs-calendar.html",
+		"oF": 0
+		},
 	"\/gfs-checkout-widget\/css\/custom-min.css": {
 		"aP": 1,
 		"bl": 0,
@@ -20073,6 +20079,16 @@
 		"l": 1,
 		"oA": 0,
 		"oAP": "\/gfs-checkout-widget\/images\/Gfs.png",
+		"oF": 0,
+		"opt": 0,
+		"q": 100
+		},
+	"\/gfs-checkout-widget\/images\/gmap-icon-selected-shadow.png": {
+		"ft": 32768,
+		"iS": 26935,
+		"l": 1,
+		"oA": 0,
+		"oAP": "\/gfs-checkout-widget\/images\/gmap-icon-selected-shadow.png",
 		"oF": 0,
 		"opt": 0,
 		"q": 100

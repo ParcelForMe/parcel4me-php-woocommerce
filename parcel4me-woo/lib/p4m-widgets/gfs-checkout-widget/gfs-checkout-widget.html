@@ -114,10 +114,13 @@
 
                         <div id="mapContainer">
 
-                            <div class="hidden">
-                                <div id="droppoint_info" class="noscroll">Selected
+
+                            <div class="hidden" id="hiddenElements">
+                                <div id="droppoint_info" class="noscroll">Selected</div>
+                                <div id="inspectingDropPointPanel">
+                                    <gfs-droppoint id="inspectedDropPoint" droppoint-data="{{_inspectedDropPoint}}" show-shipping-options="false" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                                 </div>
-                            </div>                           
+                            </div>                          
                             <!--
                                <div id="gfsMapCanvas-loading" class="loading"><paper-spinner id="search-spinner"></paper-spinner></div> 
                             -->
@@ -134,9 +137,7 @@
 
                         <array-selector id="dropPointSelector" items="{{_dropPoints}}" selected="{{selected}}" multi="false"></array-selector>
                         <div id="dropPointListContainer" class="hidden">
-
-                            <div class="cardList">
-                                
+                            <div class="cardList">                           
                                 <div id="mainDropPointListArea">
                                     <div id="dropPointList">
                                         <template id="dropPointListTemplate" is="dom-repeat" items="{{_dropPoints}}" sort="sortByDistance" filter="filterToMap">
@@ -145,10 +146,8 @@
                                         </template>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
                         <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
                             <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                         </div>
@@ -193,6 +192,19 @@
                 padding: 0 0 1em 0;
                 margin: .65em 1em;
                 border-bottom: 2px solid #eaeaea;
+            }
+            #inspectingDropPointPanel {
+                /*position: absolute;
+                top: 327px !important;
+                margin-top: -150px;
+                left: 0;
+                width: 100% !important;
+                height: 150px !important;
+                z-index: 9999;*/
+
+                background: rgba(255,255,255,0.9) !important;
+                padding: 15px !important;
+                box-sizing: border-box;
             }
         </style>
 
@@ -390,12 +402,14 @@
                     type: Object
                 },
 
+                _inspectedDropPoint: {
+                    type: Object
+                },             
+
                 _dropPointDetailsClass: {
                     type: String,
                     value: "hidden"
                 },
-
-
 
                 _shippingRateGroups: {
                     type: Array,
@@ -874,6 +888,7 @@
                         this.runDeliveryAddressPreferences(this.config.addressPreferences, this.config.defaultAddress, function (err) {
                             self.postGfsData(function(err) {
                                 if (err) {
+                                    console.error("postGfsData() returned", err);
                                     finalCallback(err);
                                 }
                                 else
@@ -911,7 +926,6 @@
             //preferSoonest: true/false
             //
             autoSelectDeliveryMethod: function (callback) {
-
                 //If the address chosen is a droppoint,
                 //   Get the delivery methods on the droppoint
                 //   Choose the most preferred
@@ -919,10 +933,11 @@
                 //   Choose the most preferred standard delivery
                 if (!this.standardRates.length) {
                     callback(null); //No delivery methods available yet
+                    
                 }
                 else {
                     if (this.config.deliveryPreferences) {
-                        //var sortFunction = this._getDeliveryMethodSortFunction();
+                        var sortFunction = this._getDeliveryMethodSortFunction();
                         if (this._selectedDropPoint) {
                             //this._selectedDropPoint.deliveries = this._selectedDropPoint.deliveries.sort(sortFunction);
                             //this.set('_selectedDropPoint.deliveryMethod',this._selectedDropPoint.deliveries[0].service.id);
@@ -932,13 +947,14 @@
                             this.$['infobox-droppoint'].selectMethod(this._selectedDropPoint.deliveries[0].service.id); //This should send the selection back as a droppoint-selected event
                         }
                         else {
-                            
+                            this.standardRates = this.standardRates.sort(sortFunction);
                             this.setDeliveryMethod(this.standardRates[0].id);
                             
                         }
                         callback(null);
                     }
                     else {
+                        console.warn("No delivery preferences - autoselecting without them");
                         if (this._selectedDropPoint) {
                             this.setDeliveryMethod(this._selectedDropPoint.deliveries[0].service.id);
                         }
@@ -1045,10 +1061,15 @@
             //TODO: Refactor?
             setDeliveryMethod: function (methodId, dateOverride) {
 
-                if (!methodId) return;
+                if (!methodId) {
+                    debugger;
+                    return;
+                }
+
 
                 var newMethod = this._getDeliveryRateById(methodId);
                 if (!newMethod) {
+                    debugger;
                     console.error("Method not available");
                     this.fire('noservice');
                     return;
@@ -1061,6 +1082,9 @@
                     }
 
                     newMethod.selected = true;
+                    if (!newMethod.price) {
+                        debugger;
+                    }
 
                     var newSelectedServiceDetails = {
                         _originalMethodObject: newMethod,
@@ -1326,9 +1350,10 @@
                 var self = this;
 
                 var home = null;
-
+                console.log("Infowindow = ", self.$.droppoint_info);
                 self._infoWindow = new google.maps.InfoWindow({
-                    content: self.$.droppoint_info
+                    //TIP: To use dynamic content here, use "droppoint_info" as shown in comment below. Then place a droppoint widget or similar into the droppoint_info element.
+                    content: "Selected" //self.$.droppoint_info
                 });
                 var position = new google.maps.LatLng(37, 0);
 
@@ -1408,7 +1433,7 @@
 					        position: new google.maps.LatLng(pointItem.geoLocation.coordinates.latitude, pointItem.geoLocation.coordinates.longitude),
 					        map: self._map,
 					        //animation: google.maps.Animation.DROP,
-					        title: pointItem.droppointDescription,
+					        //title: pointItem.droppointDescription,
 					        customData: pointItem,
 					        icon: self._droppointIcon(getCountryCode) + '/' + pointItem.providerName + '.png',
 					        zIndex: google.maps.Marker.MAX_ZINDEX + 1
@@ -1419,6 +1444,13 @@
 					    marker.addListener('click', function (clickedMarker) {
 					        self._selectDropPointMarker(this);
 					    });
+                        marker.addListener('mouseover', function(inspectedMarker) {
+                            var latlng = this.getPosition();
+                            self._inspectDropPointMarker(this);
+                        });
+                        marker.addListener('mouseout', function() {
+                            self._hideDropPointInspector();
+                        });
 					    // add a link to the marker to get to it from the droppoint, need to animate and centre the marker if selecting from list view
 					    pointItem.marker = marker;
 					}
@@ -1429,8 +1461,11 @@
 
             _droppointIcon: function(countryCode) {
                 var url = this.resolveUrl('./images/');
-
-                switch (countryCode) {
+                if (!countryCode) {
+                    return url;
+                }
+                else {                
+                    switch (countryCode) {
                     case "DE":
                         return url + '/DE/';
                     case "FR":
@@ -1439,6 +1474,7 @@
                         return url + '/FR/';
                     default:
                         return url + '/GB/';
+                    }
                 }
             },
 
@@ -1580,6 +1616,7 @@
 
             _updateUi: function() {
                 //Display/hide things based on the current state
+
                 if (this._selectedDropPoint) {
                     this.$.selectedDropPointPanel.classList.remove("hidden");
                 }
@@ -1660,8 +1697,9 @@
                     this.$.mapContainer.classList.remove('hidden');
                     //this._makeMap();
                     this._loadDroppointMarkers(this._dropPoints);                                                                           
-                    this._resetMap(this._map);
-                    this._openSelectedDropPointInfoWindow();
+                    this._resetMap(this._map, function() {
+                        self._openSelectedDropPointInfoWindow();
+                    });
                     //this.panToDefaultLocation();
 
                 }
@@ -1674,11 +1712,12 @@
 
             },
 
-            _resetMap: function (map) {
+            _resetMap: function (map, callback) {
                 var self = this;
                 if (map) {
                     window.setTimeout(function () {
                         google.maps.event.trigger(map, 'resize');
+                        if (callback) callback();
                         
                     }, 100);
                 }           
@@ -1775,13 +1814,16 @@
 
             //==== Make this droppoint the 'selected' one
             //If no method chosen, auto-choose one
-            _completeDropPointSelection(droppointId, methodId, callback) {
+            _completeDropPointSelection: function(droppointId, methodId, callback) {
                 if (!callback) { callback = function () { }; }
 
                 var self = this;
                 if (methodId && (methodId == this.selectedServiceDetails.serviceId && this.selectedServiceDetails.collectionPoint == droppointId) ) {
-                    callback(null);  
-                }  
+                    
+                    //this.setDeliveryMethod(methodId); //?
+                    callback(null); 
+                } 
+                //if (false) {} 
                 else {
 
                     var dp = this._droppointById(null, droppointId)            
@@ -1830,8 +1872,48 @@
             //Select the infobox's gfs-droppoint widget.
             _selectDropPointMarker: function (marker) {
                 var dp = this._droppointById(null, marker.customData.droppointId);
+
+                //marker.setIcon(this._droppointIcon() + 'gmap-icon-selected-shadow.png');
                 this._selectDropPoint(marker.customData.droppointId);
             },
+
+            _inspectDropPointMarker: function (marker) {
+                var dp = this._droppointById(null, marker.customData.droppointId);
+                this._inspectDropPoint(dp, marker);
+            },
+
+            _inspectDropPoint: function (dp, marker) {
+                this._hideDropPointInspector();
+
+                this._inspectDropPointTimeout = window.setTimeout((function() {
+                    this.set('_inspectedDropPoint', dp);
+                    this.$.inspectedDropPoint.buildWeekCollection();
+                    this._hideDropPointInspector();
+
+
+                    this._customInfoBox = new InfoBox({
+                        latlng: marker.getPosition(),
+                        map: this._map,
+                        content: this.$.inspectingDropPointPanel
+                    });       
+                }).bind(this), 350);
+
+
+            },
+
+            _hideDropPointInspector: function() {
+                if (this._inspectDropPointTimeout) {
+                    window.clearTimeout(this._inspectDropPointTimeout);
+                    delete this._inspectDropPointTimeout;
+                }
+                if (this._customInfoBox) {
+                    this._customInfoBox.remove();
+
+                    this._customInfoBox = null;
+                    this.set('_inspectedDropPoint', null);
+                }
+            },
+
 
             _selectFavDropPoint: function(e) {
                 this._selectDropPoint(e.target.droppointData.droppointId);
@@ -2199,5 +2281,69 @@
             if (a == null || typeof (a) == "undefined" || a == "" || a.length == 0) return b
             else return a;
         }
+
+
+        /* An InfoBox is like an info window, but it displays
+         * under the marker, opens quicker, and has flexible styling.
+         * @param {GLatLng} latlng Point to place bar at
+         * @param {Map} map The map on which to display this InfoBox.
+         * @param {Object} opts Passes configuration options - content,
+         * offsetVertical, offsetHorizontal, className, height, width
+         */
+
+        function InfoBox(opts) {
+            google.maps.OverlayView.call(this);
+            this.latlng_ = opts.latlng;
+            this.map_ = opts.map;
+            this.content = opts.content;
+            this.contentOrigin = this.content.parentNode;
+            this.offsetVertical_ = -195;
+            this.offsetHorizontal_ = 5;
+            //this.height_ = 165;
+            this.width_ = 240;
+
+            this.setMap(this.map_);
+        }
+        /* InfoBox extends GOverlay class from the Google Maps API
+         */
+        InfoBox.prototype = new google.maps.OverlayView();
+        /* Creates the DIV representing this InfoBox
+         */
+        InfoBox.prototype.remove = function () {
+            if (this.content) {
+                this.contentOrigin.appendChild(this.content);
+            }
+            this.setMap(null);
+        };
+        /* Redraw the Bar based on the current projection and zoom level
+         */
+        InfoBox.prototype.draw = function () {
+            // Creates the element if it doesn't exist already.
+            this.createElement();
+            if (!this.content) return;
+            // Calculate the DIV coordinates of two opposite corners of our bounds to
+            // get the size and position of our Bar
+            var pixPosition = this.getProjection().fromLatLngToDivPixel(this.latlng_);
+            if (!pixPosition) return;
+
+            var posX = pixPosition.x + this.offsetHorizontal_;
+            var posY = pixPosition.y + this.offsetVertical_ + 85;//- (this.height_/2);
+
+            // Now position our DIV based on the DIV coordinates of our bounds
+            this.content.style.width = this.width_ + "px";
+            this.content.style.left = (posX - 32) + "px";
+            this.content.style.height = this.height_ + "px";
+            this.content.style.top = (posY + 70) + "px";
+            this.content.style.display = 'block';
+            this.content.style.position = 'relative';
+            
+            this.content.style['z-index'] = 99;
+        };
+
+        InfoBox.prototype.createElement = function () {
+            var panes = this.getPanes();
+            panes.floatPane.appendChild(this.content);
+        }
+
     </script>
 </dom-module>

@@ -193,6 +193,10 @@
                 _changeIndicatorClass: {
                     type: String,
                     value: "not_changed"
+                },
+                _loadingStack: {
+                    type: Number,
+                    value: 0
                 }
                 
             },
@@ -299,9 +303,9 @@
 
                             //Send info from cart and consumer to GFS
                             function _gfs(callback) {
+                                self.initialising = false;
                                 console.log('_gfs()');
                                 if (self.$.gfsCheckoutWidget) {
-                                    self.initialising = false;
                                     self._updateGfs(callback);
                                 }
                                 else {
@@ -311,10 +315,13 @@
 
                             function _p4mCart(callback) {
                                 //self.initialising = true;
-                                console.log('_p4mCart()');
+                                
+                                console.log('_p4mCart():self.updateP4mCart() start');
                                 //self.preselectDeliveryMethod();
+
                                 self.updateP4mCart(function(err) {//This will set IsNew to false
                                     //self._updateGfs(callback); //Try to fill out delivery method
+                                    console.log('_p4mCart():self.updateP4mCart() complete');
                                     callback(err);
                                 }); 
                             }
@@ -358,7 +365,7 @@
                 this.cartData.Items.forEach(function (item) {
                     orderValue += item.Qty * item.Price;
                 });
-
+                var addrPrefs = this.consumerData.DeliveryPreferences ? this.consumerData.DeliveryPreferences.split(',') : null;
                 var gfsPostConfig = {
                     countryCode: null,
                     town: "London",
@@ -373,7 +380,7 @@
                     favAddresses: self._getPreferredAddresses() || [],
                     defaultAddress: p4mAddressToGfsAddress(self.getAddressById(this.consumerData.PrefDeliveryAddressId)),
                     cartValue: orderValue,
-                    addressPreferences: this.consumerData.DeliveryPreferences.split(','),
+                    addressPreferences: addrPrefs,
                     deliveryPreferences: {
                         preferSoonest: this.consumerData.PreferSoonestDelivery
                     }
@@ -442,16 +449,21 @@
                     }
 
                     //this.$.gfsCheckoutWidget.setGfsOrderValue(orderValue, function () {
-                    self._showAsLoadingShipping(true);
+                    //self._showAsLoadingShipping(true);
+                    self.toggleLoading(true);
 
                     self.$.localApi.call('itemQtyChanged', {}, changes, function (err, newCartTotals) {
                         //console.log("Called local api itemQtyChanged");
                         console.log("sendCartItemChanges(): itemQtyChanged: new cart totals", newCartTotals);
                         self.$.cart.clearChanges();
-                        self.updCartTotals(newCartTotals, function (err) {
+                        self.updCartTotals(newCartTotals, function (err) { //This will trigger GFS to trigger updateP4mCart, so no need to call it in the callback here. Commented out.
+                            self.toggleLoading(false);
                             self.cartData.Discounts = newCartTotals.Discounts;
-                            self.updateP4mCart();
-                            self._showAsLoadingShipping(false);
+                            /*self.updateP4mCart(function(err) {
+                                self.toggleLoading(false);
+                                //callback(err);
+                            });*/
+                            
                         });
 
                     });
@@ -487,22 +499,40 @@
 
 
             toggleLoading: function (loading) {
+                var showAsLoading;
                 if (loading) {
+                    this._loadingStack ++;
+                }
+                else {
+                    this._loadingStack --;
+                }
+                showAsLoading = (this._loadingStack > 0);
+
+                if (showAsLoading) {
                     this.$.orderSummary.showAsLoading();
                     this._showAsLoadingShipping(true);
+                    this._toggleCartEditing(false);
 
                     //this.$.p4mPurchase.setLoadingState(true);
                 }
                 else {
+                    console.log("toggle loading off", new Error().stack);
                     this.$.orderSummary.showAsLoaded();
                     this._showAsLoadingShipping(false);
+                    this._toggleCartEditing(true);
                     //this.$.p4mPurchase.setLoadingState(false);
                 }
 
             },
 
+            _toggleCartEditing: function(allowEditing) {
+                //zzzzzz
+                this.$.cart.toggleEditing(allowEditing);
+
+            },
+
             updateP4mCart: function (callback) {
-               
+                //console.log("updateP4mCart():", new Error().stack);
                 //Send changes to P4M
                 if (!callback) callback = function () { };
                 /*if (this.updating) {
@@ -517,17 +547,22 @@
                     var cartMessage =
                     {
                         "SessionId": this.sessionId,
-                        "ClearItems": true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
+                        "ClearItems": this.cartData.Id === null, //true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
                         "Cart": this.cartData
-                    }
+                    };
 
                     this.toggleLoading(true);
                     this.$.p4mCheckoutApi.call('postCart', null, cartMessage, function (err, data) {
-                        if (err) {
-                            callback(null); //TODO: Fix double-post error causing 404 in P4M back end, so we can stop suppressing errors here
+                        self.updating = false;
+                        if (err) {  
+                            //This is a workaround. Need to either stop the double-post, or fix the 404 response to them.
+                            /*console.warn('An error occurred while updating ParcelForMe:', err);
+                            console.log('Stack:', new Error().stack);
+                            self.onRemoteCartData.bind(self)({Cart:self.cartData}, callback);  //TODO: Fix double-post error causing 404 in P4M back end, so we can stop suppressing errors here*/
+
+                            callback(err);
                         }
                         else {
-                            self.updating = false;
                             self.onRemoteCartData.bind(self)(data, callback);
                         }
                     });
@@ -551,6 +586,7 @@
                 else {
                     
                     if (!data.Cart || !data.Cart.Items || data.Cart.Items.length === 0) {
+
                         window.location.reload(true);
                     }                  
                     else {

@@ -16,14 +16,13 @@
             <p4m-api id="localApi" is-local="true"></p4m-api>
 
             <!-- <paper-tabs class="select-payment-type" selected="{{selectedTab}}" no-bar on-iron-activate="onSelectTab" > -->
-            <paper-tabs class="select-payment-type" selected="0" no-bar on-iron-activate="onSelectTab" >
-                <paper-tab id="card" name="card"><div class="payWithCard"><i class="p4micon-credit-card"></i></div></paper-tab>
-                <paper-tab id="paypal" name="paypal"><div class="payWithPayPal"><i class="payment-method-logo paypal"></i></div></paper-tab>
+            <paper-tabs class="select-payment-type" selected="0" no-bar on-iron-activate="onSelectTab">
+                <paper-tab id="card" name="card" data-tooltip="Pay with credit card"><div class="payWithCard"><i class="p4micon-credit-card"></i></div></paper-tab>
+                <paper-tab id="paypal" name="paypal" data-tooltip="Pay with PayPal"><div class="payWithPayPal"><i class="payment-method-logo paypal"></i></div></paper-tab>
             </paper-tabs>
 
             <div class$="selectedPaymentMethod_{{selectedPaymentType}}">
                 <template is="dom-if" if="{{selectedCard}}">
-                    <p>In the box below enter the <a href="#">Check Digits</a> on the reverse of your payment card and click Buy.</p>
                     <p4m-card id="card" selected-card-id={{selectedCard.Id}} on-cvv="onCvv" show-actions="false" show-toggle-btn="false" show-cvv="true" card-data="{{selectedCard}}"></p4m-card>
                 </template>
                 <template is="dom-if" if="{{_noCardSelected}}">
@@ -50,6 +49,9 @@
         }
         --iron-overlay-backdrop-opacity {
             opacity: 0.9;
+        }
+        paper-tabs {
+            overflow: visible;
         }
         .p4m-error {
             color: red;
@@ -87,6 +89,9 @@
             background-color: rgba(128, 184, 128, 1.0);
         }
 
+        div[class*="selectedPaymentMethod"] {
+            position: relative;
+        }
         .selectedPaymentMethod_paypal {
             opacity: 0.5;
         }

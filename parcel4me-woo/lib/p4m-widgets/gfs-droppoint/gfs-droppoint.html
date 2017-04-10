@@ -296,6 +296,13 @@
 				padding-bottom: 0;
 			}
 
+			#infobox-droppoint .dp-day-name, #infobox-droppoint .dp-day-time-slot {
+				font-size: 11px;
+				line-height: 11px;
+				padding-top: 0;
+				padding-bottom: 0;
+			}
+
 			.multi-times {
 				line-height: 20px
 			}
@@ -383,8 +390,6 @@
 						<div id="dp-body">
 							<div id="dp-minor-info">
 								<div class="dp-opening-hours">
-
-									<div class="font-weight-600 title">Opening Hours</div>
 									<table>
 										<template is="dom-repeat" id="openingHoursTemplate" items="{{_weekCollection}}">
 											<tr>
@@ -406,7 +411,6 @@
 						<template is="dom-if" if="{{showShippingOptions}}">
 							<template id="shippingOptionsIfTemplate" is="dom-if" if="{{droppointData.selected}}">
 								<div class="shippingOptions">
-									<div class="font-weight-600 title">Collection Options</div>
 									<ul>
 										<template id="weekCollectionTemplate" is="dom-repeat" items="{{droppointData.deliveries}}">
 											<li class="delivery-place">
@@ -418,10 +422,17 @@
 
 												<i name="shipping_method" 
 													on-click="onClickOption" 
+													value="{{item.service.id}}" 
+													id="dp-{{item.service.id}}" 
+													class$="p4micon-check-circle link droppoint-delivery-selection {{item.className}}"
+													></i>
+												<!-- <i name="shipping_method" 
+													on-click="onClickOption" 
 													value="shipping_method_{{_id}}" 
 													id="dp-{{item.service.id}}" 
-													class$="p4micon-check-circle link droppoint-delivery-selection selected_{{item._originalMethodObject.selected}}"></i>
-												<!-- <input type="radio"
+													class$="p4micon-check-circle-fill link droppoint-delivery-selection selected _{{item._originalMethodObject.selected}}"
+													></i> -->
+												<!--<input type="radio"
 													name="shipping_method_{{_id}}"
 													checked="{{item.selected}}"
 													value="{{item.service.id}}"
@@ -608,6 +619,7 @@
 			onOtherDroppointSelected: function (e) {
 			    
 			    var dp = e.detail;
+			    if (!this.droppointData) return;
 
                 //If the droppoint selected was this one, make sure this "selected" value reflects the other one
 			    if (dp.droppointId == this.droppointData.droppointId) {
@@ -652,8 +664,16 @@
 			    this.select();
 			    for (var i=0; i< this.droppointData.deliveries.length; i++) {
 			        var item = this.droppointData.deliveries[i];
+			        if (this.droppointData.deliveries[i].service.id == shippingOptionId) { //IMPORTANT: Don't use === here
+			        	this.set("droppointData.deliveries." + i + ".selected", true);
+			        	this.set("droppointData.deliveries." + i + ".className", "selected");
+			        }
+			        else {
+			        	this.set("droppointData.deliveries." + i + ".selected", false);
+			        	this.set("droppointData.deliveries." + i + ".className", "unchosen");
+			        }
+			        //this.set("droppointData.deliveries." + i + ".selected", item.service.id == shippingOptionId); //IMPORTANT: Don't use === here
 
-			        this.set("droppointData.deliveries." + i + ".selected", item.service.id == shippingOptionId); //IMPORTANT: Don't use === here
 
 			    }
 			    var method = this.getSelectedMethod();
