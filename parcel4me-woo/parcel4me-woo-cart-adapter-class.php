@@ -160,7 +160,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             $cartItem->LinkToImage  = ( (has_post_thumbnail( $woo_item['data']->post->ID )) ? (wp_get_attachment_image_src( get_post_thumbnail_id( $woo_item['data']->post->ID ), 'single-post-thumbnail' )[0]) : null );
             $cartItem->LinkToItem   = get_permalink( $woo_item['data']->post->ID );
             $cartItem->removeNullProperties();    
-
+            $cartItem->LineId       = $woo_item['p4m_line_id'];
             $items[] = $cartItem;
         }
 
@@ -192,7 +192,9 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $woo_cart->empty_cart();
 
         foreach( $p4m_cart->Items as $p4m_item ) {
-            $woo_cart->add_to_cart( $p4m_item->Sku, $p4m_item->Qty );
+            $woo_cart->add_to_cart( $p4m_item->Sku, $p4m_item->Qty,
+                                    0, null,
+                                    array( 'p4m_line_id'=>$p4m_item->LineId ) );
         }
 
         return true;
@@ -231,7 +233,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $refresh_totals = true;
 
         foreach( $itemsUpdateArray as $item_update ) {
-            $woo_cart->set_quantity( $item_update['ItemCode'], $item_update['Qty'], $refresh_totals );
+            $woo_cart->set_quantity( $item_update->ItemCode, $item_update->Qty, $refresh_totals );
         }
 
 

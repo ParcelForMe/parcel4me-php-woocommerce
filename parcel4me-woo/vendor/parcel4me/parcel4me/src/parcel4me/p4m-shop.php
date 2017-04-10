@@ -9,6 +9,9 @@ require_once 'settings.php';
 require_once 'p4m-configure-server-urls.php';
 
 
+const DEBUG_SHOW_ALL_API_CALLS = true;
+
+
 abstract class P4M_Shop implements P4M_Shop_Interface
 {
 
@@ -214,11 +217,22 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 }
         */
 
+        if ( DEBUG_SHOW_ALL_API_CALLS ) {
+            error_log( '* REQUEST * -> '.$method . ' ' . $endpoint );
+            error_log( json_encode($data) );
+        }
 
 
         $response = curl_exec($curl);
         $err  = curl_error($curl);
         $info = curl_getinfo($curl);
+
+
+        if ( DEBUG_SHOW_ALL_API_CALLS ) {
+            error_log( '* RESPONSE * -> '.json_encode($response) );
+            error_log( '* err * -> '.json_encode($err) );
+            error_log( '* info * -> '.json_encode($info) );
+        }
 
         curl_close($curl);
 
@@ -315,21 +329,14 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
             if ( strpos($rob->Error, "registered")>-1 ) {
 
-                //error_log('already registered');
-                //error_log(json_encode($rob));
-
                 $redirect_url = P4M_Shop_Urls::endPoint('alreadyRegistered', "?firstName=".$rob->consumer->GivenName."&email=".$rob->consumer->Email);
                 $this->redirectTo($redirect_url);
-
 
             } else {
                 $this->somethingWentWrong("Error registering with P4M : " . $rob->Error);
             }
 
         } else {
-
-            //error_log('else');
-            //error_log(json_encode($rob));
 
             $redirect_url = P4M_Shop_Urls::endPoint('registerConsumer', '/'.$rob->ConsumerId);
             $this->redirectTo($redirect_url);
@@ -376,7 +383,6 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                    $accessToken,
                    $cookieExpire,
                    $path );
-
             
         // close this popped up window
         echo '<script>window.close();</script>';
@@ -389,18 +395,12 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         if ($this->userIsLoggedIn()) {
             
-            setcookie( "p4mLocalLogin",
-                       true,
-                       0,
-                       '/' );
+            setcookie( "p4mLocalLogin", true, 0, '/' );
             echo '{ "Success": true, "Error": null }';
 
         } else {
 
-            setcookie( "p4mLocalLogin",
-                       false,
-                       0,
-                       '/' );
+            setcookie( "p4mLocalLogin", false, 0, '/' );
             echo '{ "Success": false, "Error": "Not logged in" }';
 
         }
