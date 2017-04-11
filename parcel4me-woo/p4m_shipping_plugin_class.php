@@ -33,7 +33,8 @@ if ( ! class_exists( 'P4M_Shipping_Method' ) ) {
 			$rate = array(
 				'id' => $this->get_rate_id(),
 				'label' => $this->title,
-				'cost' => 10.99,
+				// we store the shipping amount in this session meta field 'p4m_shipping_amount'
+				'cost' => WC()->session->get( 'p4m_shipping_amount' ),
 				'taxes' => true,
 				'package' => $package
 			);

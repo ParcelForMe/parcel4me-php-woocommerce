@@ -102,6 +102,7 @@ $GLOBALS['parcel4me_woo'] = new Parcel4me_Woo();
 
 
 
+// Extra logic here for setting up our custom Shipping Method
 // from : https://gist.github.com/rpocc/06f63d9383b5e742705e921e8e46f193
 /**
  * Check if WooCommerce is active
@@ -125,6 +126,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		}
 	}
 	new p4m_shipping_method_setup();
+
 }
+  
+
 
 ?>

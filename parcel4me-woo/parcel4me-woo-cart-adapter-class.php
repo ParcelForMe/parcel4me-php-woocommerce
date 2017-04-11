@@ -199,16 +199,14 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         return true;
     }
-    
+
 
     function updateShipping( $shippingServiceName, $amount, $dueDate ) {
 
-        $woo_cart = WC()->cart;
-
-        // TODO : fix this -- it doesn't work -- woo requires that we create an actual shipping method and set that on the cart
-
-        $woo_cart->shipping_total = $amount;
-
+        WC()->session->set( 'chosen_shipping_methods', array( 'p4m_shipping_method' ) );
+        // create a custom field for the shipping amount 
+        WC()->session->set( 'p4m_shipping_amount', $amount );
+        
         return true;
     }
 
@@ -219,9 +217,9 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         $r = new stdClass();
         $r->Tax      = $woo_cart->get_taxes_total( false, false );
-        $r->Shipping = $woo_cart->shipping_total;
+        $r->Shipping = WC()->session->get( 'p4m_shipping_amount' );
         $r->Discount = $woo_cart->get_cart_discount_total();
-        $r->Total    = $woo_cart->cart_contents_total;
+        $r->Total    = $woo_cart->cart_contents_total + $r->Shipping;
 
         return $r;
     }

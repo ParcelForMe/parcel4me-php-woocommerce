@@ -9,7 +9,7 @@ require_once 'settings.php';
 require_once 'p4m-configure-server-urls.php';
 
 
-const DEBUG_SHOW_ALL_API_CALLS = true;
+const DEBUG_SHOW_ALL_API_CALLS = false;
 
 
 abstract class P4M_Shop implements P4M_Shop_Interface
@@ -70,6 +70,14 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     }
 
 
+
+    // Available public functions 
+
+    public function isLoggedIntoParcel4me() {
+        return ( array_key_exists("p4mToken", $_COOKIE) && $_COOKIE["p4mToken"] );
+    }
+
+
     public function processPaymentRefund( $transactionId, $amount ) {
 
         // Obtain a credentials token 
@@ -105,7 +113,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
 
     public function reverseTransaction( $transactionId ) {
-
+        error_log('reverseTransation() is not currently implemented in p4m-shop.php!');
     }
 
 
@@ -568,7 +576,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
     public function checkoutRedirect() {
         // check if logged onto parcel for me, if so redirect to redirect_url_checkout, if not do nothing
-        if ( array_key_exists("p4mToken", $_COOKIE) && $_COOKIE["p4mToken"]) {
+        if ( $this->isLoggedIntoParcel4me() ) {
             $this->redirectTo(Settings::getPublic( 'RedirectUrl:Checkout' ));
         }
     }
