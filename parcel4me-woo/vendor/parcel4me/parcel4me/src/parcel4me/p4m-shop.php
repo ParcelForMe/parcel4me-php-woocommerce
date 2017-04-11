@@ -568,7 +568,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
     public function checkoutRedirect() {
         // check if logged onto parcel for me, if so redirect to redirect_url_checkout, if not do nothing
-        if ($_COOKIE["p4mToken"]) {
+        if ( array_key_exists("p4mToken", $_COOKIE) && $_COOKIE["p4mToken"]) {
             $this->redirectTo(Settings::getPublic( 'RedirectUrl:Checkout' ));
         }
     }

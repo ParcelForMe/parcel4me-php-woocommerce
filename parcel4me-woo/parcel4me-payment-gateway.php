@@ -61,7 +61,7 @@ function wc_p4m_gateway_init() {
         }
 
 
-        public function process_refund( $order_id, $amount = null ) {
+        public function process_refund( $order_id, $amount = null, $reason = '' ) {
         
             $order = wc_get_order( $order_id );
             $transactionId = $order->get_transaction_id();
