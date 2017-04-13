@@ -215,11 +215,27 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         $woo_cart = WC()->cart;
 
+/*
+error_log( ' get_taxes( ) '. json_encode($woo_cart->get_taxes( )) );
+error_log( ' get_tax_totals( )'. json_encode($woo_cart->get_tax_totals( )) );
+error_log( ' get_cart_item_tax_classes( )'. json_encode($woo_cart->get_cart_item_tax_classes( )) );
+error_log( ' before calc get_cart_tax( )'. json_encode($woo_cart->get_cart_tax( )) );
+$woo_cart->calculate_totals();
+error_log( ' AFTER calc get_cart_tax( )'. json_encode($woo_cart->get_cart_tax( )) );
+*/
+
+error_log( ' tax_total '. json_encode($woo_cart->tax_total) );
+error_log( ' taxes '. json_encode($woo_cart->taxes) );
+error_log( ' '. json_encode() );
+error_log( ' '. json_encode() );
+
         $r = new stdClass();
-        $r->Tax      = $woo_cart->get_taxes_total( false, false );
+        $r->Tax      = $woo_cart->get_cart_tax();
         $r->Shipping = WC()->session->get( 'p4m_shipping_amount' );
         $r->Discount = $woo_cart->get_cart_discount_total();
-        $r->Total    = $woo_cart->cart_contents_total + $r->Shipping;
+        $r->Total    = $woo_cart->cart_contents_total + $r->Shipping + $r->Tax - $r->Discount;
+
+error_log(' getCartTotal() = '.json_encode($r));
 
         return $r;
     }
@@ -367,6 +383,15 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             $order->set_address( $address, 'billing' );
         }
 
+      //  $shipping_amt = WC()->session->get( 'p4m_shipping_amount' );
+      //  $order->set_shipping_total( $shipping_amt );
+
+WC()->cart->calculate_shipping();
+error_log( ' -- ' . WC()->cart->shipping_total );
+error_log( 'get shipping packages  '.json_encode($cart->get_shipping_packages()));
+error_log('show shipping '.json_encode($cart->show_shipping()));
+
+        $order->calculate_shipping();
         $order->calculate_totals();
         $order->payment_complete( $transactionId ); 
 

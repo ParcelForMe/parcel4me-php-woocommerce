@@ -9,7 +9,7 @@ require_once 'settings.php';
 require_once 'p4m-configure-server-urls.php';
 
 
-const DEBUG_SHOW_ALL_API_CALLS = false;
+const DEBUG_SHOW_ALL_API_CALLS = true;
 
 
 abstract class P4M_Shop implements P4M_Shop_Interface
