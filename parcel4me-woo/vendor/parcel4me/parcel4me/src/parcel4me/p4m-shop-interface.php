@@ -72,7 +72,7 @@ interface P4M_Shop_Interface {
     /**
         update the shipping and tax on the current local cart   
     */
-    public function updateShipping( $shippingServiceName, $amount, $dueDate );
+    public function updateShipping( $shippingServiceName, $amount, $dueDate, $address );
 
 
     /**

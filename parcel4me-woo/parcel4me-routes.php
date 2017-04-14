@@ -44,7 +44,7 @@ function handle_p4m_routes( $query )
             case 'p4m/paypalCancel' :           $p4m_shopping_cart_adapter->paypalCancel();              break;
 
             // POST
-            case 'p4m/updShippingService' :     $p4m_shopping_cart_adapter->udpShippingService();        break;
+            case 'p4m/updShippingService' :     $p4m_shopping_cart_adapter->updShippingService();        break;
             case 'p4m/applyDiscountCode' :      $p4m_shopping_cart_adapter->applyDiscountCode();         break;
             case 'p4m/removeDiscountCode' :     $p4m_shopping_cart_adapter->removeDiscountCode();        break;
             case 'p4m/itemQtyChanged' :         $p4m_shopping_cart_adapter->itemQtyChanged();            break;

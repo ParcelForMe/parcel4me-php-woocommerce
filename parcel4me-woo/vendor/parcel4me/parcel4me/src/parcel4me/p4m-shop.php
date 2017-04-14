@@ -9,7 +9,7 @@ require_once 'settings.php';
 require_once 'p4m-configure-server-urls.php';
 
 
-const DEBUG_SHOW_ALL_API_CALLS = true;
+const DEBUG_SHOW_ALL_API_CALLS = false;
 
 
 abstract class P4M_Shop implements P4M_Shop_Interface
@@ -28,7 +28,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     abstract public function setCurrentUserDetails( $p4m_consumer );
     abstract public function getCartOfCurrentUser();
     abstract public function setCartOfCurrentUser( $p4m_cart );
-    abstract public function updateShipping( $shippingServiceName, $amount, $dueDate );
+    abstract public function updateShipping( $shippingServiceName, $amount, $dueDate, $address );
     abstract public function getCartTotals();
     abstract public function updateWithDiscountCode( $discountCode );
     abstract public function updateRemoveDiscountCode( $discountCode );
@@ -670,7 +670,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     }
 
 
-    public function udpShippingService() {
+    public function updShippingService() {
         // http://developer.parcelfor.me/docs/documentation/parcel-for-me-widgets/p4m-checkout-widget/updshippingservice/
 
         // update the local cart with the new shipping amt
@@ -682,7 +682,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $resultObject = new \stdClass();
 
         try {
-            $this->updateShipping( $postBody->Service, $postBody->Amount, $postBody->DueDate );
+            $this->updateShipping( $postBody->Service, $postBody->Amount, $postBody->DueDate, $postBody->Address );
             $totalsObject = $this->getCartTotals();
 
             $resultObject->Success  = true;

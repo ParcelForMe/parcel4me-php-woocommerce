@@ -201,12 +201,24 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
 
 
-    function updateShipping( $shippingServiceName, $amount, $dueDate ) {
+    function updateShipping( $shippingServiceName, $amount, $dueDate, $address) {
 
+        // set the shipping method to the Parcel For Me shipping method
         WC()->session->set( 'chosen_shipping_methods', array( 'p4m_shipping_method' ) );
+
         // create a custom field for the shipping amount 
         WC()->session->set( 'p4m_shipping_amount', $amount );
-        
+
+        // set the shipping details so that Woo is able to calculate (via p4m_shipping_plugin) the shipping, and tax
+        $woo_customer = WC()->customer;
+        $woo_customer->set_shipping_location( $address->CountryCode,
+                                              $address->State, 
+                                              $address->PostCode, 
+                                              $address->City );
+        $woo_customer->set_shipping_address( $address->Street1 );
+        $woo_customer->set_shipping_address_2( $address->Street2 );
+        $woo_customer->save_data();
+
         return true;
     }
 
@@ -226,11 +238,11 @@ error_log( ' AFTER calc get_cart_tax( )'. json_encode($woo_cart->get_cart_tax( )
 
 error_log( ' tax_total '. json_encode($woo_cart->tax_total) );
 error_log( ' taxes '. json_encode($woo_cart->taxes) );
-error_log( ' '. json_encode() );
-error_log( ' '. json_encode() );
+//error_log( ' '. json_encode() );
+//error_log( ' '. json_encode() );
 
         $r = new stdClass();
-        $r->Tax      = $woo_cart->get_cart_tax();
+        $r->Tax      = $woo_cart->tax_total;
         $r->Shipping = WC()->session->get( 'p4m_shipping_amount' );
         $r->Discount = $woo_cart->get_cart_discount_total();
         $r->Total    = $woo_cart->cart_contents_total + $r->Shipping + $r->Tax - $r->Discount;

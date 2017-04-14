@@ -128,7 +128,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	new p4m_shipping_method_setup();
 
 }
-  
-
+ 
 
 ?>
