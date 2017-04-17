@@ -547,7 +547,7 @@
                     var cartMessage =
                     {
                         "SessionId": this.sessionId,
-                        "ClearItems": this.cartData.Id === null, //true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
+                        "ClearItems": (!this.cartData.Id), //true, // are we always replacing the whole cart? or ClearItems = this.cartData.Id === null; ??
                         "Cart": this.cartData
                     };
 

@@ -101,33 +101,6 @@ class Parcel4me_Woo {
 $GLOBALS['parcel4me_woo'] = new Parcel4me_Woo();
 
 
-
-// Extra logic here for setting up our custom Shipping Method
-// from : https://gist.github.com/rpocc/06f63d9383b5e742705e921e8e46f193
-/**
- * Check if WooCommerce is active
- */
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-
-	class p4m_shipping_method_setup {
-
-		public function __construct() {
-			add_action( 'woocommerce_shipping_init', array($this, 'p4m_shipping_method_init') );
-			add_filter( 'woocommerce_shipping_methods', array( $this, 'add_p4m_shipping_method') );
-		}
-		
-		public function p4m_shipping_method_init() {
-			include('p4m_shipping_plugin_class.php');
-		}
-
-		public function add_p4m_shipping_method( $methods ) {
-			$methods['p4m_shipping_method'] = 'P4M_Shipping_Method';
-			return $methods;
-		}
-	}
-	new p4m_shipping_method_setup();
-
-}
  
 
 ?>
