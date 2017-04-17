@@ -9,6 +9,7 @@ if ( ! class_exists( 'P4M_Shipping_Method' ) ) {
 			*/
 		public function __construct( $instance_id = 0 ) {
 			$this->id                 = 'p4m_shipping_method'; // Id for your shipping method. Should be uunique.
+			$this->title 			  = __( 'Parcel For Me Shipping' );
 			$this->instance_id        = absint( $instance_id );
 			$this->method_title       = __( 'Parcel For Me Shipping' );  // Title shown in admin
 			$this->method_description = __( 'Parcel For Me will handle the shipping' ); 
