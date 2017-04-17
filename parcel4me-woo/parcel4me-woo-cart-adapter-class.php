@@ -208,6 +208,9 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         // create a custom field for the shipping amount 
         WC()->session->set( 'p4m_shipping_amount', $amount );
+        WC()->session->set( 'p4m_shipping_name', $shippingServiceName );
+        WC()->session->set( 'p4m_shipping_due', $dueDate );
+
 
         // set the shipping details so that Woo is able to calculate (via p4m_shipping_plugin) the shipping, and tax
         $woo_customer = WC()->customer;
@@ -227,19 +230,8 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         $woo_cart = WC()->cart;
 
-/*
-error_log( ' get_taxes( ) '. json_encode($woo_cart->get_taxes( )) );
-error_log( ' get_tax_totals( )'. json_encode($woo_cart->get_tax_totals( )) );
-error_log( ' get_cart_item_tax_classes( )'. json_encode($woo_cart->get_cart_item_tax_classes( )) );
-error_log( ' before calc get_cart_tax( )'. json_encode($woo_cart->get_cart_tax( )) );
-$woo_cart->calculate_totals();
-error_log( ' AFTER calc get_cart_tax( )'. json_encode($woo_cart->get_cart_tax( )) );
-*/
-
 error_log( ' tax_total '. json_encode($woo_cart->tax_total) );
 error_log( ' taxes '. json_encode($woo_cart->taxes) );
-//error_log( ' '. json_encode() );
-//error_log( ' '. json_encode() );
 
         $r = new stdClass();
         $r->Tax      = $woo_cart->tax_total;
@@ -395,15 +387,8 @@ error_log(' getCartTotal() = '.json_encode($r));
             $order->set_address( $address, 'billing' );
         }
 
-      //  $shipping_amt = WC()->session->get( 'p4m_shipping_amount' );
-      //  $order->set_shipping_total( $shipping_amt );
+        $this->addShippingToOrder( $order, WC()->session->get( 'p4m_shipping_amount' ), WC()->session->get( 'p4m_shipping_name' ) );
 
-WC()->cart->calculate_shipping();
-error_log( ' -- ' . WC()->cart->shipping_total );
-error_log( 'get shipping packages  '.json_encode($cart->get_shipping_packages()));
-error_log('show shipping '.json_encode($cart->show_shipping()));
-
-        $order->calculate_shipping();
         $order->calculate_totals();
         $order->payment_complete( $transactionId ); 
 
@@ -412,6 +397,28 @@ error_log('show shipping '.json_encode($cart->show_shipping()));
         return true;
     }
         
+
+    function addShippingToOrder( $order, $shipping_amount, $shipping_name ) {
+
+        // I spent a lot of time attempting to do this via the shipping method class,
+        // but was unable to figure that out, and so this is the shipping solution 
+
+        $shipping_tax = array(); // TO DO when P4M supports it
+        $shipping_rate = new WC_Shipping_Rate( '', 'Parcel For Me : '.$shipping_name, $shipping_amount, $shipping_tax, 'p4m_shipping_method' );
+        $order->add_shipping($shipping_rate);
+
+        /* v3.0 solution will be something like this :
+        // https://docs.woocommerce.com/wc-apidocs/class-WC_Order_Item_Shipping.html
+        $woo_shipping = new WC_Order_Item_Shipping();
+        $woo_shipping->set_method_title( $shipping_name );
+        $woo_shipping->set_method_id( 'p4m_shipping_method' );
+        $woo_shipping->set_total( $shipping_amount );
+
+		$order->add_item( $woo_shipping );
+        */
+        
+    }
+
 
     function handleError($message) {
         echo '<div class="error p4m-error">'.$message.'</div>';

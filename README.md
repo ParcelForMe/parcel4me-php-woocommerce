@@ -7,7 +7,6 @@ This is the repo for the ParcelForMe WooCommerce plugin.
 
 See the [parcelfor.me](http://parcelfor.me/) website for more information about Parcel For Me.
 
-See [the readme.txt](parcel4me/readme.txt) for more details about this plugin.
 
 ------
 
