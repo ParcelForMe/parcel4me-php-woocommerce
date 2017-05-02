@@ -151,9 +151,15 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
             //$truncated_desc = strlen($woo_item['data']->post->post_content) > 120 ? substr($woo_item['data']->post->post_content,0,90)."..." : $woo_item['data']->post->post_content; 
 
+            // get product SKU if set, else use product_id
+            $args     = array( 'post_type' => 'product', 'product_id' => $woo_item['product_id'] );
+            $product = wc_get_product( $woo_item['product_id'] );
+            $product_sku = $product->get_sku();
+            if (!$product_sku) $product_sku = $woo_item['product_id'];
+
             $cartItem = new P4M\Model\CartItem();
             $cartItem->Make         = $woo_item['data']->post->post_name;
-            $cartItem->Sku          = $woo_item['product_id'];
+            $cartItem->Sku          = $product_sku;
             $cartItem->Desc         = $woo_item['data']->post->post_title;
             $cartItem->Qty          = $woo_item['quantity'];
             $cartItem->Price        = (double)$woo_item['data']->price;
@@ -230,9 +236,6 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         $woo_cart = WC()->cart;
 
-error_log( ' tax_total '. json_encode($woo_cart->tax_total) );
-error_log( ' taxes '. json_encode($woo_cart->taxes) );
-
         $r = new stdClass();
         $r->Tax      = $woo_cart->tax_total;
         $r->Shipping = WC()->session->get( 'p4m_shipping_amount' );
@@ -250,23 +253,37 @@ error_log(' getCartTotal() = '.json_encode($r));
         $woo_cart = WC()->cart;
         $refresh_totals = true;
 
-        foreach( $itemsUpdateArray as $item_update ) {
-            $woo_cart->set_quantity( $item_update->ItemCode, $item_update->Qty, $refresh_totals );
+        foreach( $itemsUpdateArray as $item_key=>$item_update ) {
+            // note that the product SKU that p4m knows will either be a woo SKU (if set), or else the product_id (see code in getCartOfCurrentUser)
+            $product_id = wc_get_product_id_by_sku( $item_update->ItemCode ) || $item_update->ItemCode;
+            // determine the woo cart_item_key for this product 
+            $cart_item_key = $woo_cart->find_product_in_cart( $product_id );
+            // now set the quantity for that line
+            $woo_cart->set_quantity( $cart_item_key, $item_update->Qty, $refresh_totals );
         }
 
+        // find discounts 
+        $p4m_discounts = [];
+/* WIP ..
+error_log(' STILL .. in updateCartItemQuantities ..');
 
-        // TODO : get the discounts attached to the cart and return them
-        /*
-        $dis = new P4M\Model\Discount();
-        $dis->Code           = 'valid_code';
-        $dis->Description    = 'A demo valid coupon code!';
-        $dis->Amount         = 0.01;
+        $woo_coupons = $woo_cart->get_coupons();
 
-        $disArray = [ $dis ];
-        */
-        $disArray = [];
+error_log(' woo_coupons = '.json_encode($woo_coupons));
 
-        return $disArray;
+        foreach($woo_coupons as $woo_coupon) {
+
+            $dis = new P4M\Model\Discount();
+            $dis->Code           = $woo_coupon->get_code();
+            $dis->Description    = $woo_coupon->get_description();
+            $dis->Amount         = $woo_coupon->get_discount_amount( $woo_cart->cart_contents_total );
+
+            $p4m_discounts[] = $dis;
+        }
+
+error_log(' Returning '.json_encode($p4m_discounts));
+*/
+        return $p4m_discounts;
     }
 
 
