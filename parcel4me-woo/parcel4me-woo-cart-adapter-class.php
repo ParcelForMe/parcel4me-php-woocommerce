@@ -236,11 +236,13 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         $woo_cart = WC()->cart;
 
+        $woo_cart->calculate_totals();
+        
         $r = new stdClass();
         $r->Tax      = $woo_cart->tax_total;
         $r->Shipping = WC()->session->get( 'p4m_shipping_amount' );
         $r->Discount = $woo_cart->get_cart_discount_total();
-        $r->Total    = $woo_cart->cart_contents_total + $r->Shipping + $r->Tax - $r->Discount;
+        $r->Total    = $woo_cart->cart_contents_total + $r->Shipping + $r->Tax;
 
 error_log(' getCartTotal() = '.json_encode($r));
 
@@ -264,25 +266,23 @@ error_log(' getCartTotal() = '.json_encode($r));
 
         // find discounts 
         $p4m_discounts = [];
-/* WIP ..
-error_log(' STILL .. in updateCartItemQuantities ..');
+
+error_log('Current cart total is : '.$woo_cart->cart_contents_total);
 
         $woo_coupons = $woo_cart->get_coupons();
-
-error_log(' woo_coupons = '.json_encode($woo_coupons));
-
         foreach($woo_coupons as $woo_coupon) {
+error_log( '  COUPON '.json_encode($woo_coupon));
 
             $dis = new P4M\Model\Discount();
-            $dis->Code           = $woo_coupon->get_code();
-            $dis->Description    = $woo_coupon->get_description();
-            $dis->Amount         = $woo_coupon->get_discount_amount( $woo_cart->cart_contents_total );
+            $dis->Code           = $woo_coupon->code;
+            $dis->Description    = $woo_coupon->description;
+            $dis->Amount         = $woo_cart->get_coupon_discount_amount( $woo_coupon->code );
 
             $p4m_discounts[] = $dis;
         }
 
 error_log(' Returning '.json_encode($p4m_discounts));
-*/
+
         return $p4m_discounts;
     }
 
