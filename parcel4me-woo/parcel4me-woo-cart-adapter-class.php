@@ -165,10 +165,11 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             $cartItem->Price        = (double)$woo_item['data']->price;
             $cartItem->LinkToImage  = ( (has_post_thumbnail( $woo_item['data']->post->ID )) ? (wp_get_attachment_image_src( get_post_thumbnail_id( $woo_item['data']->post->ID ), 'single-post-thumbnail' )[0]) : null );
             $cartItem->LinkToItem   = get_permalink( $woo_item['data']->post->ID );
-            $cartItem->removeNullProperties();    
             $cartItem->LineId       = $woo_item['p4m_line_id'];
+            $cartItem->removeNullProperties();    
             $items[] = $cartItem;
         }
+
 
         // and then the cart object 
 
@@ -183,7 +184,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $cart->Tax          = $woo_cart->tax_total;
         $cart->Total        = $woo_cart->total;
         $cart->PaymentType  = "DB"; // TODO : NOT YET READY : this needs more throught first before implementing
-        // $cart->Discounts    = ?? $woo_cart->$coupons ?? // TODO : coupon logic to do later
+        $cart->Discounts    = $this->get_p4m_discounts_from_woo_cart_coupons();
         $cart->Items        = $items;
         $cart->removeNullProperties();
 
@@ -197,11 +198,20 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         $woo_cart->empty_cart();
 
+        // add in all the order lines
         foreach( $p4m_cart->Items as $p4m_item ) {
             $woo_cart->add_to_cart( $p4m_item->Sku, $p4m_item->Qty,
                                     0, null,
                                     array( 'p4m_line_id'=>$p4m_item->LineId ) );
         }
+
+        // and apply the approprate discounts
+        foreach( $p4m_cart->Discounts as $p4m_disc ) {
+            $woo_cart->remove_coupon( $p4m_disc->Code );
+            $woo_cart->add_discount( $p4m_disc->Code );
+        }
+
+        $woo_cart->calculate_totals();
 
         return true;
     }
@@ -216,7 +226,6 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         WC()->session->set( 'p4m_shipping_amount', $amount );
         WC()->session->set( 'p4m_shipping_name', $shippingServiceName );
         WC()->session->set( 'p4m_shipping_due', $dueDate );
-
 
         // set the shipping details so that Woo is able to calculate (via p4m_shipping_plugin) the shipping, and tax
         $woo_customer = WC()->customer;
@@ -244,11 +253,25 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $r->Discount = $woo_cart->get_cart_discount_total();
         $r->Total    = $woo_cart->cart_contents_total + $r->Shipping + $r->Tax;
 
-error_log(' getCartTotal() = '.json_encode($r));
+        //error_log(' getCartTotal() = '.json_encode($r));
 
         return $r;
     }
 
+    function get_p4m_discounts_from_woo_cart_coupons() {
+        $woo_cart = WC()->cart;
+        $p4m_discounts = [];
+        $woo_coupons = $woo_cart->get_coupons();
+        foreach($woo_coupons as $woo_coupon) {
+            $dis = new P4M\Model\Discount();
+            $dis->Code           = $woo_coupon->code;
+            $dis->Description    = $woo_coupon->code;
+            $dis->Amount         = $woo_cart->get_coupon_discount_amount( $woo_coupon->code );
+            $dis->removeNullProperties();
+            $p4m_discounts[] = $dis;
+        }
+        return $p4m_discounts;
+    }
 
     public function updateCartItemQuantities( $itemsUpdateArray ) {
 
@@ -264,71 +287,57 @@ error_log(' getCartTotal() = '.json_encode($r));
             $woo_cart->set_quantity( $cart_item_key, $item_update->Qty, $refresh_totals );
         }
 
-        // find discounts 
-        $p4m_discounts = [];
-
-error_log('Current cart total is : '.$woo_cart->cart_contents_total);
-
-        $woo_coupons = $woo_cart->get_coupons();
-        foreach($woo_coupons as $woo_coupon) {
-error_log( '  COUPON '.json_encode($woo_coupon));
-
-            $dis = new P4M\Model\Discount();
-            $dis->Code           = $woo_coupon->code;
-            $dis->Description    = $woo_coupon->description;
-            $dis->Amount         = $woo_cart->get_coupon_discount_amount( $woo_coupon->code );
-
-            $p4m_discounts[] = $dis;
-        }
-
-error_log(' Returning '.json_encode($p4m_discounts));
+        $p4m_discounts = $this->get_p4m_discounts_from_woo_cart_coupons();
 
         return $p4m_discounts;
     }
 
 
     function updateWithDiscountCode( $discountCode ) {
-        /* 
-            some logic goes here to check if this discount code is valid,
-            if not throw an error, if so then apply it to the cart and return the discount details 
-        */
 
-        // TODO !
-
-        $dis = new P4M\Model\Discount();
-
-        if ($discountCode != 'valid_code') // special discount code "valid_code" works, else fails
-        {
-            throw new Exception('Unknown discount code.'); 
+        // fetch and check coupon is valid 
+        $woo_coupon = new WC_Coupon( $discountCode );
+        if ( !$woo_coupon->exists ) {
+            throw new Exception('Unknown discount code : '.$discountCode ); 
         }
 
+        // apply coupon discount to cart
+        $woo_cart = WC()->cart;
+        $woo_cart->add_discount( $discountCode );
+        $woo_cart->calculate_totals();
+        
+        // now return the P4M discount object
+        $dis = new P4M\Model\Discount();
         $dis->Code          = $discountCode;
-        $dis->Description   = 'A demo valid coupon code!';
-        $dis->Amount        = 0.01;
+        $dis->Description   = $discountCode;   // in Woo version 3.0, use $woo_coupon->get_description();
+        $dis->Amount        = $woo_cart->get_coupon_discount_amount( $woo_coupon->code );
+        $dis->removeNullProperties();
 
         return $dis;
     }
 
 
     function updateRemoveDiscountCode( $discountCode ) {
-        /* 
-            some logic goes here to remove this discount code from the cart 
-            throw error if it is not on there
-        */
 
-        // TODO !
-
-        $dis = new P4M\Model\Discount();
-
-        if ($discountCode != 'valid_code') // special discount code "valid_code" works, else fails
-        {
-            throw new Exception('Unknown discount code.'); 
+        // fetch and check coupon is valid 
+        $woo_coupon = new WC_Coupon( $discountCode );
+        if ( !$woo_coupon->exists ) {
+            throw new Exception('Unknown discount code : '.$discountCode ); 
         }
 
+        // apply coupon discount to cart
+        $woo_cart = WC()->cart;
+        $prev_discount_amount = $woo_cart->get_coupon_discount_amount( $woo_coupon->code );
+        $woo_cart->remove_coupon( $discountCode );
+        $woo_cart->calculate_totals();
+        
+        // now return the P4M discount object
+        $dis = new P4M\Model\Discount();
         $dis->Code          = $discountCode;
-        $dis->Description   = 'A demo valid coupon code!';
-        $dis->Amount        = 0.01;
-
+        $dis->Description   = $discountCode;   // in Woo version 3.0, use $woo_coupon->get_description();
+        $dis->Amount        = $prev_discount_amount;
+        $dis->removeNullProperties();
+        
         return $dis;
     }
     

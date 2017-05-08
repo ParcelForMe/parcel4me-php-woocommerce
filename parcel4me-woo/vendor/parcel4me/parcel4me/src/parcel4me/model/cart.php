@@ -42,7 +42,7 @@ class Cart extends P4mModel
     public  $AuthCode;                /* (read only)	 Used in back office transactions */
     public  $PurchaseConfirmedTS;     /* (read only)	 Date and time purchased was confirmed by the PSP */
     public  $Items;                 // = [];	                /* List (CartItems) */
-    public  $Dicounts;              // = [];                /* List (Discounts)	*/
+    public  $Discounts;             // = [];                /* List (Discounts)	*/
 
 }
 

@@ -709,21 +709,30 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         $resultObject = new \stdClass();
 
-        try {
-            $discountCodeDetails = $this->updateWithDiscountCode( $postBody->discountCode );
-            $totalsObject = $this->getCartTotals();
+        if ( null == $postBody->discountCode ) {
+            $workaround_err_message = "applyDiscountCode was called with a null discountCode -- this is a widget error and incorrect but we allow it and return Success : true";
+            $resultObject->Success       = true;
+            $resultObject->WidgetMessage = $workaround_err_message;
+            error_log($workaround_err_message);
+        } else {
 
-            $resultObject->Success      = true;
-            $resultObject->Tax          = $totalsObject->Tax;
-            $resultObject->Shipping     = $totalsObject->Shipping;
-            $resultObject->Discount     = $totalsObject->Discount;
-            $resultObject->Total        = $totalsObject->Total;
-            $resultObject->Code         = $discountCodeDetails->Code;
-            $resultObject->Description  = $discountCodeDetails->Description;
-            $resultObject->Amount       = $discountCodeDetails->Amount;
-        } catch (\Exception $e) {
-            $resultObject->Success = false;
-            $resultObject->Error   = $e->getMessage();
+            try {
+                $discountCodeDetails = $this->updateWithDiscountCode( $postBody->discountCode );
+                $totalsObject = $this->getCartTotals();
+
+                $resultObject->Success      = true;
+                $resultObject->Tax          = $totalsObject->Tax;
+                $resultObject->Shipping     = $totalsObject->Shipping;
+                $resultObject->Discount     = $totalsObject->Discount;
+                $resultObject->Total        = $totalsObject->Total;
+                $resultObject->Code         = $discountCodeDetails->Code;
+                $resultObject->Description  = $discountCodeDetails->Description;
+                $resultObject->Amount       = $discountCodeDetails->Amount;
+            } catch (\Exception $e) {
+                $resultObject->Success = false;
+                $resultObject->Error   = $e->getMessage();
+            }
+
         }
 
         $resultJson = json_encode($resultObject, JSON_PRETTY_PRINT);
