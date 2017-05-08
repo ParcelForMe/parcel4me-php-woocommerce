@@ -477,7 +477,6 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                     // case 1 OR case 2b
 
                     $localUser = $this->fetchLocalUserByEmail( $consumer->Email );
-                    
                     if ( !$localUser ) $localUser = $this->createNewUser( $consumer ); 
                         
                     if ( !$localUser ) $this->returnJsonError("Failed to create new local user");
@@ -503,7 +502,10 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 if (!$hasLocalId) {
                     // case 3
                     $this->logoutCurrentUser();
-                    $localUser = $this->createNewUser($consumer); 
+
+                    $localUser = $this->fetchLocalUserByEmail( $consumer->Email );
+                    if ( !$localUser ) $localUser = $this->createNewUser( $consumer ); 
+
                     if ( !isset($localUser->id) ) $this->returnJsonError('No "id" field on local (logged in) user');
 
                     try {
