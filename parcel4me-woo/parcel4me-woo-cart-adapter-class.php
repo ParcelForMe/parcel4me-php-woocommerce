@@ -113,8 +113,6 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             return false;
         }
 
-        // TODO : IMPORTANT ! maybe get addresses from woo commerce if possible
-
         $consumer = new P4M\Model\Consumer();
         $consumer->GivenName  = $wp_user->first_name;
         $consumer->FamilyName = $wp_user->last_name;
@@ -127,14 +125,63 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             $consumer->Extras->LocalId = $current_user->ID;
         }
 
+        // If the user has a billing or shipping address then add these to the P4M consumer
+
+        $billing_address = $this->get_address_for_p4m( 'billing' );
+        $shipping_address = $this->get_address_for_p4m( 'shipping' );
+
+        $consumer->Addresses = [];
+        $address_index = 0;
+
+        if ( $billing_address ) {
+            $consumer->Addresses[] = $billing_address;
+            $consumer->BillingAddressId = $address_index;
+            $address_index++;
+        }
+
+        if ( $shipping_address ) {
+            $consumer->Addresses[] = $shipping_address;
+            $consumer->PrefDeliveryAddressId = $address_index;
+            $address_index++;
+        }
+
+
         $consumer->removeNullProperties();
 
         return $consumer;
     }
 
 
-    // -----------------------------------------------------------------
-    // Code below here is WooCommerce specific -------------------------
+// -----------------------------------------------------------------
+// Code below here is WooCommerce specific -------------------------
+
+
+    function get_address_for_p4m( $address_type ) {
+        // WooCommerce keeps a 'billing' and 'shipping' address
+        // https://docs.woocommerce.com/wc-apidocs/source-class-WC_Customer.html#418-438
+
+        $woo_customer = WC()->customer;
+
+        // Business Rule - the address MUST have a country code to be valid
+        $country = $woo_customer->get_address_prop( 'country', $address_type );
+        if (!$country) return false;
+
+        // and if we have a country code then we create an address with whatever details we have
+        $address = new P4M\Model\Address();
+        $address['AddressType'] = 'Address';
+        $address['CompanyName'] = $woo_customer->get_address_prop( 'company', $address_type );
+        $address['Street1'] = $woo_customer->get_address_prop( 'address_1', $address_type );
+        $address['Street2'] = $woo_customer->get_address_prop( 'address_2', $address_type );
+        $address['City'] = $woo_customer->get_address_prop( 'city', $address_type );
+        $address['PostCode'] = $woo_customer->get_address_prop( 'postcode', $address_type );
+        $address['State'] = $woo_customer->get_address_prop( 'state', $address_type );
+        $address['CountryCode'] = $woo_customer->get_address_prop( 'country', $address_type );
+        $address['Phone'] = $woo_customer->get_address_prop( 'phone', $address_type );
+
+        $address->removeNullProperties();
+
+        return $address;
+    }
 
 
     function getCartOfCurrentUser() {
