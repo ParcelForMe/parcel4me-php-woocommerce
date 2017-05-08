@@ -108,7 +108,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         $wp_user = wp_get_current_user();
 
-        if ( 0 == $current_user->ID ) {
+        if ( 0 == $wp_user->ID ) {
             // No logged in user 
             return false;
         }
@@ -118,11 +118,14 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $consumer->FamilyName = $wp_user->last_name;
         $consumer->Email      = $wp_user->user_email;
 
-        if ( !property_exists( $consumer, 'Extras' ) ) {
+        if ( ( !property_exists( $consumer, 'Extras' ) ) ||
+             ( null == $consumer->Extras ) )
+        {
             $consumer->Extras  = new stdClass();
         }  
+
         if ( !property_exists( $consumer->Extras, 'LocalId' ) ) {
-            $consumer->Extras->LocalId = $current_user->ID;
+            $consumer->Extras->LocalId = $wp_user->ID;
         }
 
         // If the user has a billing or shipping address then add these to the P4M consumer
@@ -161,22 +164,62 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         // https://docs.woocommerce.com/wc-apidocs/source-class-WC_Customer.html#418-438
 
         $woo_customer = WC()->customer;
+        if ( (!$woo_customer) || (empty($woo_customer)) ) return false;
 
+        if ( 'billing' == $address_type ) {
+
+            // Business Rule - the address MUST have a country code to be valid
+            $country = $woo_customer->get_country();
+            if (!country) return false;
+
+            // and if we have a country code then we create an address with whatever details we have
+            $address = new P4M\Model\Address();
+            $address->AddressType = 'Address';
+            $address->Street1     = $woo_customer->get_address();
+            $address->Street2     = $woo_customer->get_address_2();
+            $address->City        = $woo_customer->get_city();
+            $address->PostCode    = $woo_customer->get_postcode();
+            $address->State       = $woo_customer->get_state();
+            $address->CountryCode = $woo_customer->get_country();
+
+        } elseif ( 'shipping' == $address_type ) {
+
+            // Business Rule - the address MUST have a country code to be valid
+            $country = $woo_customer->get_shipping_country();
+            if (!country) return false;
+
+            // and if we have a country code then we create an address with whatever details we have
+            $address = new P4M\Model\Address();
+            $address->AddressType = 'Address';
+            $address->Street1     = $woo_customer->get_shipping_address();
+            $address->Street2     = $woo_customer->get_shipping_address_2();
+            $address->City        = $woo_customer->get_shipping_city();
+            $address->PostCode    = $woo_customer->get_shipping_postcode();
+            $address->State       = $woo_customer->get_shipping_state();
+            $address->CountryCode = $woo_customer->get_shipping_country();
+
+        } else {
+            throw new Exception('Unknown address type : '.$address_type);
+        }
+       
+
+        /* WooCommerce v3.0 Code (much neater!) :
         // Business Rule - the address MUST have a country code to be valid
         $country = $woo_customer->get_address_prop( 'country', $address_type );
         if (!$country) return false;
 
         // and if we have a country code then we create an address with whatever details we have
         $address = new P4M\Model\Address();
-        $address['AddressType'] = 'Address';
-        $address['CompanyName'] = $woo_customer->get_address_prop( 'company', $address_type );
-        $address['Street1'] = $woo_customer->get_address_prop( 'address_1', $address_type );
-        $address['Street2'] = $woo_customer->get_address_prop( 'address_2', $address_type );
-        $address['City'] = $woo_customer->get_address_prop( 'city', $address_type );
-        $address['PostCode'] = $woo_customer->get_address_prop( 'postcode', $address_type );
-        $address['State'] = $woo_customer->get_address_prop( 'state', $address_type );
-        $address['CountryCode'] = $woo_customer->get_address_prop( 'country', $address_type );
-        $address['Phone'] = $woo_customer->get_address_prop( 'phone', $address_type );
+        $address->AddressType = 'Address';
+        $address->CompanyName = $woo_customer->get_address_prop( 'company', $address_type );
+        $address->Street1     = $woo_customer->get_address_prop( 'address_1', $address_type );
+        $address->Street2     = $woo_customer->get_address_prop( 'address_2', $address_type );
+        $address->City        = $woo_customer->get_address_prop( 'city', $address_type );
+        $address->PostCode    = $woo_customer->get_address_prop( 'postcode', $address_type );
+        $address->State       = $woo_customer->get_address_prop( 'state', $address_type );
+        $address->CountryCode = $woo_customer->get_address_prop( 'country', $address_type );
+        $address->Phone       = $woo_customer->get_address_prop( 'phone', $address_type );
+        */
 
         $address->removeNullProperties();
 

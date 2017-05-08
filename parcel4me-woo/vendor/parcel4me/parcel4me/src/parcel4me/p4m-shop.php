@@ -499,6 +499,8 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
             } else {
 
+                $local_consumer = $this->getCurrentUserDetails();
+
                 if (!$hasLocalId) {
                     // case 3
                     $this->logoutCurrentUser();
@@ -517,9 +519,10 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
                 } elseif ( (property_exists($consumer, 'Extras')) && 
                            (property_exists($consumer->Extras, 'LocalId')) && 
-                           (is_object($loggedInUser)) &&
-                           (property_exists($loggedInUser, 'id')) &&
-                           ($consumer->Extras->LocalId != $loggedInUser->id) ) 
+                           (is_object($local_consumer)) &&
+                           (property_exists($local_consumer, 'Extras')) &&
+                           (property_exists($local_consumer->Extras, 'LocalId')) &&
+                           ($consumer->Extras->LocalId != $local_consumer->Extras->LocalId) ) 
                 {
                     // case 4
                     $this->logoutCurrentUser();
