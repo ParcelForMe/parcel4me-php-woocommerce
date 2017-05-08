@@ -87,8 +87,11 @@ class Parcel4me_Woo {
         $gateways[] = 'P4M_Payment_Gateway';
         return $gateways;
     }
+    /*
+    Note - we want the P4M_Payment_Gateway to exist as a payment type because we use it on the order,
+           but we do NOT want it in the list of available payment options, so we deliberately don't do this :
     add_filter( 'woocommerce_payment_gateways', 'wc_add_p4m_payment_gateway_to_gateways' );
-
+    */
 
   }
 
