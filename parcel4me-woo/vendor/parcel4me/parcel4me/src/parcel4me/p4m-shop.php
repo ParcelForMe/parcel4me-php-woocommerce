@@ -7,6 +7,7 @@ require_once 'p4m-urls.php';
 require_once 'p4m-models.php';
 require_once 'settings.php';
 require_once 'p4m-configure-server-urls.php';
+require_once 'p4m-cacert.php';
 
 
 const DEBUG_SHOW_ALL_API_CALLS = false;
@@ -88,7 +89,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $oidc->addScope('p4mRetail');
         $oidc->addScope('p4mApi');
 
-        $oidc->setCertPath( dirname(__FILE__) . "/cert/cacert.pem" );  
+        $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() );  
         
         $clientCredentials = $oidc->requestClientCredentialsToken();
 
@@ -109,6 +110,15 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             return $rob->Error;
         } 
 
+    }
+
+
+    public function updateCaCertificateIfChanged() {
+        try {
+            P4M_Shop_CaCert::downloadLatestCertIfChanged();
+        } catch (\Exception $e) {
+            $this->somethingWentWrong( $e->getMessage() );
+        }
     }
 
 
@@ -187,7 +197,6 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            // CURLOPT_PORT => "44321",
             CURLOPT_URL => $endpoint,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
@@ -212,19 +221,8 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 https://blogs.msdn.microsoft.com/azureossds/2015/06/12/verify-peer-certificate-from-php-curl-for-azure-apps/
                 (which includes the link to http://curl.haxx.se/docs/caextract.html)
         */
-        // TODO : mozilla suggests updating when changed, need to do this somewhere ! :  curl --remote-name --time-cond cacert.pem https://curl.haxx.se/ca/cacert.pem
-        curl_setopt($curl, CURLOPT_CAINFO, dirname(__FILE__) . "/cert/cacert.pem");
-        /* a possible 'nother option :
-                $NOT_YET_IMPLEMENTED_use_ssl_cert_verify_peer = false;
-                if ( $NOT_YET_IMPLEMENTED_use_ssl_cert_verify_peer ) {
-                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-                    curl_setopt($curl, CURLOPT_CAINFO, $TO_BE_DEFINED_certPath);
-                } else {
-                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-                }
-        */
-
+        curl_setopt($curl, CURLOPT_CAINFO, P4M_Shop_CaCert::fullCertPath());
+        
         if ( DEBUG_SHOW_ALL_API_CALLS ) {
             error_log( '* REQUEST * -> '.$method . ' ' . $endpoint );
             error_log( json_encode($data) );
@@ -307,7 +305,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $oidc->addScope('p4mRetail');
         $oidc->addScope('p4mApi');
 
-        $oidc->setCertPath( dirname(__FILE__) . "/cert/cacert.pem" );  
+        $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() );  
         
         $clientCredentials = $oidc->requestClientCredentialsToken();
 
@@ -369,7 +367,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             $oidc->providerConfigParam(array('jwks_uri'=>P4M_Shop_Urls::endPoint('jwks')));
             $oidc->setProviderURL(Settings::getPublic( 'Server:P4M_OID_SERVER' ));
         
-            $oidc->setCertPath( dirname(__FILE__) . "/cert/cacert.pem" ); 
+            $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() ); 
 
             $response = $oidc->authenticate();
 
@@ -613,7 +611,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $oidc->addScope('read');
                 $oidc->addScope('checkout-api');
 
-                $oidc->setCertPath( dirname(__FILE__) . "/cert/cacert.pem" ); 
+                $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() ); 
 
                 $response = $oidc->requestClientCredentialsToken();
 
@@ -952,7 +950,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $oidc->addScope('p4mRetail');
                 $oidc->addScope('p4mApi');
 
-                $oidc->setCertPath( dirname(__FILE__) . "/cert/cacert.pem" ); 
+                $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() ); 
    
                 $response = $oidc->requestClientCredentialsToken();
 
@@ -975,7 +973,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $oidc->addScope('read');
                 $oidc->addScope('checkout-api');
 
-                $oidc->setCertPath( dirname(__FILE__) . "/cert/cacert.pem" ); 
+                $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() ); 
 
                 $response = $oidc->requestClientCredentialsToken();
 

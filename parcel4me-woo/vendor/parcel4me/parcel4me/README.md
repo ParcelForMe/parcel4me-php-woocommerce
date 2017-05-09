@@ -32,6 +32,7 @@ These working implementations demonstrate how this Parcel For Me package can be 
 
 *Tested working on PHP version 5.6.7.*
 
+**Note: The updateCaCertificateIfChanged() method requires at least TLS v1.2 (for OpenSSL this means at least version 1.0.1)**
 
 
 ## Usage (how to modify an existing PHP shopping cart)

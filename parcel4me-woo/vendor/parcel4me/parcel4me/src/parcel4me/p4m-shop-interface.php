@@ -131,6 +131,13 @@ interface P4M_Shop_Interface {
     public function handleError( $message );
 
 
+
+    /**
+
+        NOTE : your implementation should call $this->updateCaCertificateIfChanged() ~ monthly
+
+    */
+
 }
 
 

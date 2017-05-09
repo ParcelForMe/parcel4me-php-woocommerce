@@ -43,12 +43,17 @@ function handle_p4m_routes( $query )
             case 'p4m/paypalSetup' :            $p4m_shopping_cart_adapter->paypalSetup();               break;
             case 'p4m/paypalCancel' :           $p4m_shopping_cart_adapter->paypalCancel();              break;
 
+            // this need never be used - but it is there just in case - hitting this endpoint will auto update the cacert.pem file :
+            case 'p4m/updateTheCaCert' :        $p4m_shopping_cart_adapter->updateCaCertificateIfChanged(); break;
+
+
             // POST
             case 'p4m/updShippingService' :     $p4m_shopping_cart_adapter->updShippingService();        break;
             case 'p4m/applyDiscountCode' :      $p4m_shopping_cart_adapter->applyDiscountCode();         break;
             case 'p4m/removeDiscountCode' :     $p4m_shopping_cart_adapter->removeDiscountCode();        break;
             case 'p4m/itemQtyChanged' :         $p4m_shopping_cart_adapter->itemQtyChanged();            break;
             case 'p4m/purchase' :               $p4m_shopping_cart_adapter->purchase();                  break;
+
 
             default:
                 // NB : This endpoint required if implementing 3D secure transactions : 'p4m/purchaseComplete/([a-z0-9_-]+)'
