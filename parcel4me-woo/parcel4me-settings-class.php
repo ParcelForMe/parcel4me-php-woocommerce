@@ -362,6 +362,7 @@ class Parcel4me_Settings {
       function checkoutpage_field_cb( $args ) {
         // get the value of the setting we've registered with register_setting()
         $options = get_option( 'p4m_options' );
+        
         // output the field
         ?>
         <input 
@@ -382,6 +383,9 @@ class Parcel4me_Settings {
       function paymentcomplete_field_cb( $args ) {
         // get the value of the setting we've registered with register_setting()
         $options = get_option( 'p4m_options' );
+        // default to the woocommerce thanks page
+        if ( '' == $options[ $args['label_for'] ]) $options[ $args['label_for'] ] = str_replace( home_url(), "", get_permalink( get_option( 'woocommerce_thanks_page_id' ) ) );
+       
         // output the field
         ?>
         <input 
