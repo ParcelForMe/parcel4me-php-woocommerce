@@ -93,6 +93,19 @@ class Parcel4me_Woo {
     add_filter( 'woocommerce_payment_gateways', 'wc_add_p4m_payment_gateway_to_gateways' );
     */
 
+
+
+    // Finally create a WP cron task to check and auto-update the OIDC CA file daily
+    function p4m_cron_update_ca_file() {
+      $GLOBALS['parcel4me_woo']->p4m_shopping_cart_adapter->updateCaCertificateIfChanged();
+    }
+    $cron_interval = 'daily'; 
+    if ( ! wp_next_scheduled( 'hook_p4m_cron_update_ca_file' ) ) {
+        wp_schedule_event( time(), $cron_interval, 'hook_p4m_cron_update_ca_file' );
+    }
+    add_action( 'hook_p4m_cron_update_ca_file', 'p4m_cron_update_ca_file' );
+
+
   }
 
 
