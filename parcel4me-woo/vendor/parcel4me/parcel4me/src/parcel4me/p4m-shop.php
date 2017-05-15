@@ -89,7 +89,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $oidc->addScope('p4mRetail');
         $oidc->addScope('p4mApi');
 
-        $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() );  
+        $oidc->setCertPath( P4M_Shop_CaCert::localCertPath() );  
         
         $clientCredentials = $oidc->requestClientCredentialsToken();
 
@@ -221,7 +221,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 https://blogs.msdn.microsoft.com/azureossds/2015/06/12/verify-peer-certificate-from-php-curl-for-azure-apps/
                 (which includes the link to http://curl.haxx.se/docs/caextract.html)
         */
-        curl_setopt($curl, CURLOPT_CAINFO, P4M_Shop_CaCert::fullCertPath());
+        curl_setopt($curl, CURLOPT_CAINFO, P4M_Shop_CaCert::localCertPath());
         
         if ( DEBUG_SHOW_ALL_API_CALLS ) {
             error_log( '* REQUEST * -> '.$method . ' ' . $endpoint );
@@ -305,7 +305,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $oidc->addScope('p4mRetail');
         $oidc->addScope('p4mApi');
 
-        $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() );  
+        $oidc->setCertPath( P4M_Shop_CaCert::localCertPath() );  
         
         $clientCredentials = $oidc->requestClientCredentialsToken();
 
@@ -367,7 +367,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             $oidc->providerConfigParam(array('jwks_uri'=>P4M_Shop_Urls::endPoint('jwks')));
             $oidc->setProviderURL(Settings::getPublic( 'Server:P4M_OID_SERVER' ));
         
-            $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() ); 
+            $oidc->setCertPath( P4M_Shop_CaCert::localCertPath() ); 
 
             $response = $oidc->authenticate();
 
@@ -611,7 +611,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $oidc->addScope('read');
                 $oidc->addScope('checkout-api');
 
-                $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() ); 
+                $oidc->setCertPath( P4M_Shop_CaCert::localCertPath() ); 
 
                 $response = $oidc->requestClientCredentialsToken();
 
@@ -950,7 +950,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $oidc->addScope('p4mRetail');
                 $oidc->addScope('p4mApi');
 
-                $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() ); 
+                $oidc->setCertPath( P4M_Shop_CaCert::localCertPath() ); 
    
                 $response = $oidc->requestClientCredentialsToken();
 
@@ -973,7 +973,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $oidc->addScope('read');
                 $oidc->addScope('checkout-api');
 
-                $oidc->setCertPath( P4M_Shop_CaCert::fullCertPath() ); 
+                $oidc->setCertPath( P4M_Shop_CaCert::localCertPath() ); 
 
                 $response = $oidc->requestClientCredentialsToken();
 
