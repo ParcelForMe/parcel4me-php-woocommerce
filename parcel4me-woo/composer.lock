@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5bd1cd0b0c401747c8092cbc1ac01b47",
+    "content-hash": "124aa84a0b3addfa09d9f8d750c0b5d6",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -81,16 +81,16 @@
         },
         {
             "name": "parcel4me/parcel4me",
-            "version": "v0.0.10",
+            "version": "v0.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ParcelForMe/parcel4me-php.git",
-                "reference": "d8c0a07de49616f7a2011e4e9470e36c80416dc9"
+                "reference": "b4dde08394a15b44761d28053a2613a841426acc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ParcelForMe/parcel4me-php/zipball/d8c0a07de49616f7a2011e4e9470e36c80416dc9",
-                "reference": "d8c0a07de49616f7a2011e4e9470e36c80416dc9",
+                "url": "https://api.github.com/repos/ParcelForMe/parcel4me-php/zipball/b4dde08394a15b44761d28053a2613a841426acc",
+                "reference": "b4dde08394a15b44761d28053a2613a841426acc",
                 "shasum": ""
             },
             "require": {
@@ -114,7 +114,7 @@
                 }
             ],
             "description": "A one-click checkout and delivery package for PHP shopping carts",
-            "time": "2017-03-23T05:32:41+00:00"
+            "time": "2017-05-15T02:17:45+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
