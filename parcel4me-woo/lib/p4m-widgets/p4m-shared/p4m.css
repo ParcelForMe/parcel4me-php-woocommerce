@@ -531,6 +531,9 @@ body.fullbleed {
 .p4micon-map-marker-selected-fill:before {
   content: "\e929"; }
 
+.p4micon-save:before {
+  content: "\e92a"; }
+
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-BlaIta-webfont.eot");
@@ -655,44 +658,21 @@ a, a:visited {
   -moz-transition: .15s ease-in-out;
   transition: .15s ease-in-out; }
 
-.change {
-  cursor: pointer;
-  -webkit-animation: change 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95);
-  -moz-animation: change 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95);
-  -ms-animation: change 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95);
-  animation: change 4s 1 cubic-bezier(0.05, 0.8, 0.75, 0.95); }
+@-webkit-keyframes greenPulse {
+  from {
+    border-color: #37a553;
+    box-shadow: 0 0 0 0 rgba(55, 165, 83, 0.5);
+    background: rgba(55, 165, 83, 0.2); }
+  to {
+    border-color: #37a553;
+    box-shadow: 0 0 10px 10px rgba(55, 165, 83, 0);
+    background: rgba(55, 165, 83, 0); } }
 
-@-webkit-keyframes change {
-  0% {
-    background-color: white; }
-  1% {
-    background-color: rgba(77, 143, 94, 0.25); }
-  100% {
-    background-color: white; } }
-
-@-moz-keyframes change {
-  0% {
-    background-color: white; }
-  1% {
-    background-color: #7bc78f; }
-  100% {
-    background-color: white; } }
-
-@-ms-keyframes change {
-  0% {
-    background-color: white; }
-  2% {
-    background-color: #7bc78f; }
-  100% {
-    background-color: white; } }
-
-@keyframes change {
-  0% {
-    background-color: white; }
-  1% {
-    background-color: #7bc78f; }
-  100% {
-    background-color: white; } }
+.changed {
+  animation-name: greenPulse;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out; }
 
 p4m-spinner[species='progress'] {
   position: absolute;
@@ -710,6 +690,16 @@ p4m-spinner[species='progress'] {
         p4m-spinner[species='progress'] #container #progressContainer #primaryProgress:after {
           background: #37a553;
           height: 3px; }
+  p4m-spinner[species='progress']#newcard-spinner {
+    bottom: initial;
+    top: 100px;
+    left: 50%;
+    margin-left: -100px;
+    bottom: initial;
+    top: 180px;
+    left: 50%;
+    margin-left: -100px;
+    z-index: 0; }
 
 [data-tooltip] {
   position: relative;
@@ -986,7 +976,8 @@ p4m-card {
     display: flex;
     max-height: 20vw;
     padding: 0;
-    margin: 0; }
+    margin: 0;
+    box-sizing: border-box; }
     p4m-card > div#container .card-panel {
       border-radius: 6px;
       box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
@@ -1021,7 +1012,8 @@ p4m-card {
           p4m-card > div#container .card-panel .card-body .card-content .inputs {
             display: flex;
             align-items: center;
-            margin-top: 4px; }
+            margin-top: 4px;
+            overflow: visible; }
         p4m-card > div#container .card-panel .card-body .card-name {
           height: 24px;
           line-height: inherit;
@@ -1193,12 +1185,51 @@ p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.sear
   align-items: center;
   justify-content: flex-end;
   color: #aaa;
-  font-size: 14px;
+  font-size: 15px;
   padding: 10px; }
-  .add-new span {
-    margin-right: 5px; }
-  .add-new i {
-    color: #aaa; }
+  .add-new div {
+    display: flex;
+    align-items: center; }
+    .add-new div span {
+      margin-right: 5px; }
+    .add-new div i {
+      color: #aaa;
+      -webkit-transition: rotate, 0.2s;
+      -khtml-transition: rotate, 0.2s;
+      -moz-transition: rotate, 0.2s;
+      -ms-transition: rotate, 0.2s;
+      -o-transition: rotate, 0.2s;
+      transition: rotate, 0.2s; }
+    .add-new div.cancel i {
+      -webkit-transform: rotate(45deg);
+      -khtml-transform: rotate(45deg);
+      -moz-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      -o-transform: rotate(45deg);
+      transform: rotate(45deg);
+      filter: progid:DXImageTransform.Microsoft.Matrix( M11=0, M12=0, M21=0, M22=0, sizingMethod='auto expand');
+      zoom: 1; }
+
+p.new-card-notice {
+  font-size: 14px;
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  p.new-card-notice a {
+    color: #37a553;
+    display: flex;
+    align-items: center; }
+
+#paymentIframe {
+  border: none;
+  z-index: 1; }
+
+#container.p4m-new-card {
+  padding: 10px;
+  margin: 0; }
 
 i.link {
   font-size: 24px;
@@ -1212,6 +1243,10 @@ paper-dialog {
   color: #fff;
   display: flex;
   justify-content: center; }
+
+div.pac-container.pac-logo {
+  min-width: 200px;
+  width: 200px !important; }
 
 .p4m-label {
   color: darkgreen; }
@@ -1435,7 +1470,8 @@ p4m-checkout {
   p4m-checkout #container {
     width: 100%;
     margin: auto;
-    padding-bottom: 8px; }
+    padding-bottom: 8px;
+    box-sizing: border-box; }
   p4m-checkout paper-tab.gfs-checkout {
     padding: 0 0; }
   p4m-checkout .topPanel {
@@ -1576,7 +1612,10 @@ p4m-checkout {
   p4m-checkout #mapTools {
     height: 48px;
     display: flex;
-    align-items: center; }
+    align-items: center;
+    background: #f8f8f8;
+    border-top: 1px solid #fff;
+    box-sizing: border-box; }
   p4m-checkout #mapContainer {
     display: block;
     position: relative; }
@@ -1688,6 +1727,9 @@ p4m-checkout {
     width: 80%; }
   p4m-checkout #droppoint-delivery-options {
     clear: both; }
+  p4m-checkout .toggleDropPointsViewControls {
+    display: flex;
+    flex-direction: row; }
   p4m-checkout #mapTools, p4m-checkout #listTools {
     display: flex;
     flex-direction: row; }
@@ -1698,6 +1740,9 @@ p4m-checkout {
     width: 48px;
     justify-content: center;
     align-items: center; }
+    p4m-checkout a#viewAsList.active, p4m-checkout a#viewAsMap.active {
+      background: #ffffff;
+      color: #444; }
   p4m-checkout paper-menu-button iron-dropdown {
     margin-bottom: 8px;
     margin-top: 8px; }
@@ -1710,8 +1755,9 @@ p4m-checkout {
     margin-top: 0 !important; }
   p4m-checkout #contentWrapper .dropdown-content {
     margin-bottom: 0 !important;
-    margin-top: -10px;
-    top: 10px; }
+    top: 10px;
+    padding: 0;
+    min-width: 200px; }
   p4m-checkout .adjoiner {
     display: flex;
     height: 48px;
@@ -1951,7 +1997,12 @@ p4m-checkout {
     right: 4px;
     left: initial;
     top: 6px;
-    color: #ccc; }
+    color: #ccc;
+    background: white;
+    box-shadow: 0 0 3px 3px white; }
+  p4m-checkout paper-input iron-icon {
+    background: white;
+    box-shadow: 0 0 3px 3px white; }
   p4m-checkout .consumer-addresses {
     display: flex;
     flex-direction: row; }
@@ -2074,8 +2125,7 @@ p4m-checkout {
     flex-direction: row;
     height: 100%;
     height: calc(100% - 30px);
-    max-height: 100%;
-    max-height: calc(100% - 30px);
+    max-height: 367px;
     overflow: visible;
     justify-content: space-around; }
   p4m-checkout #cardPage #cardList p4m-card {
@@ -2198,7 +2248,8 @@ gfs-calendar .gfs-calendar {
 p4m-address #container {
   display: flex;
   flex-direction: column;
-  padding-bottom: 0; }
+  padding-bottom: 0;
+  box-sizing: border-box; }
   p4m-address #container ul {
     padding: 0;
     margin: 0 10px 5px 10px; }

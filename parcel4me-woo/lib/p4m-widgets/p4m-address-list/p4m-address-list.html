@@ -7,13 +7,20 @@
 
     <template>
         <div id="container">
-            <div class="add-new horizontal layout center end-justified style-scope p4m-address-list">
-            <span>Add New</span><i class="p4micon-add-circle link" id="addNewAddress" on-tap="addNewAddress"></i>
-            </div>
 
-            <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">
-                <p4m-address address-data="{{item}}" on-canceledit="cancelAdd" cart-data="{{cartData}}" mode="edit" on-save="onSaveNewAddress"></p4m-address>
-            </template>
+            <div class="address-section">
+                <div class="add-new horizontal layout center end-justified style-scope p4m-address-list">
+                    <div class="link add" id="addNewAddress" on-tap="addNewAddress">
+                        <span>Add a New Address</span>
+                        <i class="p4micon-add-circle link"></i>
+                    </div>
+                </div>
+                <!-- help BAZ! - please add the cancel function into div.add-new above - to create the same add/cancel UX as in p4m-card list -->
+                <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">
+                    <p4m-address address-data="{{item}}" on-canceledit="cancelAdd" cart-data="{{cartData}}" mode="edit" on-save="onSaveNewAddress"></p4m-address>
+                </template>
+
+            </div>
 
             <template id="oldAddresses" is="dom-repeat" items="{{addressListData}}" filter="filterOldOnly">
                 <p4m-address address-data="{{item}}" on-canceledit="cancelEdit" cart-data="{{cartData}}" mode="view" on-save="onUpdateAddress" on-select-address="onSelectAddress"></p4m-address>
@@ -81,6 +88,7 @@
             {
                 
             },
+
 
             addNewAddress: function () {
                

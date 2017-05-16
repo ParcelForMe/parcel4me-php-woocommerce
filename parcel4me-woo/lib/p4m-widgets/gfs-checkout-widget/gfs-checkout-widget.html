@@ -53,15 +53,15 @@
                         </div> -->
 
                         <div class="toggleDropPointsViewControls">
-                            <template is="dom-if" if="{{_showingDroppointsList}}">
-                                <a id="viewAsList" on-tap="_toggleDroppointView">
+                            <!-- <template is="dom-if" if="{{_showingDroppointsList}}"> -->
+                                <a id="viewAsMap" on-tap="_toggleDroppointView">
                                 <i class="p4micon p4micon-map-with-marker"></i>
                                 </a>
-                            </template>
-                            <template is="dom-if" if="{{_showingDroppointsMap}}">
+                            <!-- </template> -->
+                            <!-- <template is="dom-if" if="{{_showingDroppointsMap}}"> -->
                                 <a id="viewAsList" on-tap="_toggleDroppointView">
                                 <i class="p4micon p4micon-list"></i></a>
-                            </template>
+                            <!-- </template> -->
                         </div>
 					
 					
@@ -149,7 +149,7 @@
                             </div>
                         </div>
                         <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
-                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
+                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true">HELLO</gfs-droppoint>
                         </div>
                         
                     </div>
@@ -1699,6 +1699,9 @@
                     this._loadDroppointMarkers(this._dropPoints);                                                                           
                     this._resetMap(this._map, function() {
                         self._openSelectedDropPointInfoWindow();
+                    // Switch classes on the Map/list toggle - help BAZ!
+                    this.$['viewAsMap'].classList.add('active');
+                    this.$['viewAsList'].classList.remove('active');
                     });
                     //this.panToDefaultLocation();
 
@@ -1708,6 +1711,9 @@
                     this.$.mapContainer.classList.add('hidden');
                     //this._resetMap(this._map);
                     //this._openSelectedDropPointInfoWindow();
+                    // Switch classes on the Map/list toggle
+                    this.$['viewAsMap'].classList.remove('active');
+                    this.$['viewAsList'].classList.add('active');
                 }
 
             },

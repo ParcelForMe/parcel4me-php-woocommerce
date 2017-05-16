@@ -21,16 +21,20 @@
                             <p class="address-text lg font-weight-regular">{{addressData.Street1}}</p>
                         </div>
                         <div class="flex-spacer"></div>
-                        <div id="deliveryToggle" class="toggle-button horizontal layout center">
+                        <div id="deliveryToggle" class="link toggle-button horizontal layout center" data-tooltip="Select as your shipping address">
                             <span on-tap="markAsDelivery">Shipping</span>
                             <template is="dom-if" if="{{isDelivery}}"><i class="p4micon-check"></i></template>
                         </div>
-                        <div id="billingToggle" class="toggle-button horizontal layout center">
+                        <div id="billingToggle" class="link toggle-button horizontal layout center" data-tooltip="Select as your billing address">
                             <span on-tap="markAsBilling">Billing</span>
                             <template is="dom-if" if="{{isBilling}}"><i class="p4micon-check"></i></template>
                         </div>
-                        <i on-tap="edit" class="p4micon-edit-circle link"></i>
-                        <i on-tap="delete" class="p4micon-delete-circle link"></i>
+                        <div data-tooltip="Edit">
+                            <i on-tap="edit" class="p4micon-edit-circle link"></i>
+                        </div>
+                        <!-- <div data-tooltip="Delete">
+                            <i on-tap="delete" class="p4micon-delete-circle link"></i>
+                        </div> -->
                     </li>
                 </iron-page>
                 <iron-page>
@@ -52,7 +56,7 @@
                                 </vaadin-combo-box-light>
                             </div>
                             <div class="vertical layout end">
-                                <a class="p4m-button" href="#" on-tap="save">Add <i class="p4micon p4micon-add"></i></a>
+                                <a class="p4m-button" href="#" on-tap="save">Save <i class="p4micon p4micon-save"></i></a>
                             </div>
                         </div>
                     </div>

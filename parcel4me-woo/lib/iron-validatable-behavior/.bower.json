@@ -36,7 +36,7 @@
     "tag": "v1.1.2",
     "commit": "f5d85f8dea62d13176b14a4a25c206feb18432c5"
   },
-  "_source": "https://github.com/polymerelements/iron-validatable-behavior.git",
-  "_target": "^1.0.5",
-  "_originalSource": "polymerelements/iron-validatable-behavior"
+  "_source": "https://github.com/PolymerElements/iron-validatable-behavior.git",
+  "_target": "^1.0.0",
+  "_originalSource": "PolymerElements/iron-validatable-behavior"
 }
