@@ -1,4 +1,4 @@
-﻿
+
 // P4M Universal Styles
 
 @import 'variables.scss';
@@ -549,8 +549,9 @@ left: 0;
 .p4micon-map-marker-selected-fill:before {
   content: "\e929";
 }
-
-
+.p4micon-save:before {
+  content: "\e92a";
+}
 
 //////////////////////////////////////////////////
 // Typography
@@ -714,61 +715,74 @@ a, a:visited {
 	transition: .15s ease-in-out;
 }
 
-
-
-// Pulse Animation
-.change {
-  cursor: pointer;
-  -webkit-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
-  -moz-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
-  -ms-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
-  animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
+// Pulse Animation 
+@-webkit-keyframes greenPulse {
+  from { border-color: #37a553; box-shadow: 0 0 0 0 rgba(55, 165, 83, 0.5); background: rgba(55, 165, 83, 0.2); }
+  // 15% { border-color: #37a553; box-shadow: 0 0 0 2px rgba(55, 165, 83, 0.4); }
+  to { border-color: #37a553; box-shadow: 0 0 10px 10px rgba(55, 165, 83, 0); background: rgba(55, 165, 83, 0); }
 }
 
-@-webkit-keyframes change {
-  0% {
-    background-color: white;
-  }
-  1% {
-    background-color: $translucent-p4m-green;
-  }
-  100% {
-    background-color: white;
-  }
+.changed {
+  animation-name: greenPulse;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }
-@-moz-keyframes change {
-  0% {
-    background-color: white;
-  }
-  1% {
-    background-color: $pale-p4m-green;
-  }
-  100% {
-    background-color: white;
-  }
-}
-@-ms-keyframes change {
-  0% {
-    background-color: white;
-  }
-  2% {
-    background-color: $pale-p4m-green;
-  }
-  100% {
-    background-color: white;
-  }
-}
-@keyframes change {
-  0% {
-    background-color: white;
-  }
-  1% {
-    background-color: $pale-p4m-green;
-  }
-  100% {
-    background-color: white;
-  }
-}
+
+
+
+// Pulse Animation TEST VERSION
+// .change {
+//   -webkit-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
+//   -moz-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
+//   -ms-animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
+//   animation: change 4s 1 cubic-bezier(0.05, 0.80, 0.75, 0.95);
+// }
+
+// @-webkit-keyframes change {
+//   0% {
+//     background-color: white;
+//   }
+//   1% {
+//     background-color: $translucent-p4m-green;
+//   }
+//   100% {
+//     background-color: white;
+//   }
+// }
+// @-moz-keyframes change {
+//   0% {
+//     background-color: white;
+//   }
+//   1% {
+//     background-color: $pale-p4m-green;
+//   }
+//   100% {
+//     background-color: white;
+//   }
+// }
+// @-ms-keyframes change {
+//   0% {
+//     background-color: white;
+//   }
+//   2% {
+//     background-color: $pale-p4m-green;
+//   }
+//   100% {
+//     background-color: white;
+//   }
+// }
+// @keyframes change {
+//   0% {
+//     background-color: white;
+//   }
+//   1% {
+//     background-color: $pale-p4m-green;
+//   }
+//   100% {
+//     background-color: white;
+//   }
+// }
 // END - Pulse Animation
 
 
@@ -795,6 +809,35 @@ p4m-spinner[species='progress'] {
                 }
             }
         }
+    }
+    // &#newcard-spinner {
+    //   bottom: initial;
+    //   top: 38px;
+    //   width: 100%;
+    //   left: 0;
+    //   padding: 0 20px;
+    //   box-sizing: border-box;
+    //   paper-progress.p4m-spinner {
+    //       width: 100%;
+    //   }
+    // }
+    &#newcard-spinner {
+      bottom: initial;
+      top: 100px;
+      // width: 100%;
+      left: 50%;
+      margin-left: -100px;
+      // padding: 0 20px;
+      // box-sizing: border-box;
+
+      bottom: initial;
+      top: 180px;
+      left: 50%;
+      margin-left: -100px;
+      z-index: 0;
+      paper-progress.p4m-spinner {
+          // width: 100%;
+      }
     }
 }
 
@@ -965,26 +1008,12 @@ p4m-spinner[species='progress'] {
       opacity: 1;
       transition: all 0.2s ease 1s;
     }
-
     &.tooltip-right {
       &:after {
         border-top: 4px solid transparent;
         border-bottom: 4px solid transparent;
         border-right-color: #37a553;
         border-left: none;
-
-        // border-top: none;
-        // border-bottom: none;
-        // border-right: none;
-        // border-left: none;
-        // content: "\25BC";
-        // color: #37a553;
-        // width: 8px;
-        // height: 8px;
-        // display: flex;
-        // overflow: visible;
-        // font-size: 8px;
-        // text-shadow: 0 2px 2px rgba(0,0,0,0.5);
       }
     }
     &.tooltip-left {
@@ -1157,6 +1186,7 @@ p4m-card {
         max-height: 20vw;
         padding: 0;
         margin: 0;  
+        box-sizing: border-box;
         .card-panel {
             border-radius: 6px;
             box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
@@ -1196,6 +1226,7 @@ p4m-card {
                       display: flex;
                       align-items: center;
                       margin-top: 4px;
+                      overflow: visible;
                     }
                 }
                 .card-name {
@@ -1427,16 +1458,49 @@ p4m-checkout {
     align-items: center;
     justify-content: flex-end;
     color: $grey-hb;
-    font-size: 14px;
+    font-size: 15px;
     padding: 10px;
-    span {
+    div {
+      display: flex;
+      align-items: center;
+      span {
         margin-right: 5px;
-    }
-    i {
+      }
+      i {
         color: $grey-hb;
+        @include transition(rotate, 0.2s)
+      }
+      &.cancel {
+        i {
+          @include rotate(45);
+        }
+      }
     }
+    
 }
-
+p.new-card-notice {
+  font-size: 14px;
+  text-align: center;
+  margin-top: -10px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  a {
+    color: $p4m-green;
+    display: flex;
+    align-items: center;
+  }
+}
+#paymentIframe {
+  border: none;
+  z-index: 1;
+  // max-width: calc(100% - 20px);
+}
+#container.p4m-new-card {
+  padding: 10px;
+  margin: 0;
+}
 
 i.link {
     font-size: 24px;
@@ -1453,6 +1517,11 @@ paper-dialog {
     color: $white;
     display: flex;
     justify-content: center;
+}
+// Google address list dropdown
+div.pac-container.pac-logo {
+    min-width: 200px;
+    width: 200px !important;
 }
 
 
@@ -1472,6 +1541,7 @@ paper-dialog {
 .corners-bottom-5px{
     @include border-radius-separate( 0, 0, 5px, 5px );
 }
+
 
 
 
@@ -1519,6 +1589,7 @@ i.p4micon-cart-empty {
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: relative;
     #profileImage {
         height: 44px;
         border-radius: 44px;
@@ -1538,11 +1609,11 @@ i.p4micon-cart-empty {
         display: none;
     }
     #spinner {
-        width: 44px;
-        height: 44px;
-        position: absolute;
-        top: 0;
-        left: 4px;
+      width: 42px;
+      height: 42px;
+      position: absolute;
+      top: 1px;
+      left: 4px;
     }
 }
 
@@ -1697,6 +1768,7 @@ p4m-checkout {
         width: 100%;
         margin: auto;
         padding-bottom: 8px;
+        box-sizing: border-box;
     }
 
     paper-tab.gfs-checkout {
@@ -1916,6 +1988,9 @@ p4m-checkout {
     	height: 48px;
     	display: flex;
     	align-items: center;
+      background: #f8f8f8;
+      border-top: 1px solid #fff;
+      box-sizing: border-box;
     }
     
 
@@ -2076,18 +2151,24 @@ p4m-checkout {
         clear: both;
     }
     .toggleDropPointsViewControls {
+      display: flex;
+      flex-direction: row;
     }
     #mapTools, #listTools {
         display: flex;
         flex-direction: row;
     }
     a#viewAsList, a#viewAsMap {
-		text-decoration: none;
-		display: flex;
-		height: 48px;
-		width: 48px;
-		justify-content: center;
-		align-items: center;
+  		text-decoration: none;
+  		display: flex;
+  		height: 48px;
+  		width: 48px;
+  		justify-content: center;
+  		align-items: center;
+      &.active {
+        background: #ffffff;
+        color: #444;
+      }
     }
     paper-menu-button iron-dropdown {
 		margin-bottom: 8px;
@@ -2107,21 +2188,22 @@ p4m-checkout {
 	    margin-top: 0 !important;
     }
     #contentWrapper .dropdown-content {
-        margin-bottom: 0 !important;
-        margin-top: -10px;
-        top: 10px;
-     }
+      margin-bottom: 0 !important;
+      top: 10px;
+      padding: 0;
+      min-width: 200px;
+    }
     .adjoiner {
     	display: flex;
-		height: 48px;
-		width: 24px;
-		justify-content: center;
-		align-items: center;
-		p {
-			font-size: 14px;
-			font-style: italic;
-			color: #aaa;
-		}
+      height: 48px;
+      width: 24px;
+      justify-content: center;
+      align-items: center;
+      p {
+        font-size: 14px;
+        font-style: italic;
+        color: #aaa;
+      }
     }
     .collection-points, .location-points, .search-postcode-wrap {
     	width: 26%;
@@ -2442,12 +2524,18 @@ p4m-checkout {
         --paper-toast-color: white;
     }
     .search-button {
-		position: absolute;
-		right: 4px;
-		left: initial;
-		top: 6px;
-		color: #ccc;
-    }              
+  		position: absolute;
+  		right: 4px;
+  		left: initial;
+  		top: 6px;
+  		color: #ccc;
+      background: rgb(255,255,255);
+      box-shadow: 0 0 3px 3px rgb(255,255,255);
+    } 
+    paper-input iron-icon {
+      background: rgba(255,255,255,1);
+      box-shadow: 0 0 3px 3px rgb(255,255,255);
+    }            
     .consumer-addresses {
         display: flex;
         flex-direction: row;
@@ -2621,8 +2709,9 @@ p4m-checkout {
                     flex-direction: row;
                     height: 100%;
                     height: calc(100% - 30px);
-                    max-height: 100%;
-                    max-height: calc(100% - 30px);
+                    // max-height: 100%;
+                    // max-height: calc(100% - 30px);
+                    max-height: 367px;
                     overflow: visible;
                     justify-content: space-around;
                 }
@@ -2830,6 +2919,7 @@ p4m-address {
         display: flex;
         flex-direction: column;
         padding-bottom: 0;
+        box-sizing: border-box;
         ul {
             padding: 0;
             margin: 0 10px 5px 10px;
@@ -2897,6 +2987,9 @@ p4m-address {
         	color: $white;
         	font-size: 18px;
         	font-weight: 600;
+          &.p4micon-save {
+            // font-size: 24px;
+          }
         }
         &:hover {
         	color: $white;

@@ -27,7 +27,7 @@
             </div>
 
             <div id="quantity" class="card-panel horizontal layout center">
-                <div id="delete" data-tooltip="Remove item">
+                <div id="delete" data-tooltip="Remove item" class="tooltip-topright">
                     <i on-tap="removeQty" class="p4micon-subtract-circle link"></i>
                 </div>
                 <input label="Qty" _is="iron-input" prevent-invalid-input allowed-pattern="[0-9]" type="text" id="qty" bind-value="{{cartItemData.Qty}}" value="{{cartItemData.Qty}}" />

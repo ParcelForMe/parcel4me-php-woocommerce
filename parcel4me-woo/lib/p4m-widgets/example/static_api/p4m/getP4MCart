@@ -10,7 +10,6 @@
         "PaymentType"       : "DB",
         "Items"	        : [
             {
-                "LineId"          : 1,
                 "Make"            : "Classic",
                 "Sku"             : "0123",
                 "Desc"            : "Short (Opposite of Tall)",
@@ -22,7 +21,6 @@
                 "SiteReference"   : "la la"
             },
             {
-                "LineId"          : 2,
                 "Make"            : "Sunny",
                 "Sku"             : "0123",
                 "Desc"            : "Light (Opposite of Dark)",
