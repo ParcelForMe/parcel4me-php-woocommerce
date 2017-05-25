@@ -28,16 +28,16 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
     function createNewUser( $p4m_consumer ) 
     {
-        $username = $p4m_consumer->Email;
+        $username = $p4m_consumer->email;
         $password = wp_generate_password();
         $user_data = array(
                         'user_login'   => $username,
                         'user_pass'    => $password,
-                        'user_email'   => $p4m_consumer->Email,
-                        'first_name'   => $p4m_consumer->GivenName,
-                        'nickname'     => $p4m_consumer->GivenName,
-                        'display_name' => $p4m_consumer->GivenName,
-                        'last_name'    => $p4m_consumer->FamilyName
+                        'user_email'   => $p4m_consumer->email,
+                        'first_name'   => $p4m_consumer->givenName,
+                        'nickname'     => $p4m_consumer->givenName,
+                        'display_name' => $p4m_consumer->givenName,
+                        'last_name'    => $p4m_consumer->familyName
         );
         $wp_userid = wp_insert_user( $user_data );
 
@@ -82,13 +82,13 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         // update name and email of wordpress user
         $wp_user = wp_get_current_user();
-        $wp_user->user_email        = $p4m_consumer->Email;
-        $wp_user->first_name        = $p4m_consumer->GivenName;
-        $wp_user->last_name         = $p4m_consumer->FamilyName;
-        $wp_user->first_name        = $p4m_consumer->GivenName;
-        $wp_user->nickname          = $p4m_consumer->GivenName;
-        $wp_user->display_name      = $p4m_consumer->GivenName;
-        $wp_user->last_name         = $p4m_consumer->FamilyName;
+        $wp_user->user_email        = $p4m_consumer->email;
+        $wp_user->first_name        = $p4m_consumer->givenName;
+        $wp_user->last_name         = $p4m_consumer->familyName;
+        $wp_user->first_name        = $p4m_consumer->givenName;
+        $wp_user->nickname          = $p4m_consumer->givenName;
+        $wp_user->display_name      = $p4m_consumer->givenName;
+        $wp_user->last_name         = $p4m_consumer->familyName;
         
         $update_result = wp_update_user( $wp_user );
 
@@ -114,18 +114,18 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         }
 
         $consumer = new P4M\Model\Consumer();
-        $consumer->GivenName  = $wp_user->first_name;
-        $consumer->FamilyName = $wp_user->last_name;
-        $consumer->Email      = $wp_user->user_email;
+        $consumer->givenName  = $wp_user->first_name;
+        $consumer->familyName = $wp_user->last_name;
+        $consumer->email      = $wp_user->user_email;
 
-        if ( ( !property_exists( $consumer, 'Extras' ) ) ||
-             ( null == $consumer->Extras ) )
+        if ( ( !property_exists( $consumer, 'dxtras' ) ) ||
+             ( null == $consumer->extras ) )
         {
-            $consumer->Extras  = new stdClass();
+            $consumer->extras  = new stdClass();
         }  
 
-        if ( !property_exists( $consumer->Extras, 'LocalId' ) ) {
-            $consumer->Extras->LocalId = $wp_user->ID;
+        if ( !property_exists( $consumer->extras, 'localId' ) ) {
+            $consumer->extras->localId = $wp_user->ID;
         }
 
         // If the user has a billing or shipping address then add these to the P4M consumer
@@ -133,18 +133,18 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $billing_address = $this->get_address_for_p4m( 'billing' );
         $shipping_address = $this->get_address_for_p4m( 'shipping' );
 
-        $consumer->Addresses = [];
+        $consumer->addresses = [];
         $address_index = 0;
 
         if ( $billing_address ) {
-            $consumer->Addresses[] = $billing_address;
-            $consumer->BillingAddressId = $address_index;
+            $consumer->addresses[] = $billing_address;
+            $consumer->billingAddressId = $address_index;
             $address_index++;
         }
 
         if ( $shipping_address ) {
-            $consumer->Addresses[] = $shipping_address;
-            $consumer->PrefDeliveryAddressId = $address_index;
+            $consumer->addresses[] = $shipping_address;
+            $consumer->prefDeliveryAddressId = $address_index;
             $address_index++;
         }
 
@@ -174,13 +174,13 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
             // and if we have a country code then we create an address with whatever details we have
             $address = new P4M\Model\Address();
-            $address->AddressType = 'Address';
-            $address->Street1     = $woo_customer->get_address();
-            $address->Street2     = $woo_customer->get_address_2();
-            $address->City        = $woo_customer->get_city();
-            $address->PostCode    = $woo_customer->get_postcode();
-            $address->State       = $woo_customer->get_state();
-            $address->CountryCode = $woo_customer->get_country();
+            $address->addressType = 'Address';
+            $address->street1     = $woo_customer->get_address();
+            $address->street2     = $woo_customer->get_address_2();
+            $address->city        = $woo_customer->get_city();
+            $address->postCode    = $woo_customer->get_postcode();
+            $address->state       = $woo_customer->get_state();
+            $address->countryCode = $woo_customer->get_country();
 
         } elseif ( 'shipping' == $address_type ) {
 
@@ -190,13 +190,13 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
             // and if we have a country code then we create an address with whatever details we have
             $address = new P4M\Model\Address();
-            $address->AddressType = 'Address';
-            $address->Street1     = $woo_customer->get_shipping_address();
-            $address->Street2     = $woo_customer->get_shipping_address_2();
-            $address->City        = $woo_customer->get_shipping_city();
-            $address->PostCode    = $woo_customer->get_shipping_postcode();
-            $address->State       = $woo_customer->get_shipping_state();
-            $address->CountryCode = $woo_customer->get_shipping_country();
+            $address->addressType = 'Address';
+            $address->street1     = $woo_customer->get_shipping_address();
+            $address->street2     = $woo_customer->get_shipping_address_2();
+            $address->city        = $woo_customer->get_shipping_city();
+            $address->postCode    = $woo_customer->get_shipping_postcode();
+            $address->state       = $woo_customer->get_shipping_state();
+            $address->countryCode = $woo_customer->get_shipping_country();
 
         } else {
             throw new Exception('Unknown address type : '.$address_type);
@@ -210,15 +210,15 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         // and if we have a country code then we create an address with whatever details we have
         $address = new P4M\Model\Address();
-        $address->AddressType = 'Address';
-        $address->CompanyName = $woo_customer->get_address_prop( 'company', $address_type );
-        $address->Street1     = $woo_customer->get_address_prop( 'address_1', $address_type );
-        $address->Street2     = $woo_customer->get_address_prop( 'address_2', $address_type );
-        $address->City        = $woo_customer->get_address_prop( 'city', $address_type );
-        $address->PostCode    = $woo_customer->get_address_prop( 'postcode', $address_type );
-        $address->State       = $woo_customer->get_address_prop( 'state', $address_type );
-        $address->CountryCode = $woo_customer->get_address_prop( 'country', $address_type );
-        $address->Phone       = $woo_customer->get_address_prop( 'phone', $address_type );
+        $address->addressType = 'Address';
+        $address->companyName = $woo_customer->get_address_prop( 'company', $address_type );
+        $address->street1     = $woo_customer->get_address_prop( 'address_1', $address_type );
+        $address->street2     = $woo_customer->get_address_prop( 'address_2', $address_type );
+        $address->city        = $woo_customer->get_address_prop( 'city', $address_type );
+        $address->postCode    = $woo_customer->get_address_prop( 'postcode', $address_type );
+        $address->state       = $woo_customer->get_address_prop( 'state', $address_type );
+        $address->countryCode = $woo_customer->get_address_prop( 'country', $address_type );
+        $address->phone       = $woo_customer->get_address_prop( 'phone', $address_type );
         */
 
         $address->removeNullProperties();
@@ -248,14 +248,14 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             if (!$product_sku) $product_sku = $woo_item['product_id'];
 
             $cartItem = new P4M\Model\CartItem();
-            $cartItem->Make         = $woo_item['data']->post->post_name;
-            $cartItem->Sku          = $product_sku;
-            $cartItem->Desc         = $woo_item['data']->post->post_title;
-            $cartItem->Qty          = $woo_item['quantity'];
-            $cartItem->Price        = (double)$woo_item['data']->price;
-            $cartItem->LinkToImage  = ( (has_post_thumbnail( $woo_item['data']->post->ID )) ? (wp_get_attachment_image_src( get_post_thumbnail_id( $woo_item['data']->post->ID ), 'single-post-thumbnail' )[0]) : null );
-            $cartItem->LinkToItem   = get_permalink( $woo_item['data']->post->ID );
-            $cartItem->LineId       = $woo_item['p4m_line_id'];
+            $cartItem->make         = $woo_item['data']->post->post_name;
+            $cartItem->sku          = $product_sku;
+            $cartItem->desc         = $woo_item['data']->post->post_title;
+            $cartItem->qty          = $woo_item['quantity'];
+            $cartItem->price        = (double)$woo_item['data']->price;
+            $cartItem->linkToImage  = ( (has_post_thumbnail( $woo_item['data']->post->ID )) ? (wp_get_attachment_image_src( get_post_thumbnail_id( $woo_item['data']->post->ID ), 'single-post-thumbnail' )[0]) : null );
+            $cartItem->linkToItem   = get_permalink( $woo_item['data']->post->ID );
+            $cartItem->lineId       = $woo_item['p4m_line_id'];
             $cartItem->removeNullProperties();    
             $items[] = $cartItem;
         }
@@ -266,16 +266,16 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $generated_reference = spl_object_hash( $woo_cart );
 
         $cart = new P4M\Model\Cart();
-        $cart->SessionId    = $this->getCurrentSessionId();
-        $cart->Reference    = $generated_reference; 
-        $cart->Date         = gmdate( "D, d M Y T" );
-        $cart->Currency     = get_woocommerce_currency();
-        $cart->ShippingAmt  = $woo_cart->shipping_total;
-        $cart->Tax          = $woo_cart->tax_total;
-        $cart->Total        = $woo_cart->total;
-        $cart->PaymentType  = "DB"; // TODO : NOT YET READY : this needs more throught first before implementing
-        $cart->Discounts    = $this->get_p4m_discounts_from_woo_cart_coupons();
-        $cart->Items        = $items;
+        $cart->sessionId    = $this->getCurrentSessionId();
+        $cart->reference    = $generated_reference; 
+        $cart->date         = gmdate( "D, d M Y T" );
+        $cart->currency     = get_woocommerce_currency();
+        $cart->shippingAmt  = $woo_cart->shipping_total;
+        $cart->tax          = $woo_cart->tax_total;
+        $cart->total        = $woo_cart->total;
+        $cart->paymentType  = "DB"; // TODO : NOT YET READY : this needs more throught first before implementing
+        $cart->discounts    = $this->get_p4m_discounts_from_woo_cart_coupons();
+        $cart->items        = $items;
         $cart->removeNullProperties();
 
         return $cart;
@@ -289,16 +289,16 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $woo_cart->empty_cart();
 
         // add in all the order lines
-        foreach( $p4m_cart->Items as $p4m_item ) {
-            $woo_cart->add_to_cart( $p4m_item->Sku, $p4m_item->Qty,
+        foreach( $p4m_cart->items as $p4m_item ) {
+            $woo_cart->add_to_cart( $p4m_item->sku, $p4m_item->qty,
                                     0, null,
-                                    array( 'p4m_line_id'=>$p4m_item->LineId ) );
+                                    array( 'p4m_line_id'=>$p4m_item->lineId ) );
         }
 
         // and apply the approprate discounts
-        foreach( $p4m_cart->Discounts as $p4m_disc ) {
-            $woo_cart->remove_coupon( $p4m_disc->Code );
-            $woo_cart->add_discount( $p4m_disc->Code );
+        foreach( $p4m_cart->discounts as $p4m_disc ) {
+            $woo_cart->remove_coupon( $p4m_disc->code );
+            $woo_cart->add_discount( $p4m_disc->code );
         }
 
         $woo_cart->calculate_totals();
@@ -319,12 +319,12 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         // set the shipping details so that Woo is able to calculate (via p4m_shipping_plugin) the shipping, and tax
         $woo_customer = WC()->customer;
-        $woo_customer->set_shipping_location( $address->CountryCode,
-                                              $address->State, 
-                                              $address->PostCode, 
-                                              $address->City );
-        $woo_customer->set_shipping_address( $address->Street1 );
-        $woo_customer->set_shipping_address_2( $address->Street2 );
+        $woo_customer->set_shipping_location( $address->countryCode,
+                                              $address->state, 
+                                              $address->postCode, 
+                                              $address->city );
+        $woo_customer->set_shipping_address( $address->street1 );
+        $woo_customer->set_shipping_address_2( $address->street2 );
         $woo_customer->save_data();
 
         return true;
@@ -338,10 +338,10 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $woo_cart->calculate_totals();
         
         $r = new stdClass();
-        $r->Tax      = $woo_cart->tax_total;
-        $r->Shipping = WC()->session->get( 'p4m_shipping_amount' );
-        $r->Discount = $woo_cart->get_cart_discount_total();
-        $r->Total    = $woo_cart->cart_contents_total + $r->Shipping + $r->Tax;
+        $r->tax      = $woo_cart->tax_total;
+        $r->shipping = WC()->session->get( 'p4m_shipping_amount' );
+        $r->discount = $woo_cart->get_cart_discount_total();
+        $r->total    = $woo_cart->cart_contents_total + $r->shipping + $r->tax;
 
         //error_log(' getCartTotal() = '.json_encode($r));
 
@@ -354,9 +354,9 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $woo_coupons = $woo_cart->get_coupons();
         foreach($woo_coupons as $woo_coupon) {
             $dis = new P4M\Model\Discount();
-            $dis->Code           = $woo_coupon->code;
-            $dis->Description    = $woo_coupon->code;
-            $dis->Amount         = $woo_cart->get_coupon_discount_amount( $woo_coupon->code );
+            $dis->code           = $woo_coupon->code;
+            $dis->description    = $woo_coupon->code;
+            $dis->amount         = $woo_cart->get_coupon_discount_amount( $woo_coupon->code );
             $dis->removeNullProperties();
             $p4m_discounts[] = $dis;
         }
@@ -370,11 +370,11 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
         foreach( $itemsUpdateArray as $item_key=>$item_update ) {
             // note that the product SKU that p4m knows will either be a woo SKU (if set), or else the product_id (see code in getCartOfCurrentUser)
-            $product_id = wc_get_product_id_by_sku( $item_update->ItemCode ) || $item_update->ItemCode;
+            $product_id = wc_get_product_id_by_sku( $item_update->itemCode ) || $item_update->itemCode;
             // determine the woo cart_item_key for this product 
             $cart_item_key = $woo_cart->find_product_in_cart( $product_id );
             // now set the quantity for that line
-            $woo_cart->set_quantity( $cart_item_key, $item_update->Qty, $refresh_totals );
+            $woo_cart->set_quantity( $cart_item_key, $item_update->qty, $refresh_totals );
         }
 
         $p4m_discounts = $this->get_p4m_discounts_from_woo_cart_coupons();
@@ -398,9 +398,9 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         
         // now return the P4M discount object
         $dis = new P4M\Model\Discount();
-        $dis->Code          = $discountCode;
-        $dis->Description   = $discountCode;   // in Woo version 3.0, use $woo_coupon->get_description();
-        $dis->Amount        = $woo_cart->get_coupon_discount_amount( $woo_coupon->code );
+        $dis->code          = $discountCode;
+        $dis->description   = $discountCode;   // in Woo version 3.0, use $woo_coupon->get_description();
+        $dis->amount        = $woo_cart->get_coupon_discount_amount( $woo_coupon->code );
         $dis->removeNullProperties();
 
         return $dis;
@@ -423,9 +423,9 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         
         // now return the P4M discount object
         $dis = new P4M\Model\Discount();
-        $dis->Code          = $discountCode;
-        $dis->Description   = $discountCode;   // in Woo version 3.0, use $woo_coupon->get_description();
-        $dis->Amount        = $prev_discount_amount;
+        $dis->code          = $discountCode;
+        $dis->description   = $discountCode;   // in Woo version 3.0, use $woo_coupon->get_description();
+        $dis->amount        = $prev_discount_amount;
         $dis->removeNullProperties();
         
         return $dis;
@@ -434,10 +434,10 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
     public function completePurchase ( $purchase_data ) {
         
-        $p4m_cart           = $purchase_data->Cart; 
-        $transactionId      = $purchase_data->Id;
-        $transationTypeCode = $purchase_data->TransactionTypeCode; 
-        $authCode           = $purchase_data->AuthCode;
+        $p4m_cart           = $purchase_data->cart; 
+        $transactionId      = $purchase_data->id;
+        $transationTypeCode = $purchase_data->transactionTypeCode; 
+        $authCode           = $purchase_data->authCode;
 
         $wp_user = wp_get_current_user();
 
@@ -461,44 +461,44 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         update_post_meta( $order_id, '_payment_method_title', 'Parcel For Me Payment' );
 
 
-        if (property_exists($purchase_data, 'DeliverTo') && $purchase_data->DeliverTo) {
-            $p4m_ad = $purchase_data->DeliverTo;
+        if (property_exists($purchase_data, 'deliverTo') && $purchase_data->deliverTo) {
+            $p4m_ad = $purchase_data->deliverTo;
             $address = array(
                 'first_name' => $wp_user->first_name,
                 'last_name'  => $wp_user->last_name,
-                'company'    => $p4m_ad->CompanyName,
+                'company'    => $p4m_ad->companyName,
                 'email'      => $wp_user->email,
-                'phone'      => $p4m_ad->Phone,
-                'address_1'  => $p4m_ad->Street1,
-                'address_2'  => $p4m_ad->Street2, 
-                'city'       => $p4m_ad->City,
-                'state'      => $p4m_ad->State,
-                'postcode'   => $p4m_ad->PostCode,
-                'country'    => $p4m_ad->CountryCode
+                'phone'      => $p4m_ad->phone,
+                'address_1'  => $p4m_ad->street1,
+                'address_2'  => $p4m_ad->street2, 
+                'city'       => $p4m_ad->city,
+                'state'      => $p4m_ad->state,
+                'postcode'   => $p4m_ad->postCode,
+                'country'    => $p4m_ad->countryCode
             );
             $order->set_address( $address, 'shipping' );
 
-            // set BillTo address to the same if it is null
-            if ( property_exists($purchase_data, 'BillTo') && (null==$purchase_data->BillTo) ) {
+            // set billTo address to the same if it is null
+            if ( property_exists($purchase_data, 'billTo') && (null==$purchase_data->billTo) ) {
                 $order->set_address( $address, 'billing' );
             }
 
         }
 
-        if (property_exists($purchase_data, 'BillTo') && $purchase_data->BillTo) {
-            $p4m_ad = $purchase_data->BillTo;
+        if (property_exists($purchase_data, 'billTo') && $purchase_data->billTo) {
+            $p4m_ad = $purchase_data->billTo;
             $address = array(
                 'first_name' => $wp_user->first_name,
                 'last_name'  => $wp_user->last_name,
-                'company'    => $p4m_ad->CompanyName,
+                'company'    => $p4m_ad->companyName,
                 'email'      => $wp_user->email,
-                'phone'      => $p4m_ad->Phone,
-                'address_1'  => $p4m_ad->Street1,
-                'address_2'  => $p4m_ad->Street2, 
-                'city'       => $p4m_ad->City,
-                'state'      => $p4m_ad->State,
-                'postcode'   => $p4m_ad->PostCode,
-                'country'    => $p4m_ad->CountryCode
+                'phone'      => $p4m_ad->phone,
+                'address_1'  => $p4m_ad->street1,
+                'address_2'  => $p4m_ad->street2, 
+                'city'       => $p4m_ad->city,
+                'state'      => $p4m_ad->state,
+                'postcode'   => $p4m_ad->postCode,
+                'country'    => $p4m_ad->countryCode
             );
             $order->set_address( $address, 'billing' );
         }
