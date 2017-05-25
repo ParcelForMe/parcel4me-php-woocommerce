@@ -32,7 +32,7 @@ class Parcel4me_Shortcodes {
       // scripts required for all components
       wp_enqueue_script( 'webcomponentsjs', base_uri() . 'webcomponentsjs/webcomponents.min.js' );
     }
-    add_action( 'wp_enqueue_scripts', 'add_all_scripts' );
+    add_action( 'wp_enqueue_scripts', 'add_all_scripts', 0 );
 
 
 
