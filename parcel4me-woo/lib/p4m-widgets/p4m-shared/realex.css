@@ -1,0 +1,71 @@
+
+// Realex 'Add New Card' iframe styles
+// 25.05.17
+
+#rpx-saved-card .control-label, #rpx-another-card .control-label, #rxp-header .rxp-title, #rpx-saved-card .form-control, #rpx-another-card .form-control, .btn {
+	font-family: 'Lato', sans-serif;
+}
+.portfolio-realex {
+    background: transparent;
+    max-width: 100%;
+}
+#rxp-header .rxp-title {
+    padding: .5em 20px 0 20px;
+    margin: 0;
+    font-size: 1.3em;
+    font-size: 16px;
+    font-weight: 600;
+}
+#another-card-section {
+    background: #f8f8f8;
+    border: none;
+    border-radius: 0;
+}
+.form-control {
+	border-radius: 0;
+}
+.input-group-addon:last-child {
+    border-radius: 0;
+}
+div#info-box-footer {
+    padding: 0;
+    margin: 1em 0;
+}
+.btn {
+	border-radius: 0;
+}
+#main-btn-box {
+    display: flex;
+    justify-content: flex-end;
+}
+.btn-hpp-a {
+	display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    text-transform: none;
+    text-decoration: none;
+    height: 36px;
+    width: auto;
+    min-width: initial;
+    align-self: flex-end;
+    background-color: #37a553;
+    color: #fff;
+    border-radius: 20px;
+    box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+    padding: 0;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+.btn-hpp-a:hover, .btn-hpp-a:active {
+    background-color: #37a553;
+    color: #FFF;
+    box-shadow: rgba(128, 128, 128, 0.4) 0px 2px 6px 0px;
+    border: 0;
+}
+.btn-hpp-a span:before {
+    margin-right: 6px;
+}
+
+// END Realex 'Add New Card' iframe styles

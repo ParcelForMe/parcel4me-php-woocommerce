@@ -302,6 +302,9 @@
                     if (!this.consumerToken) {
                         this.consumerToken = this.$.p4mTokenCookie.readCookie();
                     }
+                    if (!this.consumerToken) {
+                        return;
+                    }
                     httpRequest.setRequestHeader('Authorization', 'Bearer ' + this.consumerToken);
                     httpRequest.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                     httpRequest.onreadystatechange = (function () {

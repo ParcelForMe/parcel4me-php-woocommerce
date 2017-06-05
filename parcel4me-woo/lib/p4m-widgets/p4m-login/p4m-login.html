@@ -2,7 +2,7 @@
 <link rel="import" href="../../iron-ajax/iron-ajax.html" />
 <link rel="import" href="../../paper-dialog/paper-dialog.html" />
 <link rel="import" href="../../polymer-cookie/polymer-cookie.html" />
-<link rel="import" href="../../paper-spinner/paper-spinner.html" />
+<link rel="import" href="../p4m-spinner/p4m-spinner.html" />
 <link rel="import" href="../../paper-menu/paper-menu.html" />
 <link rel="import" href="../../paper-item/paper-item.html" />
 <link rel="import" href="../p4m-profile/p4m-profile.html" />
@@ -12,98 +12,93 @@
 
 <dom-module id="p4m-login">
 
-    <template>  
-        <p4m-profile id="p4mProfile" on-click="launchPopup" on-mouseover="_mouseOverMenu" on-mouseleave="_mouseOutMenu"></p4m-profile>
-        <div id="p4m-menu-wrapper" class="p4m-menu hidden" on-mouseleave="_mouseOutMenu" on-mouseover="_mouseOverMenu">
-            <paper-menu id="p4m-menu" on-iron-select="_selectMenuItem">
-                <paper-item>Sign out:</paper-item>
-                <paper-item> - this site</paper-item>
-                <paper-item> - this device</paper-item>
-                <paper-item> - all devices</paper-item>
-                <paper-item>Restore last cart</paper-item>
-                <paper-item>Saved items</paper-item>
-                <paper-item>P4M Account</paper-item>
-            </paper-menu>
-        </div>
-    
-        <paper-dialog id="lastCartDlg" modal="true">
-            <img class="p4m-register-logo" src="../p4m-shared/img/logo-stacked-white.png" id="peli-icon-header" />
-            <h2>Restore your last cart?</h2>
-            <p class="restoreCartMessage italic">{{_restoreCartMessage}}</p>
-            <p class="restoreCartStatusMessage italic"><paper-spinner id="dlgSpinner"></paper-spinner>{{_restoreCartStatusMessage}}</p>
-            
-            <p4m-api id="localApi" is-local="true"></p4m-api>
-            <p4m-api id="p4mLoginApi" ssl="true" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
-            <div class="buttons">
-                <div class="p4m-button" on-click="_useNewCart">No</div>
-                <div class="p4m-button p4m-button-active" on-click="_useLastCart">Yes</div>
-            </div>
-        </paper-dialog>
+    <template> 
 
-        <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
-        <polymer-cookie id="p4mStateCookie" name="p4mState" path="/" value="{{_state}}"></polymer-cookie>
-        <polymer-cookie id="p4mNonceCookie" name="p4mNonce" path="/" value="{{_nonce}}"></polymer-cookie>
-        <polymer-cookie id="p4mLocalLoginCookie" name="p4mLocalLogin"></polymer-cookie>
-        <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
-        <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
-        <polymer-cookie id="p4mAvatarUrlCookie" name="p4mAvatarUrl"></polymer-cookie>
-        <polymer-cookie id="p4mDefaultCountryCodeCookie" name="p4mDefaultCountryCode"></polymer-cookie>
-        <polymer-cookie id="p4mDefaultPostCodeCookie" name="p4mDefaultPostCode"></polymer-cookie>
-        <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
-        <polymer-cookie id="gfsCheckoutTokenCookie" name="gfsCheckoutToken"></polymer-cookie>
+        <div class="login-wrap">
+
+            <div id="loginWidget" class="loginWidget" on-click="launchPopup"> 
+
+                <div id="p4m-logo">
+                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
+                    <path d="M17.2,4.5c0.2,0.3,0.7-0.2,0.7-0.2L18,4.1C18.1,4.1,18,4,18,4c-0.1,0-0.2,0-0.2-0.1C17.5,3.9,17,4.1,17.2,4.5
+                        C17.2,4.5,17.2,4.5,17.2,4.5z"/>
+                    <path d="M23.2,2.5c-1,0.2-2.9,1.1-4.7,0.3c-2.6-1-3.6,1.9-3.8,2.7c-0.2,0.8-2,6.6-12.1-3.4C2.2,1.9,1.7,2.1,1.8,2.5
+                        C1.9,5.9,5,9.2,5,9.2s7.2,8-3.2,9.9c-2.1,0.5-1,1.1-0.5,1.3c0.2,0.1,0.3,0.2,0.5,0.3c0.2,0.2,0.3,0.5,0,0.8
+                        c-0.6,0.6-1.4,1.5,0.9,1.2c2.2-0.3,16.5-2.1,17.1-12.3c0.3-5.8,2.5-6.5,3.5-7.6C23.5,2.7,23.3,2.5,23.2,2.5L23.2,2.5z M17.9,3.7
+                        c0.2,0,0.4,0.1,0.5,0.1c0.1,0,0.1,0.1,0.1,0.2l-0.3,0.4c0,0-0.8,1-1.3,0.4c0-0.1,0-0.1-0.1-0.2C16.5,4,17.5,3.6,17.9,3.7z M3.9,22
+                        c-0.1,0-0.1-0.1-0.2-0.1c-0.2-0.4-0.3-1.6,1.9-2.7c6.4-2.4,8.3-7.2,8.9-9.1c0.8-2.1,1.8-3.7,3.2-2.4C21.7,11.4,16.9,20,3.9,22
+                        L3.9,22z M8.8,3c-0.2-2.5,0.9-2,1.5-0.8v0.1c0.7,1.2,1.4,2.2,2.8,3.4c0.2,0.2,0.3,0.5,0.2,0.7c-0.6,1.2-2.6,0.6-3.1,0.4
+                        c-0.1,0-0.2-0.1-0.2-0.2C9.7,6.2,8.9,5.1,8.8,3L8.8,3z"/>
+                    </svg>
+                </div>
+                <div id="loginMessage">Use 1 Click Checkout</div>
+                <div id="loggingInMessage">Logging in ...</div>
+                <p4m-profile id="p4mProfile" on-click="launchPopup" on-mouseover="_mouseOverMenu" on-mouseleave="_mouseOutMenu"></p4m-profile>
+                <p4m-spinner id="spinner" species="progress" class="login_widget_spinner"></p4m-spinner>
+            </div>
+            
+
+            <div id="p4m-menu-wrapper" class="p4m-menu hidden" on-mouseleave="_mouseOutMenu" on-mouseover="_mouseOverMenu">
+                <paper-menu id="p4m-menu" on-iron-select="_selectMenuItem">
+                    <paper-item>Sign out:</paper-item>
+                    <paper-item> - this site</paper-item>
+                    <paper-item> - this device</paper-item>
+                    <paper-item> - all devices</paper-item>
+                    <paper-item>Restore last cart</paper-item>
+                    <paper-item>Saved items</paper-item>
+                    <paper-item>P4M Account</paper-item>
+                </paper-menu>
+            </div>
+        
+            <paper-dialog id="lastCartDlg" modal="true">
+                <img class="p4m-register-logo" src="../p4m-shared/img/logo-stacked-white.png" id="peli-icon-header" />
+                <h2>Restore your last cart?</h2>
+                <p class="restoreCartMessage italic">{{_restoreCartMessage}}</p>
+                <p class="restoreCartStatusMessage italic"><paper-spinner id="dlgSpinner"></paper-spinner>{{_restoreCartStatusMessage}}</p>
+                
+                <p4m-api id="localApi" is-local="true"></p4m-api>
+                <p4m-api id="p4mLoginApi" ssl="true" host-base-domain="parcelfor.me" host-type="{{hostType}}" version="v2"></p4m-api>
+                <div class="buttons">
+                    <div class="p4m-button" on-click="_useNewCart">No</div>
+                    <div class="p4m-button p4m-button-active" on-click="_useLastCart">Yes</div>
+                </div>
+            </paper-dialog>
+
+            <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
+            <polymer-cookie id="p4mStateCookie" name="p4mState" path="/" value="{{_state}}"></polymer-cookie>
+            <polymer-cookie id="p4mNonceCookie" name="p4mNonce" path="/" value="{{_nonce}}"></polymer-cookie>
+            <polymer-cookie id="p4mLocalLoginCookie" name="p4mLocalLogin"></polymer-cookie>
+            <polymer-cookie id="p4mOfferCartRestoreCookie" name="p4mOfferCartRestore"></polymer-cookie>
+            <polymer-cookie id="p4mLocaleCookie" name="p4mLocale"></polymer-cookie>
+            <polymer-cookie id="p4mAvatarUrlCookie" name="p4mAvatarUrl"></polymer-cookie>
+            <polymer-cookie id="p4mDefaultCountryCodeCookie" name="p4mDefaultCountryCode"></polymer-cookie>
+            <polymer-cookie id="p4mDefaultPostCodeCookie" name="p4mDefaultPostCode"></polymer-cookie>
+            <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
+            <polymer-cookie id="gfsCheckoutTokenCookie" name="gfsCheckoutToken"></polymer-cookie>
+
+        </div>
     </template>
 
     <style>
-        #lastCartDlg {
-            background: #37a553;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            padding: 35px;
-            width: 430px;
-            max-width: 90%;
-        }
-        #lastCartDlg > * {
-            display: flex;
-            justify-content: center;
-            margin-top: 0;
-        }
-        #lastCartDlg > h2 {
-            font-size: 28px;
-            line-height: 36px;
-        }
-        #lastCartDlg > p {
-            font-style: italic;
-            font-size: 15px;
-            text-align: center;
-            margin: .5em 0;
-        }
-        #lastCartDlg .buttons {
-            margin: 20px 0 0 0 !important;
-            padding: 0 !important;
-        }
-        .restoreCartStatusMessage {
-            display: none !important;
-        }
-        .p4m-register-logo.p4m-login {
-            min-width: initial !important;
-            height: auto;
-            width: 128px !important;
-            align-self: center;
-            margin-bottom: 25px;
-        }
+
         .p4m-menu {
             position:absolute;
             min-width:180px;
-            border: 1px solid silver;
             z-index: 99;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
         }
+
+        .login-wrap {
+            display: block;
+        }
+
         .p4m-menu paper-item {
             min-height: 28px;
+            cursor:pointer;
         }
         .p4m-menu paper-item:hover{
-            background-color: silver;
+            background-color: #eaeaea;
         }
         #dlgSpinner {
             width: 50px;
@@ -112,10 +107,7 @@
         .hidden {
             display: none;
         }
-        .restoreCartMessage {
-            display: flex;
-            flex-direction: row;
-        }
+        
     </style>
 
     <script>
@@ -165,9 +157,11 @@
 
             ready: function () {
                 window.addEventListener('p4m-request-login', this.onRequestForLogin.bind(this));
+
                 this._getTokenCookie();
                 if (this.p4mToken) 
                 {
+                    this._showAsLoggedIn();
                     // if the P4M Consumer is logged in, then check if they are logged in locally
                     var localLogin = this.$.p4mLocalLoginCookie.readCookie(); 
                     if (!localLogin || localLogin === "") {
@@ -192,6 +186,7 @@
                     }
                 }
                 else {
+                    this._showAsLoggedOut();
                     this.clearCookies();
                 	var locale = this.$.p4mLocaleCookie.readCookie();
                     if (!locale || locale === "") {
@@ -199,6 +194,9 @@
                     	this.$.p4mLoginApi.call("getLocale", null, null, this._onGotLocale.bind(this));
                     }
                 }
+
+                //Move dialog out into the body
+                Polymer.dom(document.body).appendChild(this.$.lastCartDlg);
             },
 
             _onGotLocale: function (err, data) {
@@ -225,6 +223,7 @@
 			
             showPopup: function(){
                     //Make AuthUrl
+                    this._showAsLoggingIn();
                     this._makeState();
                     this._makeAuthUrl();
                     this.popupCenter(this._authUrl, "Login", 450, 500);
@@ -237,6 +236,9 @@
                     var formElem = document.getElementById(this.logoutForm);
                     if (formElem) {
                         formElem.submit();
+                    }
+                    else {
+                        window.location.reload(true); 
                     }
                 }
                 else {
@@ -253,6 +255,9 @@
                     if (formElem) {
                         formElem.submit();
                     }
+                    else {
+                        window.location.reload(true); 
+                    }
                 }
                 else {
                     window.location.reload(true);
@@ -267,6 +272,9 @@
                     var formElem = document.getElementById(this.logoutForm);
                     if (formElem) {
                         formElem.submit();
+                    }
+                    else {
+                        window.location.reload(true); 
                     }
                 }
                 else {
@@ -336,13 +344,13 @@
 
             _onAuthCompletion: function () {
                 var currentPage = { "currentPage": window.location.href };
-                this.$.p4mProfile.showSpinner();
+                this._showAsLoggingIn();
                 this.$.localApi.call('localLogin', currentPage, null, this._onLocalLogin.bind(this));
             },
 
             _onLocalLogin: function (err, data) {
                 console.log(JSON.stringify(data));
-                this.$.p4mProfile.hideSpinner();
+                this._showAsLoggedIn();
                 if (data.RedirectUrl) {
                     window.location.href = data.RedirectUrl;
                 }
@@ -405,6 +413,7 @@
             },
 
             showMenu: function(){
+
                 this.$['p4m-menu-wrapper'].classList.remove('hidden');
             },
 
@@ -424,8 +433,27 @@
 
             onRequestForLogin: function () {
                 //If we hear a global event calling for a login
+                this._showAsLoggingIn();
                 this.launchPopup();
 
+            },
+
+            _showAsLoggingIn: function() {
+                this.$.p4mProfile.classList.add("hidden");
+                this.$.loginWidget.classList.add("loggingIn");
+                this.$.spinner.active = true;
+            },
+
+            _showAsLoggedIn: function() {
+                this.$.p4mProfile.classList.remove("hidden");
+                this.$.loginWidget.classList.add("loggedIn");
+                this.$.spinner.active = false;
+            },
+
+
+            _showAsLoggedOut: function() {
+                this.$.p4mProfile.classList.add("hidden");
+                this.$.loginWidget.classList.add("loggedOut");
             }
         });
     </script>

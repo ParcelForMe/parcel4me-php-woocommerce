@@ -149,7 +149,7 @@
                             </div>
                         </div>
                         <div id="selectedDropPointPanel" class="hidden" style="height: {{mapHeight}}px; display: block">
-                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true">HELLO</gfs-droppoint>
+                            <gfs-droppoint id="infobox-droppoint" droppoint-data="{{_selectedDropPoint}}" on-droppoint-selected="_onDropPointSelectedEvent" show-shipping-options="true" show-distance="true" show-opening-hours="true"></gfs-droppoint>
                         </div>
                         
                     </div>
@@ -1137,6 +1137,7 @@
 
                     this.$.standardRatesTemplate.render();
                     this.fire('selectedservicechanged', this.selectedServiceDetails);
+                    this._updateUi();
                     return this.selectedServiceDetails;
                 }
             },
@@ -1699,9 +1700,9 @@
                     this._loadDroppointMarkers(this._dropPoints);                                                                           
                     this._resetMap(this._map, function() {
                         self._openSelectedDropPointInfoWindow();
-                    // Switch classes on the Map/list toggle - help BAZ!
-                    this.$['viewAsMap'].classList.add('active');
-                    this.$['viewAsList'].classList.remove('active');
+                        // Switch classes on the Map/list toggle - help BAZ!
+                        self.$.viewAsMap.classList.add('active');
+                        self.$.viewAsList.classList.remove('active');
                     });
                     //this.panToDefaultLocation();
 
@@ -1712,8 +1713,8 @@
                     //this._resetMap(this._map);
                     //this._openSelectedDropPointInfoWindow();
                     // Switch classes on the Map/list toggle
-                    this.$['viewAsMap'].classList.remove('active');
-                    this.$['viewAsList'].classList.add('active');
+                    this.$.viewAsMap.classList.remove('active');
+                    this.$.viewAsList.classList.add('active');
                 }
 
             },

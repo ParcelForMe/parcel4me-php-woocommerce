@@ -10,21 +10,30 @@
 
             <div class="address-section">
                 <div class="add-new horizontal layout center end-justified style-scope p4m-address-list">
-                    <div class="link add" id="addNewAddress" on-tap="addNewAddress">
-                        <span>Add a New Address</span>
+                    <div class="link add" id="toggleAddressMode" on-tap="toggleAddressMode">
+                        <span>{{_addressModePrompt}}</span>
                         <i class="p4micon-add-circle link"></i>
                     </div>
                 </div>
-                <!-- help BAZ! - please add the cancel function into div.add-new above - to create the same add/cancel UX as in p4m-card list -->
-                <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">
-                    <p4m-address address-data="{{item}}" on-canceledit="cancelAdd" cart-data="{{cartData}}" mode="edit" on-save="onSaveNewAddress"></p4m-address>
-                </template>
+                <iron-pages id="addressSelectionPages" selected="1"> 
+                    <iron-page>
+                        <template is="dom-repeat" items="{{addressListData}}" filter="filterNewOnly">
+
+                            <p4m-address show-cancel="false" address-data="{{item}}" on-canceledit="toggleAddressMode" cart-data="{{cartData}}" mode="edit" on-save="onSaveNewAddress"></p4m-address>
+                            
+                        </template>
+                    </iron-page>
+                    <iron-page>
+                        <template id="oldAddresses" is="dom-repeat" items="{{addressListData}}" filter="filterOldOnly">
+                        
+                            <p4m-address show-cancel="true" address-data="{{item}}" on-canceledit="cancelEdit" cart-data="{{cartData}}" mode="view" on-save="onUpdateAddress" on-select-address="onSelectAddress"></p4m-address>
+                        </template>
+                    </iron-page>
+                </iron-pages>
 
             </div>
 
-            <template id="oldAddresses" is="dom-repeat" items="{{addressListData}}" filter="filterOldOnly">
-                <p4m-address address-data="{{item}}" on-canceledit="cancelEdit" cart-data="{{cartData}}" mode="view" on-save="onUpdateAddress" on-select-address="onSelectAddress"></p4m-address>
-            </template>
+
             <paper-spinner id="spinner"></paper-spinner>
 
         </div>
@@ -72,6 +81,11 @@
                     value: {},
                     notify: true
                 },
+                _addressModePrompt: {
+                    type: String,
+                    value: "Add a New Address"
+
+                },
                 _addedNewAddress: {
                     type: Object,
                     value: false
@@ -82,7 +96,10 @@
                 "onCartAddressDataChange(cartData.BillingAddressId)",
                 "onCartAddressDataChange(cartData.AddressId)",
                 "onCartAddressDataChange(addressListData)"
+            
+                //"onCartAddressDataChange(addressListData.*)"
             ],
+                
 
             ready: function()
             {
@@ -90,13 +107,29 @@
             },
 
 
-            addNewAddress: function () {
+            toggleAddressMode: function () {
+
+                if (this.$.addressSelectionPages.selected == 0) {
+                    this.$.addressSelectionPages.select(1);
+                    this.$.toggleAddressMode.classList.add("add");
+                    this.$.toggleAddressMode.classList.remove("cancel");
+                    this.set("_addressModePrompt", "Add a New Address");
+                    this.cancelAdd();
+
+                }
+                else {
+                    this.$.addressSelectionPages.select(0);
+                    this.$.toggleAddressMode.classList.add("cancel");
+                    this.$.toggleAddressMode.classList.remove("add");
+                    this.set("_addressModePrompt", "Cancel");
+                    //if (this.addressListData && !this._addedNewAddress) {
+                        this._addedNewAddress = true;
+                        //Add empty object to handle adding a new address
+                        this.push('addressListData', this.newAddress);
+                    //}   
+                }
                
-                if (this.addressListData && !this._addedNewAddress) {
-                    this._addedNewAddress = true;
-                    //Add empty object to handle adding a new address
-                    this.push('addressListData', this.newAddress);
-                }             
+          
 
             },
 
@@ -104,6 +137,7 @@
                 console.log("Cancel add address");
                 this._addedNewAddress = false;
                 this.pop('addressListData');
+
 
                 //this.$.newAddressCollapse.opened = false;
             },
@@ -116,19 +150,25 @@
 
             onSaveNewAddress: function(addressElement) {
                 this.fire('add', addressElement.detail);
+                this.notifyPath('addressListData');
+                this.$.oldAddresses.render();
+                this.toggleAddressMode();
             },
 
             onUpdateAddress: function (addressElement) {
                 this.fire('update', addressElement.detail);
+                this.$.oldAddresses.render();
             },
 
             onSelectAddress: function (e) {
                 console.log("*** Selected address");
                 this.fire('select', e.detail);
+
             },
 
             onCartAddressDataChange: function (e) {
                 var i = 0;
+
                 this.$.oldAddresses.render();
                 /*
                 console.log("*** Changed delivery or billing address", e);
@@ -143,11 +183,13 @@
             },
 
             filterNewOnly: function (e) {
-                return (typeof(e.Label) === "undefined");
+                return (e && typeof(e.Label) === "undefined");
             },
 
             filterOldOnly: function (e) {
-                return (typeof (e.Label) === "string" && e.AddressType == "Address");
+                //return true;
+                //return false;
+                return (e && typeof (e.Label) === "string" && e.AddressType == "Address");
             },
 
             showAsLoaded: function () {

@@ -1,6 +1,7 @@
 ﻿<link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../../iron-overlay-behavior/iron-overlay-behavior.html" />
-<link rel="import" href="../../paper-spinner/paper-spinner.html" />
+<!-- <link rel="import" href="../../paper-spinner/paper-spinner.html" /> -->
+<link rel="import" href="../p4m-spinner/p4m-spinner.html" />
 
 <dom-module id="p4m-overlay">
     <style>
@@ -15,9 +16,51 @@
     </style>
 
     <template>
-       <content><paper-spinner active="true"></paper-spinner></content> 
+       <!-- <content><paper-spinner active="true"></paper-spinner></content>  -->
+        <content>
+        <div class="checking">
+
+            <h3>Processing payment, please wait ...</h3>
+            <p4m-spinner species="progress" id="cvv_check" active="true" active></p4m-spinner>
+            <div class="powered-by-link">
+                <img class="powered-by" src="../p4m-shared/img/powered-by-parcel-for-me.png" id="powered-by" />
+            </div>
+
+        </content> 
        
     </template>
+    <style>
+        .checking {
+            width: 320px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        #p4m-logo {
+            width: 24px;
+            height: 24px;
+        }
+        #p4m-logo svg {
+            fill: #fff;
+        }
+        .checking h3 {
+            color: #fff;
+            font-weight: 200 !important;
+            font-size: 18px;
+            height: 24px;
+            padding: 0;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-end;
+        }
+        .checking p4m-spinner {
+            background: rgba(255,255,255,0.3);
+            position: relative;
+            top: initial;
+            bottom: initial;
+            margin-bottom: 12px;
+        }
+    </style>
 
     <script>
 

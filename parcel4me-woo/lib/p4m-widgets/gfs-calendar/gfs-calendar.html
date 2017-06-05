@@ -7,7 +7,7 @@
         <div id="calendar-body" class="horizontal layout center">
 
             <div class="calendar-buttons flex self-stretch">
-                <div on-click="seePreviousWeek" class$="gfs-button transition {{_previousWeekClass}}">
+                <div data-tooltip="Previous Week" on-click="seePreviousWeek" class$="gfs-button transition {{_previousWeekClass}} tooltip-top">
                     <i class="p4micon-chevron-left"></i>
                 </div>
             </div>
@@ -35,7 +35,7 @@
             </template>
 
             <div class="calendar-buttons flex self-stretch">
-                <div on-click="seeNextWeek" class$="gfs-button transition {{_nextWeekClass}}">
+                <div data-tooltip="Next Week" on-click="seeNextWeek" class$="gfs-button transition {{_nextWeekClass}} tooltip-top">
                     <i class="p4micon-chevron-right"></i>
                 </div>
             </div>
@@ -430,15 +430,21 @@
             },
 
             _calendarShippingOptionIsSelected: function (item) {
-                var selectedDeliveryDate;
+                var selectedDeliveryDateStr;
                 if (this.selectedDeliveryDate) {
-                    selectedDeliveryDate = new Date(Math.floor((new Date(this.selectedDeliveryDate).getTime()) / DAY_MS) * DAY_MS);//Remove time component
-                    if ((this.selectedShippingMethodId == item.id) && (selectedDeliveryDate.getTime() == new Date(item.deliveryDate).getTime())) {
-                        return true;
+                    //Remove time component
+
+                    selectedDeliveryDateStr = makeDateStr(new Date(this.selectedDeliveryDate));
+                    if (this.selectedShippingMethodId == item.id) {
+                        var itemDeliveryDateStr = makeDateStr(new Date(item.deliveryDate));
+                        if (selectedDeliveryDateStr == itemDeliveryDateStr) {
+                            return true;
+                        }
+                        else return false
                     }
                     else return false;
                 }
-                else return false;              
+                else return false;
            }
         });
 
@@ -449,6 +455,20 @@
         function minutesToTimeStr(minutes) {
             var d = new Date(minutes * 60 * 1000);
             return d.getUTCHours() + ":" + zeroPad(d.getUTCMinutes(), 2); //.toLocaleTimeString();
+        }
+
+        function makeDateStr(date) {
+            try {
+                if (date) {
+                    return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+                }
+                else return null;
+            }
+            catch(e) {
+                return null;
+            }
+
+            
         }
 
         function zeroPad(num, places) {

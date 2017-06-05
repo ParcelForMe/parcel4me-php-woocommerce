@@ -63,7 +63,7 @@ exports.localLogin = function(req, res) {
 	var now = new Date();
 	var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
 	cookies.set('p4mAvatarUrl', 		'http://localhost:8080/profile.png', cookieConf);
-	cookies.set('p4mGivenName', 		'Guest', cookieConf);
+	cookies.set('p4mGivenName', 		'Hugo', cookieConf);
 	cookies.set('p4mDefaultPostCode', 	'4000', cookieConf);
 	cookies.set('p4mDefaultCountryCode', 'AU', cookieConf);
 	cookies.set('p4mOfferCartRestore', 	'true', cookieConf);
@@ -98,29 +98,21 @@ exports.checkout = function(req, res) {
 			form : data
 		}
 
-
 		request.post(options, function(error, response, body) {
 
 			var now = new Date();
 			var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
-
-console.log('HERE with ', body);
-
 			var base64Token = new Buffer(JSON.parse(body).access_token).toString('base64');
 			cookies.set('gfsCheckoutToken', base64Token, cookieConf);
 
 			returnTemplateFile('checkout.html', '[gfs-access-token]', base64Token, res);
 			
 		});
-
-	} else {
-	
+	} 
+	else {	
 		console.log('THIS NEVER HAPPENS CURRENTLY.. but if i stored the gfs-access-token somewhere then I could do this logic ..');
 		returnTemplateFile('checkout.html', '[gfs-access-token]', base64Token, res);
-
 	}
-
-
 }
 
 
@@ -137,17 +129,13 @@ function returnTemplateFile(file, find, replace, res) {
 		if (err) {
 			res.status(500).send(err);
 		}
-
 		// IMPLEMENTING ONLY THE MOST BASIC FIND REPLACE, OF ONE SHORT CODE AND ONLY ONE OCCURANCE
 		file_contents = file_contents.toString('utf8').replace(find, replace);  
 
 		res.set('Content-Type', 'text/html');
 		res.status(200).send(file_contents);
 		res.end(); // needed for cookies to save !
-
 	});
-
-
 }
 
 exports.updShippingService = function(req, res) {

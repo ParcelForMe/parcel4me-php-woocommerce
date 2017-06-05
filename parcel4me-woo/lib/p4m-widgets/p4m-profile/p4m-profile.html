@@ -1,5 +1,4 @@
 ﻿<link rel="import" href="../../polymer/polymer.html" />
-<link rel="import" href="../../paper-spinner/paper-spinner.html" />
 
 <dom-module id="p4m-profile">
 
@@ -8,9 +7,12 @@
             <polymer-cookie id="p4mTokenCookie" name="p4mToken"></polymer-cookie>
             <polymer-cookie id="p4mAvatarCookie" name="p4mAvatarUrl"></polymer-cookie>
             <polymer-cookie id="p4mGivenNameCookie" name="p4mGivenName"></polymer-cookie>
-            <img id="profileImage" src$="{{_profilePicUrl}}" />  
-            <paper-spinner id="spinner"></paper-spinner>         
+            <div id="profileImage">
+                <img id="profileImg" src="{{_profilePicUrl}}" />
+            </div>
+            
             <div id="profileName">{{_profileName}}</div>
+
         </div>
     </template>
 
@@ -78,6 +80,7 @@
                     this._profilePicUrl = null;
                 else
                     this._profilePicUrl = unescape(picUrl);
+
                 this._profileName = this.$.p4mGivenNameCookie.readCookie();
 
                 //Check to see if the user is logged in
@@ -88,32 +91,44 @@
             },
 
             show: function () {
-                this.hideSpinner();
+                // this.hideSpinner();
              
+                // if (this._profilePicUrl) {
+                //     this.$.profileImg.classList.remove("hidden");
+                //     this.$.profileBlank.classList.add("hidden");
+
+                // }
+                // else {
+                //      this.$.profileImg.classList.add("hidden");
+                //     this.$.profileBlank.classList.remove("hidden");                  
+                // }
                 if (!this._profilePicUrl) {
-                    if (this._loggedIn)
-                        this._profilePicUrl = this.resolveUrl("peli-logo-green.png");
-                    else
-                        this._profilePicUrl = this.resolveUrl("peli-logo-grey.png");
+                    this._profilePicUrl = this.resolveUrl("profile.png");
                 }
+
+                /*
+                    if (this._loggedIn) {
+                        this._profilePicUrl = this.resolveUrl("profile-test-image.png");
+                    }
+                    else {
+                        this._profilePicUrl = this.resolveUrl("profile-test-image.png");
+                    }
+                }*/
             },
 
             onProfileData: function (e) {
-                this.p4mData = e.detail;
-                this._profilePicUrl = this.p4mData.Consumer.ProfilePicUrl;
-                this._profileName = this.p4mData.Consumer.GivenName;
+
+                //this.p4mData = e.detail;
+                if (!this._profilePicUrl) {
+                    this._profilePicUrl = this.p4mData.Consumer.ProfilePicUrl;
+                }
+                if (!this._profileName) {
+                    this._profileName = this.p4mData.Consumer.GivenName;
+                }
+
                 this.show();
             },
 
-            hideSpinner: function () {
-                this.$.spinner.active = false;
-                this.$.spinner.classList.add('hidden');
-            },
-
-            showSpinner: function () {
-                this.$.spinner.active = true;
-                this.$.spinner.classList.remove('hidden');
-            }
         });
     </script>
 </dom-module>
