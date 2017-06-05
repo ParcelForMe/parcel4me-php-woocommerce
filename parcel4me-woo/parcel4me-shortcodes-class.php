@@ -46,7 +46,8 @@ class Parcel4me_Shortcodes {
       if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
 
       // scripts required for all components
-      wp_enqueue_script( 'webcomponentsjs', base_uri() . 'webcomponentsjs/webcomponents.min.js' );
+      //wp_enqueue_script( 'webcomponentsjs', '///cdn.rawgit.com/webcomponents/webcomponentsjs/v0.7.24/webcomponents-lite.js' );
+      wp_enqueue_script( 'webcomponentsjs', base_uri() . 'webcomponentsjs/webcomponents-lite.js' );
     }
     add_action( 'wp_enqueue_scripts', 'add_all_scripts', 0 );
 
