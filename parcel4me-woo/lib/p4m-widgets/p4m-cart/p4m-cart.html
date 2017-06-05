@@ -6,8 +6,8 @@
 
     <template>
         <div id="container">
-            <template is="dom-repeat" items="{{cartData.Items}}">
-                <p4m-cart-card allow-editing="{{allowEditing}}" currency="{{cartData.Currency}}" cart-item-data="{{item}}"></p4m-cart-card>
+            <template is="dom-repeat" items="{{cartData.items}}">
+                <p4m-cart-card allow-editing="{{allowEditing}}" currency="{{cartData.currency}}" cart-item-data="{{item}}"></p4m-cart-card>
             </template>
         </div>
         
@@ -44,7 +44,7 @@
                 }
             },
             observers: [
-                "onCartDataChange(cartData.Items.*)"
+                "onCartDataChange(cartData.items.*)"
             ],
 
             ready: function()
@@ -68,12 +68,11 @@
             onCartDataChange: function (e) {
                 if (e && e.path) {
                     //Parse path to identify change
-                    //cartData.Items.#1.Qty
                     var tokens = e.path.split('.');
                     if (tokens.length == 4) {
                         var propertyChanged = tokens[3];
                         var itemIndex = Number(tokens[2].replace('#', ''));
-                        this.changes[e.base[itemIndex].Sku] = e.value;
+                        this.changes[e.base[itemIndex].sku] = e.value;
                     }
 
                 }

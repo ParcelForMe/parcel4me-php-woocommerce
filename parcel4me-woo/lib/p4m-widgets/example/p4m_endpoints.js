@@ -21,7 +21,7 @@ exports.getP4MAccessToken = function(req, res) {
 	}
 
 
-	var url = "https://dev.parcelfor.me:44333/connect/token";
+	var url = "https://dev-ids.parcelfor.me/connect/token";
 
 	var data = {
 		grant_type		: "authorization_code",
@@ -36,11 +36,24 @@ exports.getP4MAccessToken = function(req, res) {
 			"Authorization": "Basic " + new Buffer("10006:secret").toString('base64'),
 			"Content-Type": "application/x-www-form-urlencoded"
 		},
-		form : data
+		port: 443,
+
+		form : data,
+	
+		rejectUnauthorized : false
+
 	}
 
 
+	function isEmptyObject(obj) {
+		return !Object.keys(obj).length;
+	}
+
 	request.post(options, function(error, response, body) {
+
+		if (error && !isEmptyObject(error)) {
+			res.status(500).send(error);
+		}
 
 		var now = new Date();
 		var cookieConf = { path : '/', expires: new Date(now.setFullYear(now.getFullYear() + 1)) , httpOnly: false };
@@ -118,7 +131,7 @@ exports.checkout = function(req, res) {
 
 exports.itemQtyChanged = function(req, res) {
     var result = {
-        Success: true
+        success: true
     };
     res.status(200).json(result);
 }
@@ -140,19 +153,19 @@ function returnTemplateFile(file, find, replace, res) {
 
 exports.updShippingService = function(req, res) {
     var result = {
-        Discount: 0,
-        Error: null,
-        Shipping: req.body.Amount,
-        Success: true
+        discount: 0,
+        error: null,
+        shipping: req.body.Amount,
+        success: true
     };
     try {
-    result.Tax = Math.floor(result.Shipping / 10);
-    result.Total = result.Tax + result.Shipping;
+		result.tax = Math.floor(result.shipping / 10);
+		result.total = result.tax + result.shipping;
     }
     catch(e) {
     	console.error(e);
-    	result.Tax = 0;
-    	result.Total = result.Shipping;
+    	result.tax = 0;
+    	result.total = result.shipping;
     }
     res.status(200).json(result);
 }

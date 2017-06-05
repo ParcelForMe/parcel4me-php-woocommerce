@@ -29,12 +29,12 @@
                 <input type="hidden" name="CARD_STORAGE_ENABLE" value="1" />
                 <input type="hidden" name="OFFER_SAVE_CARD" value="0" />
                 <input type="hidden" name="PAYER_EXIST" value="{{payerExist}}" />
-                <input type="hidden" name="PAYER_REF" value="{{consumerData.Id}}" />
+                <input type="hidden" name="PAYER_REF" value="{{consumerData.id}}" />
                 <input type="hidden" name="PMT_REF" value="{{newCardId}}" />
                 <input type="hidden" name="VALIDATE_CARD_ONLY" value="1" />
                 <!-- End Card Storage Fields -->
                 <input type="hidden" name="MERCHANT_RESPONSE_URL" value="{{responseUrl}}" />
-                <input type="hidden" name="PAYER_LOCALE" value="{{consumerData.Locale}}" />
+                <input type="hidden" name="PAYER_LOCALE" value="{{consumerData.locale}}" />
                 <input type="hidden" name="P4M_SOURCE" value="web" />
                 <input type="hidden" name="CARD_PAYMENT_BUTTON" value="Store Card" />
             </form>
@@ -136,7 +136,7 @@
 
             onConsumerData: function (consumer) {
                 this.set('payerExist', "2");
-                //this.set('payerExist',(consumer.PaymentMethods.length > 0) ? "1" : "0");
+                //this.set('payerExist',(consumer.paymentMethods.length > 0) ? "1" : "0");
             },
 
             loadRealexForm: function() {
@@ -171,9 +171,9 @@
             onCardHash: function (err, hashResponse) {
                 //We have received the hash data, now fill in the form and post  
                 console.log("Received card hash. Posting form...", hashResponse);
-                this.set('cardMerchantId', hashResponse.MerchantId);
-                this.set('cardHash', hashResponse.Hash);
-                this.set('cardTimestamp', hashResponse.Timestamp);
+                this.set('cardMerchantId', hashResponse.merchantId);
+                this.set('cardHash', hashResponse.hash);
+                this.set('cardTimestamp', hashResponse.timestamp);
                 this._requestedForm = true;
                 this.$.realexForm.submit();
                 window.addEventListener("message", this.receiveMessage.bind(this), false);

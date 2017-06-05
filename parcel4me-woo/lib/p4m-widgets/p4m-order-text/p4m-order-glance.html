@@ -64,12 +64,12 @@
             {
                 if (this.cartData && this.consumerData) {
                     this.isLoading = false;
-                    var deliveryAddr = this._addressById(this.cartData.AddressId);
+                    var deliveryAddr = this._addressById(this.cartData.addressId);
                     this.deliveryAddressStr = this._addressToStr(deliveryAddr);
                     this.addressTypeStr = this._addressType(deliveryAddr);
-                    this.deliveryDatePrefixStr = this._expectedDeliveryDatePrefixStr(this.cartData.ExpDeliveryDate);
-                    this.deliveryDateStr = this._expectedDeliveryDateStr(this.cartData.ExpDeliveryDate);
-                    this.deliveryMethodStr = this.cartData.ServiceName;
+                    this.deliveryDatePrefixStr = this._expectedDeliveryDatePrefixStr(this.cartData.expDeliveryDate);
+                    this.deliveryDateStr = this._expectedDeliveryDateStr(this.cartData.expDeliveryDate);
+                    this.deliveryMethodStr = this.cartData.serviceName;
                 }
                 else {
                     this.isLoading = true;
@@ -78,9 +78,9 @@
 
             _addressById: function(id) {
                 var foundAddress = null;
-                for (var i = 0; i < this.consumerData.Addresses.length; i++) {
-                    var address = this.consumerData.Addresses[i];
-                    if (address.Id == this.cartData.AddressId) {
+                for (var i = 0; i < this.consumerData.addresses.length; i++) {
+                    var address = this.consumerData.addresses[i];
+                    if (address.id == this.cartData.addressId) {
                         foundAddress = address;
                         break;
                     }
@@ -90,7 +90,7 @@
 
             _addressToStr: function (address) {
                 if (address) {
-                    return address.Street1; /*+ " " + address.Street2;*/
+                    return address.street1; /*+ " " + address.Street2;*/
                 }
                 else {
                     return "";
@@ -99,8 +99,8 @@
             },
 
             _addressType: function (address) {
-                if (address && address.AddressType) {
-                    if (address.AddressType === "Collect") {
+                if (address && address.addressType) {
+                    if (address.addressType === "Collect") {
                         return "preferred collection point";
                     }
                     else {

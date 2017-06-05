@@ -56,7 +56,7 @@
             },
             sync: function () {
                 if (this.isWish) {
-                    this.itemData.Currency = this.currency;
+                    this.itemData.currency = this.currency;
                     this.fire("movingtowish", this.itemData);
                     this.api = document.getElementById("p4mCheckoutApi");
                     this.api.call('postWish', {}, this.itemData, () => this.broadcastState());

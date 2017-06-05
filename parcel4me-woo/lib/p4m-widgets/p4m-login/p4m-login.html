@@ -201,14 +201,14 @@
 
             _onGotLocale: function (err, data) {
                 //console.log(JSON.stringify(data));
-                if (data && !data.Success) {
+                if (data && !data.success) {
                     err = data.message;
                 }
                 if (err) {
                     throw err;
                 }
                 else {
-                    document.cookie = "p4mLocale=" + data.Token + "; path=/";
+                    document.cookie = "p4mLocale=" + data.token + "; path=/";
                 }
             },
 
@@ -351,12 +351,12 @@
             _onLocalLogin: function (err, data) {
                 console.log(JSON.stringify(data));
                 this._showAsLoggedIn();
-                if (data.RedirectUrl) {
-                    window.location.href = data.RedirectUrl;
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
                 }
                 else {
-                    if (err || data.Error) {
-                        console.error("A login error occurred:", err || data.Error);
+                    if (err || data.error) {
+                        console.error("A login error occurred:", err || data.error);
                     }
                     window.location.reload(true);
                 }
@@ -364,7 +364,7 @@
 
             _onCheckLocalLogin: function (err, data) {
                 //console.log(JSON.stringify(data));
-                if (!data.Success)
+                if (!data.success)
                     this._onAuthCompletion();
             },
 

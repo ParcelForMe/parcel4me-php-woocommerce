@@ -71,8 +71,8 @@
             },
             onResponse: function (e, data) {
                 if (e) {
-                    if (e.Error) {
-                        this.showError(e.Error);
+                    if (e.error) {
+                        this.showError(e.error);
                     } else {
                         this.showError("This isn't a valid discount code");
                     }

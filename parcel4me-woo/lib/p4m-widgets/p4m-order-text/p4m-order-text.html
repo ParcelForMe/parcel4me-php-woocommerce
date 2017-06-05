@@ -5,12 +5,12 @@
 
     <template>
         <div id="container">
-            Thanks for ordering from us <span class="p4m-label">{{consumerData.GivenName}}</span>.
+            Thanks for ordering from us <span class="p4m-label">{{consumerData.givenName}}</span>.
             <br />
-            <template is="dom-if" if="{{!cartData.AddressId}}">
+            <template is="dom-if" if="{{!cartData.addressId}}">
                 Choose your <a on-click="requestAddress">Delivery address</a>.<br />
             </template>
-            <template is="dom-if" if="{{cartData.AddressId}}">
+            <template is="dom-if" if="{{cartData.addressId}}">
                 <p>We'll deliver your order via <span class="p4m-label">{{deliveryMethodStr}}</span>.</p>
                 <p>to your {{addressTypeStr}}:
                 <span class="p4m-label">{{deliveryAddressStr}}</span>{{deliveryDatePrefixStr}}
@@ -79,12 +79,12 @@
             {
                 if (this.cartData && this.consumerData) {
                     this.isLoading = false;
-                    var deliveryAddr = this._addressById(this.cartData.AddressId);
+                    var deliveryAddr = this._addressById(this.cartData.addressId);
                     this.deliveryAddressStr = this._addressToStr(deliveryAddr);
                     this.addressTypeStr = this._addressType(deliveryAddr);
-                    this.deliveryDatePrefixStr = this._expectedDeliveryDatePrefixStr(this.cartData.ExpDeliveryDate);
-                    this.deliveryDateStr = this._expectedDeliveryDateStr(this.cartData.ExpDeliveryDate);
-                    this.deliveryMethodStr = this.cartData.ServiceName;
+                    this.deliveryDatePrefixStr = this._expectedDeliveryDatePrefixStr(this.cartData.expDeliveryDate);
+                    this.deliveryDateStr = this._expectedDeliveryDateStr(this.cartData.expDeliveryDate);
+                    this.deliveryMethodStr = this.cartData.serviceName;
 
                 }
                 else {
@@ -94,10 +94,10 @@
 
             _addressById: function(id) {
                 var foundAddress = null;
-                if (this.consumerData && this.consumerData.Addresses && this.consumerData.Addresses.length) {
-                    for (var i = 0; i < this.consumerData.Addresses.length; i++) {
-                        var address = this.consumerData.Addresses[i];
-                        if (address.Id == this.cartData.AddressId) {
+                if (this.consumerData && this.consumerData.addresses && this.consumerData.addresses.length) {
+                    for (var i = 0; i < this.consumerData.addresses.length; i++) {
+                        var address = this.consumerData.addresses[i];
+                        if (address.id == this.cartData.addressId) {
                             foundAddress = address;
                             break;
                         }
@@ -109,7 +109,7 @@
 
             _addressToStr: function (address) {
                 if (address) {
-                    return address.Street1;// + " " + address.Street2 + " in " + (address.City || address.PostCode);
+                    return address.street1;// + " " + address.Street2 + " in " + (address.City || address.PostCode);
                 }
                 else {
                     return "";
@@ -118,8 +118,8 @@
             },
 
             _addressType: function (address) {
-                if (address && address.AddressType) {
-                    if (address.AddressType === "Collect") {
+                if (address && address.addressType) {
+                    if (address.addressType === "Collect") {
                         return "preferred collection point";
                     }
                     else {
@@ -151,7 +151,7 @@
 
             _hasDeliveryDetails: function () {
                 console.log('_hasDeliveryDetails');
-                return (this.cartData && this.cartData.ExpDeliveryDate && this.cartData.AddressId);
+                return (this.cartData && this.cartData.expDeliveryDate && this.cartData.addressId);
             },
 
             requestAddress: function () {

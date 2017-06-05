@@ -91,39 +91,21 @@
             },
 
             show: function () {
-                // this.hideSpinner();
-             
-                // if (this._profilePicUrl) {
-                //     this.$.profileImg.classList.remove("hidden");
-                //     this.$.profileBlank.classList.add("hidden");
 
-                // }
-                // else {
-                //      this.$.profileImg.classList.add("hidden");
-                //     this.$.profileBlank.classList.remove("hidden");                  
-                // }
                 if (!this._profilePicUrl) {
                     this._profilePicUrl = this.resolveUrl("profile.png");
                 }
 
-                /*
-                    if (this._loggedIn) {
-                        this._profilePicUrl = this.resolveUrl("profile-test-image.png");
-                    }
-                    else {
-                        this._profilePicUrl = this.resolveUrl("profile-test-image.png");
-                    }
-                }*/
             },
 
             onProfileData: function (e) {
 
                 //this.p4mData = e.detail;
                 if (!this._profilePicUrl) {
-                    this._profilePicUrl = this.p4mData.Consumer.ProfilePicUrl;
+                    this._profilePicUrl = this.p4mData.consumer.profilePicUrl;
                 }
                 if (!this._profileName) {
-                    this._profileName = this.p4mData.Consumer.GivenName;
+                    this._profileName = this.p4mData.consumer.givenName;
                 }
 
                 this.show();
