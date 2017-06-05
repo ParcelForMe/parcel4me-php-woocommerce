@@ -13,25 +13,25 @@ require_once 'p4m-model.php';
 class Address extends P4mModel
 {
 
-    public  $consumerId;            /* (read only)	 */
-    public  $id;                    /*  must be unique for each address for the consumer. If not assigned when added it will be assigned by P4M */
-    public  $addressType;           /*		"Address" or "Collect" */
-    public  $label;                 /*		e.g. Home, Work, etc */
-    public  $companyName;	 	 
-    public  $street1;	 	 
-    public  $street2;	 	 
-    public  $city;	 	 
-    public  $postCode;	 	 
-    public  $state;	 	 
-    public  $country;	 	 
-    public  $countryCode;            /* ISO country code e.g. "UK", "US", "FR", etc */
-    public  $contact;               /*	Name of best contact person at address */
-    public  $phone;                 /* Phone at address or mobile of contact person */
-    public  $latitude;	   
-    public  $longitude;	 
-    public  $dropPointProviderId;   /*	Integer (read only)	Assigned */
-    public  $dropPointId;           /* 	 (read only)	Assigned */
-    public  $collectPrefOrder;      /*	(should be read only) Integer	Stores the preferred order for "Collect" addresses */
+    public  $ConsumerId;            /* (read only)	 */
+    public  $Id;                    /*  must be unique for each address for the consumer. If not assigned when added it will be assigned by P4M */
+    public  $AddressType;           /*		"Address" or "Collect" */
+    public  $Label;                 /*		e.g. Home, Work, etc */
+    public  $CompanyName;	 	 
+    public  $Street1;	 	 
+    public  $Street2;	 	 
+    public  $City;	 	 
+    public  $PostCode;	 	 
+    public  $State;	 	 
+    public  $Country;	 	 
+    public  $CountryCode;            /* ISO country code e.g. "UK", "US", "FR", etc */
+    public  $Contact;               /*	Name of best contact person at address */
+    public  $Phone;                 /* Phone at address or mobile of contact person */
+    public  $Latitude;	   
+    public  $Longitude;	 
+    public  $DropPointProviderId;   /*	Integer (read only)	Assigned */
+    public  $DropPointId;           /* 	 (read only)	Assigned */
+    public  $CollectPrefOrder;      /*	(should be read only) Integer	Stores the preferred order for "Collect" addresses */
 
 }
 

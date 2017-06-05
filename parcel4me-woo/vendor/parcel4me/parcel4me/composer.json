@@ -3,7 +3,7 @@
     "description": "A one-click checkout and delivery package for PHP shopping carts",
     "require": {
         "firebase/php-jwt": "^4.0",
-        "krisrandall/openid-connect-with-client-credentials-php": "^0.3.2"
+        "krisrandall/openid-connect-with-client-credentials-php": "^0.3.1"
     },
     "license": "MIT",
     "authors": [

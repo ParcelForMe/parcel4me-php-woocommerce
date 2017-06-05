@@ -13,10 +13,10 @@ require_once 'p4m-model.php';
 class Discount extends P4mModel
 {
 
-    public  $cartId;                /* (read only) */
-    public  $code;
-    public  $description;
-    public  $amount;
+    public  $CartId;                /* (read only) */
+    public  $Code;
+    public  $Description;
+    public  $Amount;
     
 }
 

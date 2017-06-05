@@ -92,17 +92,17 @@
     },
     {
         "name": "krisrandall/openid-connect-with-client-credentials-php",
-        "version": "0.3.2",
-        "version_normalized": "0.3.2.0",
+        "version": "0.3.1",
+        "version_normalized": "0.3.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/krisrandall/OpenID-Connect-PHP.git",
-            "reference": "c77624d8acfe9a5f740b6462c3e99a3f60f42952"
+            "reference": "791a729e0ad9eec340ad42f8af63d0c432a8b488"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/krisrandall/OpenID-Connect-PHP/zipball/c77624d8acfe9a5f740b6462c3e99a3f60f42952",
-            "reference": "c77624d8acfe9a5f740b6462c3e99a3f60f42952",
+            "url": "https://api.github.com/repos/krisrandall/OpenID-Connect-PHP/zipball/791a729e0ad9eec340ad42f8af63d0c432a8b488",
+            "reference": "791a729e0ad9eec340ad42f8af63d0c432a8b488",
             "shasum": ""
         },
         "require": {
@@ -111,7 +111,7 @@
             "php": ">=5.4",
             "phpseclib/phpseclib": "2.0.1"
         },
-        "time": "2017-05-25T05:54:05+00:00",
+        "time": "2017-03-10T04:27:01+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -169,24 +169,24 @@
     },
     {
         "name": "parcel4me/parcel4me",
-        "version": "v0.0.12",
-        "version_normalized": "0.0.12.0",
+        "version": "v0.0.11",
+        "version_normalized": "0.0.11.0",
         "source": {
             "type": "git",
             "url": "https://github.com/ParcelForMe/parcel4me-php.git",
-            "reference": "4bf06553d49bbf89acae27a82768a96d70252db8"
+            "reference": "b4dde08394a15b44761d28053a2613a841426acc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/ParcelForMe/parcel4me-php/zipball/4bf06553d49bbf89acae27a82768a96d70252db8",
-            "reference": "4bf06553d49bbf89acae27a82768a96d70252db8",
+            "url": "https://api.github.com/repos/ParcelForMe/parcel4me-php/zipball/b4dde08394a15b44761d28053a2613a841426acc",
+            "reference": "b4dde08394a15b44761d28053a2613a841426acc",
             "shasum": ""
         },
         "require": {
             "firebase/php-jwt": "^4.0",
-            "krisrandall/openid-connect-with-client-credentials-php": "^0.3.2"
+            "krisrandall/openid-connect-with-client-credentials-php": "^0.3.1"
         },
-        "time": "2017-05-25T06:48:42+00:00",
+        "time": "2017-05-15T02:17:45+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

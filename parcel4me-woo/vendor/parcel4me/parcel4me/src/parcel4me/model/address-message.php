@@ -13,9 +13,9 @@ require_once 'p4m-model.php';
 class AddressMessage extends P4mModel
 {
 
-    public  $address;               /* an "Address" object */
-    public  $isPrefDeliveryAddr;    /* Boolean	 True if this is the new preferred delivery address */
-    public  $isBillingAddr;         /* Boolean	 True if this is the new preferred delivery address */
+    public  $Address;               /* an "Address" object */
+    public  $IsPrefDeliveryAddr;    /* Boolean	 True if this is the new preferred delivery address */
+    public  $IsBillingAddr;         /* Boolean	 True if this is the new preferred delivery address */
 
 }
 
