@@ -13,12 +13,12 @@ require_once 'p4m-model.php';
 class PaymentMethod extends P4mModel
 {
 
-    public  $id;                    /* Token identifying the card */
-    public  $accountType;           /* "Card", "BankAccount" */
-    public  $issuer;                /* Visa, Mastercard, Amex, etc. */
-    public  $name;                  /* name on the card */
-    public  $description;           /* string showing some card digits */
-    public  $moreDetail;            /* expiry details*/
+    public  $Id;                    /* Token identifying the card */
+    public  $AccountType;           /* "Card", "BankAccount" */
+    public  $Issuer;                /* Visa, Mastercard, Amex, etc. */
+    public  $Name;                  /* name on the card */
+    public  $Description;           /* string showing some card digits */
+    public  $MoreDetail;            /* expiry details*/
 
 }
 

@@ -35,6 +35,31 @@ class Parcel4me_Shortcodes {
     
   }
 
+
+  function set_classes_str( $atts ) {
+    $atts = array_change_key_case((array)$atts, CASE_LOWER);
+
+    $class_str = ' class="';
+
+    $options = get_option( 'p4m_options' );
+
+    $size  = $options['p4m_field_appearance_size'];
+    $color = $options['p4m_field_appearance_color'];
+
+    if ( $atts['size'] )  $size = $atts['size'];
+    if ( $atts['color'] ) $color = $atts['color'];
+
+    if ( 'medium' == $size ) $class_str.='med ';
+    elseif ( 'small' == $size ) $class_str.='sml ';
+
+    if ( 'white' == $color ) $class_str.='white ';
+
+    $class_str .= '"';
+
+    return $class_str;
+  }
+
+
   public function __construct() {
 
     function base_uri() {
@@ -46,7 +71,8 @@ class Parcel4me_Shortcodes {
       if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
 
       // scripts required for all components
-      wp_enqueue_script( 'webcomponentsjs', base_uri() . 'webcomponentsjs/webcomponents.min.js' );
+      //wp_enqueue_script( 'webcomponentsjs', '///cdn.rawgit.com/webcomponents/webcomponentsjs/v0.7.24/webcomponents-lite.js' );
+      wp_enqueue_script( 'webcomponentsjs', base_uri() . 'webcomponentsjs/webcomponents-lite.js' );
     }
     add_action( 'wp_enqueue_scripts', 'add_all_scripts', 0 );
 
@@ -61,7 +87,7 @@ class Parcel4me_Shortcodes {
       $r .= '<p4m-login id-srv-url="' . P4M\Settings::getPublic('Server:P4M_OID_SERVER') . '" 
                        client-id="' . P4M\Settings::getPublic('OpenIdConnect:ClientId') . '" 
                        redirect-url="' . P4M\Settings::getPublic('OpenIdConnect:RedirectUrl') . '" 
-                       logout-form="p4m_special_hidden_logout_form_hack"> 
+                       logout-form="p4m_special_hidden_logout_form_hack" '.Parcel4me_Shortcodes::set_classes_str( $atts ).'> 
             </p4m-login>';
       return $r;
     }
@@ -73,7 +99,7 @@ class Parcel4me_Shortcodes {
       if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
 
       $r = '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-register/p4m-register.html" />';
-      $r .= '<p4m-register></p4m-register>';
+      $r .= '<p4m-register '.Parcel4me_Shortcodes::set_classes_str( $atts ).'></p4m-register>';
       return $r;
     }
     add_shortcode( 'p4m-signup', 'p4m_signup_func' );
@@ -102,7 +128,7 @@ class Parcel4me_Shortcodes {
       $r .= '<p4m-checkout use-paypal="true" 
                           use-gfs-checkout="true"
                           session-id="' . session_id() . '"
-                          gfs-access-token="' . $gfs_access_token . '" >
+                          gfs-access-token="' . $gfs_access_token . '" '.Parcel4me_Shortcodes::set_classes_str( $atts ).'>
             </p4m-checkout>';
       return $r;
     }
@@ -114,7 +140,7 @@ class Parcel4me_Shortcodes {
       if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
 
       $r = '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-get-html/p4m-get-html.html" />';
-      $r .= '<p4m-get-html content-url="' . P4M\Settings::getPublic( 'Server:P4M_OID_SERVER' ) .'/Thankyou/Thankyou.html">';
+      $r .= '<p4m-get-html content-url="' . P4M\Settings::getPublic( 'Server:P4M_OID_SERVER' ) .'/Thankyou/Thankyou.html" '.Parcel4me_Shortcodes::set_classes_str( $atts ).'>';
       return $r;
     }
     add_shortcode( 'p4m-payment-complete', 'p4m_pc_func' );

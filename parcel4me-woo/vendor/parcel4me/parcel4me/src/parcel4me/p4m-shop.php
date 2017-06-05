@@ -104,10 +104,10 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $rob = $this->apiHttp( 'POST',  P4M_Shop_Urls::endPoint('refund', '/'.$transactionId.'/'.$amount ));
 
         // returns true or an error message
-        if ($rob->success) {
+        if ($rob->Success) {
             return true;
         } else {
-            return $rob->error;
+            return $rob->Error;
         } 
 
     }
@@ -183,14 +183,14 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     }
 
     private function returnJsonError($message) {
-        echo '{"success": false, "error": "'.$message.'" }';
+        echo '{"Success": false, "Error": "'.$message.'" }';
         exit();
     }
 
 
     private function apiHttp_withoutErrorHandler($method, $endpoint, $data = null) {
         /*
-        This does an HTTP request to the API, and calls somethingWentWrong() if the result does not contain a .success property 
+        This does an HTTP request to the API, and calls somethingWentWrong() if the result does not contain a .Success property 
         It passes $this->$bearerToken as the auth header bearer token so call setBearerToken() first
         */
 
@@ -253,13 +253,13 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             $rob = new \stdClass();
             $rob = json_decode($response);
 
-            if ( (!is_object($rob)) || (!property_exists($rob, 'success')) ) {
-                throw new \Exception("Error calling API : No 'success' property of response received");
+            if ( (!is_object($rob)) || (!property_exists($rob, 'Success')) ) {
+                throw new \Exception("Error calling API : No 'Success' property of response received");
             } 
 
         }
 
-        // if we are here then the response has a .success property, 
+        // if we are here then the response has a .Success property, 
         // the calling function can check that and handle true or false success results
 
         return $rob; // return the response as an object  
@@ -322,8 +322,8 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $consumer = $this->getCurrentUserDetails();
         $cart     = $this->getCartOfCurrentUser();
         $consumerAndCartMessage = json_encode( array (
-                'consumer'  =>  $consumer,
-                'cart'      =>  $cart
+                'Consumer'  =>  $consumer,
+                'Cart'      =>  $cart
         ));
 
 
@@ -331,20 +331,20 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $this->setBearerToken($clientCredentials->access_token);
         $rob = $this->apiHttp('POST',  P4M_Shop_Urls::endPoint('registerConsumer'), $consumerAndCartMessage);
 
-        if (!$rob->success) {
+        if (!$rob->Success) {
 
-            if ( strpos($rob->error, "registered")>-1 ) {
+            if ( strpos($rob->Error, "registered")>-1 ) {
 
-                $redirect_url = P4M_Shop_Urls::endPoint('alreadyRegistered', "?firstName=".$rob->consumer->givenName."&email=".$rob->consumer->email);
+                $redirect_url = P4M_Shop_Urls::endPoint('alreadyRegistered', "?firstName=".$rob->consumer->GivenName."&email=".$rob->consumer->Email);
                 $this->redirectTo($redirect_url);
 
             } else {
-                $this->somethingWentWrong("Error registering with P4M : " . $rob->error);
+                $this->somethingWentWrong("Error registering with P4M : " . $rob->Error);
             }
 
         } else {
 
-            $redirect_url = P4M_Shop_Urls::endPoint('registerConsumer', '/'.$rob->consumerId);
+            $redirect_url = P4M_Shop_Urls::endPoint('registerConsumer', '/'.$rob->ConsumerId);
             $this->redirectTo($redirect_url);
 
         }
@@ -402,12 +402,12 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         if ($this->userIsLoggedIn()) {
             
             setcookie( "p4mLocalLogin", true, 0, '/' );
-            echo '{ "success": true, "error": null }';
+            echo '{ "Success": true, "Error": null }';
 
         } else {
 
             setcookie( "p4mLocalLogin", false, 0, '/' );
-            echo '{ "success": false, "error": "Not logged in" }';
+            echo '{ "Success": false, "Error": "Not logged in" }';
 
         }
 
@@ -428,24 +428,24 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             $this->returnJsonError( $e->getMessage() );
         }
 
-        if (!$rob->success) {
-            echo '{ "success": false, "error": "Unsuccessful fetching consumer ('.$rob->error.')" }';
+        if (!$rob->Success) {
+            echo '{ "Success": false, "Error": "Unsuccessful fetching consumer ('.$rob->Error.')" }';
         } else {
 
-            $consumer = $rob->consumer;
+            $consumer = $rob->Consumer;
 
             if ($consumer) {
 
                 $cookieExpire = strtotime('+1 years');
                 $path         = '/';
 
-                setcookie( "p4mAvatarUrl",              $consumer->profilePicUrl,                       $cookieExpire, $path );
-                setcookie( "p4mGivenName",              $consumer->givenName,                           $cookieExpire, $path );
-                setcookie( "p4mOfferCartRestore",       ( $rob->hasOpenCart ? "true" : "false" ),       $cookieExpire, $path );
+                setcookie( "p4mAvatarUrl",              $consumer->ProfilePicUrl,                       $cookieExpire, $path );
+                setcookie( "p4mGivenName",              $consumer->GivenName,                           $cookieExpire, $path );
+                setcookie( "p4mOfferCartRestore",       ( $rob->HasOpenCart ? "true" : "false" ),       $cookieExpire, $path );
                 setcookie( "p4mLocalLogin",             "true",                                         $cookieExpire, $path );
-                if (isset($consumer->prefDeliveryAddress)) {
-                    setcookie( "p4mDefaultPostCode",        $consumer->prefDeliveryAddress->postCode,       $cookieExpire, $path );
-                    setcookie( "p4mDefaultCountryCode",     $consumer->prefDeliveryAddress->countryCode,    $cookieExpire, $path );
+                if (isset($consumer->PrefDeliveryAddress)) {
+                    setcookie( "p4mDefaultPostCode",        $consumer->PrefDeliveryAddress->PostCode,       $cookieExpire, $path );
+                    setcookie( "p4mDefaultCountryCode",     $consumer->PrefDeliveryAddress->CountryCode,    $cookieExpire, $path );
                 }
 
             }
@@ -467,32 +467,32 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 5	 Logged in	    Has matching local Id 	    Update local details from P4M if required 
             */
 
-            $hasLocalId = ( isset($consumer->extras) && isset($consumer->extras->localId) && $consumer->extras->localId);
+            $hasLocalId = ( isset($consumer->Extras) && isset($consumer->Extras->LocalId) && $consumer->Extras->LocalId);
             $loggedInUser = $this->userIsLoggedIn();
             if (!$loggedInUser) {
 
-                if ( (!$hasLocalId) || (!$this->isValidUserId($consumer->extras->localId)) ) {
+                if ( (!$hasLocalId) || (!$this->isValidUserId($consumer->Extras->LocalId)) ) {
                     // case 1 OR case 2b
 
-                    $localUser = $this->fetchLocalUserByEmail( $consumer->email );
+                    $localUser = $this->fetchLocalUserByEmail( $consumer->Email );
                     if ( !$localUser ) $localUser = $this->createNewUser( $consumer ); 
                         
                     if ( !$localUser ) $this->returnJsonError("Failed to create new local user");
                     if ( !isset($localUser->id) ) $this->returnJsonError('No "id" field on local (non logged in) user');
 
                     try {
-                        $setExtra = json_encode( array('localId' => $localUser->id) );
+                        $setExtra = json_encode( array('LocalId' => $localUser->id) );
                         $rob = $this->apiHttp_withoutErrorHandler('POST',  P4M_Shop_Urls::endPoint('consumerExtras'), $setExtra);
                     } catch (\Exception $e) {
                         $this->returnJsonError( $e->getMessage()) ;
                     }
 
-                    if ( !$rob->success ) $this->returnJsonError( $rob->error );
+                    if ( !$rob->Success ) $this->returnJsonError( $rob->Error );
 
                     $this->loginUser( $localUser->id );
                 } else {
                     // case 2a
-                    $this->loginUser( $consumer->extras->localId );
+                    $this->loginUser( $consumer->Extras->LocalId );
                 }
 
             } else {
@@ -503,28 +503,28 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                     // case 3
                     $this->logoutCurrentUser();
 
-                    $localUser = $this->fetchLocalUserByEmail( $consumer->email );
+                    $localUser = $this->fetchLocalUserByEmail( $consumer->Email );
                     if ( !$localUser ) $localUser = $this->createNewUser( $consumer ); 
 
                     if ( !isset($localUser->id) ) $this->returnJsonError('No "id" field on local (logged in) user');
 
                     try {
-                        $setExtra = json_encode( array('localId' => $localUser->id) );
+                        $setExtra = json_encode( array('LocalId' => $localUser->id) );
                         $rob = $this->apiHttp_withoutErrorHandler('POST',  P4M_Shop_Urls::endPoint('consumerExtras'), $setExtra);
                     } catch (\Exception $e) {
                         $this->returnJsonError($e->getMessage());
                     }
 
-                } elseif ( (property_exists($consumer, 'extras')) && 
-                           (property_exists($consumer->extras, 'localId')) && 
+                } elseif ( (property_exists($consumer, 'Extras')) && 
+                           (property_exists($consumer->Extras, 'LocalId')) && 
                            (is_object($local_consumer)) &&
-                           (property_exists($local_consumer, 'extras')) &&
-                           (property_exists($local_consumer->extras, 'localId')) &&
-                           ($consumer->extras->localId != $local_consumer->extras->localId) ) 
+                           (property_exists($local_consumer, 'Extras')) &&
+                           (property_exists($local_consumer->Extras, 'LocalId')) &&
+                           ($consumer->Extras->LocalId != $local_consumer->Extras->LocalId) ) 
                 {
                     // case 4
                     $this->logoutCurrentUser();
-                    $this->loginUser( $consumer->extras->localId );
+                    $this->loginUser( $consumer->Extras->LocalId );
                 } else {
                     // case 5
                     $this->setCurrentUserDetails( $consumer );
@@ -537,7 +537,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             } else {
                 $redirectTo = 'null';
             }
-            echo '{ "RedirectUrl": '.$redirectTo.', "success": true, "error": null }';
+            echo '{ "RedirectUrl": '.$redirectTo.', "Success": true, "Error": null }';
 
         }
 
@@ -557,20 +557,20 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         $rob = $this->apiHttp('GET', $endpoint);
 
-        if (!$rob->success) {
+        if (!$rob->Success) {
 
-            echo '{"success": false, "error": "'.$rob->error.'" }';
+            echo '{"Success": false, "Error": "'.$rob->Error.'" }';
 
         } else {
 
-            $this->setCartOfCurrentUser( $rob->cart );
+            $this->setCartOfCurrentUser( $rob->Cart );
 
             // delete the "p4mOfferCartRestore" cookie by setting it to have already expired
             if (isset($_COOKIE['p4mOfferCartRestore'])) {
                 setcookie( "p4mOfferCartRestore", null, -1, '/');
             }
 
-            echo  '{"success": true, "error": null }';
+            echo  '{"Success": true, "Error": null }';
 
         }
 
@@ -597,7 +597,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         $currentCart = $this->getCartOfCurrentUser();
 
-        if ( (!isset($currentCart->items)) || (empty($currentCart->items)) ) {
+        if ( (!isset($currentCart->Items)) || (empty($currentCart->Items)) ) {
             $this->redirectTo($this->HOME_URL);
         }
 
@@ -660,11 +660,11 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         try {
             $cartObject = $this->getCartOfCurrentUser();
-            $resultObject->success = true;
-            $resultObject->cart    = $cartObject;            
+            $resultObject->Success = true;
+            $resultObject->Cart    = $cartObject;            
         } catch (\Exception $e) {
-            $resultObject->success = false;
-            $resultObject->error   = $e->getMessage();
+            $resultObject->Success = false;
+            $resultObject->Error   = $e->getMessage();
         }
 
         $resultJson = json_encode($resultObject, JSON_PRETTY_PRINT);
@@ -685,17 +685,17 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $resultObject = new \stdClass();
 
         try {
-            $this->updateShipping( $postBody->service, $postBody->amount, $postBody->dueDate, $postBody->address );
+            $this->updateShipping( $postBody->Service, $postBody->Amount, $postBody->DueDate, $postBody->Address );
             $totalsObject = $this->getCartTotals();
 
-            $resultObject->success  = true;
-            $resultObject->tax      = $totalsObject->tax;
-            $resultObject->shipping = $totalsObject->shipping;
-            $resultObject->discount = $totalsObject->discount;
-            $resultObject->total    = $totalsObject->total;
+            $resultObject->Success  = true;
+            $resultObject->Tax      = $totalsObject->Tax;
+            $resultObject->Shipping = $totalsObject->Shipping;
+            $resultObject->Discount = $totalsObject->Discount;
+            $resultObject->Total    = $totalsObject->Total;
         } catch (\Exception $e) {
-            $resultObject->success = false;
-            $resultObject->error   = $e->getMessage();
+            $resultObject->Success = false;
+            $resultObject->Error   = $e->getMessage();
         }
 
         $resultJson = json_encode($resultObject, JSON_PRETTY_PRINT);
@@ -713,9 +713,9 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         $resultObject = new \stdClass();
 
         if ( null == $postBody->discountCode ) {
-            $workaround_err_message = "applyDiscountCode was called with a null discountCode -- this is a widget error and incorrect but we allow it and return success : true";
-            $resultObject->success       = true;
-            $resultObject->widgetMessage = $workaround_err_message;
+            $workaround_err_message = "applyDiscountCode was called with a null discountCode -- this is a widget error and incorrect but we allow it and return Success : true";
+            $resultObject->Success       = true;
+            $resultObject->WidgetMessage = $workaround_err_message;
             error_log($workaround_err_message);
         } else {
 
@@ -723,17 +723,17 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $discountCodeDetails = $this->updateWithDiscountCode( $postBody->discountCode );
                 $totalsObject = $this->getCartTotals();
 
-                $resultObject->success      = true;
-                $resultObject->tax          = $totalsObject->tax;
-                $resultObject->shipping     = $totalsObject->shipping;
-                $resultObject->discount     = $totalsObject->discount;
-                $resultObject->total        = $totalsObject->total;
-                $resultObject->code         = $discountCodeDetails->code;
-                $resultObject->description  = $discountCodeDetails->description;
-                $resultObject->amount       = $discountCodeDetails->amount;
+                $resultObject->Success      = true;
+                $resultObject->Tax          = $totalsObject->Tax;
+                $resultObject->Shipping     = $totalsObject->Shipping;
+                $resultObject->Discount     = $totalsObject->Discount;
+                $resultObject->Total        = $totalsObject->Total;
+                $resultObject->Code         = $discountCodeDetails->Code;
+                $resultObject->Description  = $discountCodeDetails->Description;
+                $resultObject->Amount       = $discountCodeDetails->Amount;
             } catch (\Exception $e) {
-                $resultObject->success = false;
-                $resultObject->error   = $e->getMessage();
+                $resultObject->Success = false;
+                $resultObject->Error   = $e->getMessage();
             }
 
         }
@@ -756,17 +756,17 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             $discountCodeDetails = $this->updateRemoveDiscountCode( $postBody->discountCode );
             $totalsObject = $this->getCartTotals();
 
-            $resultObject->success      = true;
-            $resultObject->tax          = $totalsObject->tax;
-            $resultObject->shipping     = $totalsObject->shipping;
-            $resultObject->discount     = $totalsObject->discount;
-            $resultObject->total        = $totalsObject->total;
-            $resultObject->code         = $discountCodeDetails->code;
-            $resultObject->description  = $discountCodeDetails->description;
-            $resultObject->amount       = $discountCodeDetails->amount;
+            $resultObject->Success      = true;
+            $resultObject->Tax          = $totalsObject->Tax;
+            $resultObject->Shipping     = $totalsObject->Shipping;
+            $resultObject->Discount     = $totalsObject->Discount;
+            $resultObject->Total        = $totalsObject->Total;
+            $resultObject->Code         = $discountCodeDetails->Code;
+            $resultObject->Description  = $discountCodeDetails->Description;
+            $resultObject->Amount       = $discountCodeDetails->Amount;
         } catch (\Exception $e) {
-            $resultObject->success = false;
-            $resultObject->error   = $e->getMessage();
+            $resultObject->Success = false;
+            $resultObject->Error   = $e->getMessage();
         }
 
         $resultJson = json_encode($resultObject, JSON_PRETTY_PRINT);
@@ -787,15 +787,15 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             $discountsArray = $this->updateCartItemQuantities( $postBody );
             $totalsObject = $this->getCartTotals();
 
-            $resultObject->success   = true;
-            $resultObject->tax       = $totalsObject->tax;
-            $resultObject->shipping  = $totalsObject->shipping;
-            $resultObject->discount  = $totalsObject->discount;
-            $resultObject->total     = $totalsObject->total;
-            $resultObject->discounts = $discountsArray;
+            $resultObject->Success   = true;
+            $resultObject->Tax       = $totalsObject->Tax;
+            $resultObject->Shipping  = $totalsObject->Shipping;
+            $resultObject->Discount  = $totalsObject->Discount;
+            $resultObject->Total     = $totalsObject->Total;
+            $resultObject->Discounts = $discountsArray;
         } catch (\Exception $e) {
-            $resultObject->success = false;
-            $resultObject->error   = $e->getMessage();
+            $resultObject->Success = false;
+            $resultObject->Error   = $e->getMessage();
         }
 
         $resultJson = json_encode($resultObject, JSON_PRETTY_PRINT);
@@ -814,10 +814,10 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         // validate that the cart total from the widget is correct to prevent cart tampering in the browser
         $localCartTotals = $this->getCartTotals();
-        if ($thisPostBody->cartTotal != $localCartTotals->total) {
-            $resultObject->success = false;
-            $resultObject->error   = "Invalid cart total";
-            error_log('Invalid cartTotal, p4m says : '.$thisPostBody->cartTotal.', local db says : '.$localCartTotals->total);
+        if ($thisPostBody->cartTotal != $localCartTotals->Total) {
+            $resultObject->Success = false;
+            $resultObject->Error   = "Invalid cart total";
+            error_log('Invalid cartTotal, p4m says : '.$thisPostBody->cartTotal.', local db says : '.$localCartTotals->Total);
         } else {
 
             try {
@@ -826,36 +826,36 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $p4mPostBody = json_encode( 
                                 array ( 
                                     'cartId'        => $thisPostBody->cartId,
-                                    'cvv'           => $thisPostBody->cvv
+                                    'CVV'           => $thisPostBody->cvv
                                 ) 
                             );
                 if (property_exists($thisPostBody, 'newDropPoint')) {
-                    $p4mPostBody->newDropPoint = $thisPostBody->newDropPoint;
+                    $p4mPostBody->NewDropPoint = $thisPostBody->newDropPoint;
                 }
                 $rob = $this->apiHttp_withoutErrorHandler('POST', P4M_Shop_Urls::endPoint('purchase'), $p4mPostBody );
 
-                $resultObject->success   = true;
+                $resultObject->Success   = true;
                 
-                if ( (!property_exists($rob, 'acsUrl')) || (!$rob->acsUrl) ) {
+                if ( (!property_exists($rob, 'ACSUrl')) || (!$rob->ACSUrl) ) {
 
                     $this->completePurchase( $rob );
 
-                    $resultObject->redirectUrl = Settings::getPublic( 'RedirectURl:PaymentDone' );
+                    $resultObject->RedirectUrl = Settings::getPublic( 'RedirectURl:PaymentDone' );
                 
                 } else {
 
-                    $resultObject->ascUrl           = $rob->ascUrl;
-                    $resultObject->paReq            = $rob->paReq;
-                    $resultObject->acsResponseUrl   = $rob->ascResponseUrl;
-                    $resultObject->p4mData          = $rob->p4mData;
+                    $resultObject->ASCUrl           = $rob->ACSUrl;
+                    $resultObject->PaReq            = $rob->PaReq;
+                    $resultObject->ACSResponseUrl   = $rob->ACSResponseUrl;
+                    $resultObject->P4MData          = $rob->P4MData;
 
                 }
 
     
             } catch (\Exception $e) {
-                $resultObject->success     = false;
-                $resultObject->error       = $e->getMessage();
-                error_log('error in p4m-shop.php purchase() '.$e->getMessage());
+                $resultObject->Success     = false;
+                $resultObject->Error       = $e->getMessage();
+                error_log('Error in p4m-shop.php purchase() '.$e->getMessage());
             }
 
         }
@@ -876,10 +876,10 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         // validate that the cart total from the widget is correct to prevent cart tampering in the browser
         $localCartTotals = $this->getCartTotals();
-        if ($cartTotal != $localCartTotals->total) {
-            $resultObject->success = false;
-            $resultObject->error   = "Invalid cart total";
-            error_log('Invalid cart total, p4m says : '.$cartTotal.', local db says : '.$localCartTotals->total);
+        if ($cartTotal != $localCartTotals->Total) {
+            $resultObject->Success = false;
+            $resultObject->Error   = "Invalid cart total";
+            error_log('Invalid cart total, p4m says : '.$cartTotal.', local db says : '.$localCartTotals->Total);
         } else {
 
             // Send the p4m server paypal setup API request 
@@ -887,11 +887,11 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             try {
                 $postParam = json_encode( array ( 'cartId'  => $cartId ) );
                 $rob = $this->apiHttp_withoutErrorHandler('POST', P4M_Shop_Urls::endPoint('paypalSetup'), $postParam );
-                $resultObject->success = true;
-                $resultObject->token   = $rob->token;            
+                $resultObject->Success = true;
+                $resultObject->Token   = $rob->Token;            
             } catch (\Exception $e) {
-                $resultObject->success = false;
-                $resultObject->error   = $e->getMessage();
+                $resultObject->Success = false;
+                $resultObject->Error   = $e->getMessage();
             }
 
         }
@@ -915,7 +915,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                         P4M_Shop_Urls::endPoint('cart', '/'.$cartId.'?wantAddress=true')
             );
 
-            if ($rob->success) {
+            if ($rob->Success) {
 
                 $this->completePurchase( $rob );
                 
