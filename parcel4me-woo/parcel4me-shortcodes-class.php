@@ -21,6 +21,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Parcel4me_Shortcodes {
  
+  function display_widget() {
+
+    $options = get_option( 'p4m_options' );
+    if ( 'admin_only' == $options['p4m_field_mode'] ) {
+
+      if ( current_user_can('administrator') ) return true;
+      else return false;
+
+    } else {
+      return true;
+    }
+    
+  }
+
   public function __construct() {
 
     function base_uri() {
@@ -29,6 +43,8 @@ class Parcel4me_Shortcodes {
 
 
     function add_all_scripts() {
+      if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
+
       // scripts required for all components
       wp_enqueue_script( 'webcomponentsjs', base_uri() . 'webcomponentsjs/webcomponents.min.js' );
     }
@@ -38,6 +54,8 @@ class Parcel4me_Shortcodes {
 
     // [p4m-login]
     function p4m_login_func( $atts ){
+      if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
+
       $r = '<form style="display:none" action="/my-account/customer-logout" id="p4m_special_hidden_logout_form_hack"></form>';
       $r .= '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-login/p4m-login.html" />';
       $r .= '<p4m-login id-srv-url="' . P4M\Settings::getPublic('Server:P4M_OID_SERVER') . '" 
@@ -52,6 +70,8 @@ class Parcel4me_Shortcodes {
 
     // [p4m-signup]
     function p4m_signup_func( $atts ) {
+      if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
+
       $r = '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-register/p4m-register.html" />';
       $r .= '<p4m-register></p4m-register>';
       return $r;
@@ -61,6 +81,7 @@ class Parcel4me_Shortcodes {
 
     // [p4m-checkout-redirect]
     function p4m_checkout_redirect_func( $atts ) {
+      if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
 
       $p4m_shopping_cart_adapter = $GLOBALS['parcel4me_woo']->p4m_shopping_cart_adapter;
       $p4m_shopping_cart_adapter->checkoutRedirect();
@@ -71,6 +92,7 @@ class Parcel4me_Shortcodes {
 
     // [p4m-checkout]
     function p4m_checkout_func( $atts ) {
+      if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
 
       $p4m_shopping_cart_adapter = $GLOBALS['parcel4me_woo']->p4m_shopping_cart_adapter;
       $p4m_shopping_cart_adapter->checkout();
@@ -89,6 +111,8 @@ class Parcel4me_Shortcodes {
 
     // [p4m-payment-complete]
     function p4m_pc_func( $atts ) {
+      if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
+
       $r = '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-get-html/p4m-get-html.html" />';
       $r .= '<p4m-get-html content-url="' . P4M\Settings::getPublic( 'Server:P4M_OID_SERVER' ) .'/Thankyou/Thankyou.html">';
       return $r;

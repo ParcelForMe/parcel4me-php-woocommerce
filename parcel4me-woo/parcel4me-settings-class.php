@@ -138,12 +138,25 @@ class Parcel4me_Settings {
 
         add_settings_field(
           'p4m_field_env',
-          __( 'Environment/Mode', 'p4m' ),
+          __( 'Environment', 'p4m' ),
           'p4m_field_env_cb',
           'p4m',
           'p4m_section_env',
           [
             'label_for' => 'p4m_field_env',
+            'class' => 'p4m_row',
+            'p4m_custom_data' => 'custom',
+          ]
+        );
+
+        add_settings_field(
+          'p4m_field_mode',
+          __( 'Mode', 'p4m' ),
+          'p4m_field_mode_cb',
+          'p4m',
+          'p4m_section_env',
+          [
+            'label_for' => 'p4m_field_mode',
             'class' => 'p4m_row',
             'p4m_custom_data' => 'custom',
           ]
@@ -212,6 +225,7 @@ class Parcel4me_Settings {
         <select id="<?php echo esc_attr( $args['label_for'] ); ?>"
         data-custom="<?php echo esc_attr( $args['p4m_custom_data'] ); ?>"
         name="p4m_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
+        onchange=""
         >
         <option value="live" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'live', false ) ) : ( '' ); ?>>
         <?php esc_html_e( 'live environment', 'p4m' ); ?>
@@ -223,13 +237,58 @@ class Parcel4me_Settings {
         <?php esc_html_e( 'dev environment', 'p4m' ); ?>
         </option>
         </select>
+
         <p class="description">
         <?php esc_html_e( 'Use "live" for your production site, or "test" for your sandbox environment.', 'p4m' ); ?>
         </p>
 
         <?php
       }
-      
+
+
+      function p4m_field_mode_cb( $args ) {
+        // get the value of the setting we've registered with register_setting()
+        $options = get_option( 'p4m_options' );
+        // output the field
+        ?>
+
+        <script type="text/javascript" >
+          jQuery(document).ready(function($) {
+
+            function default_mode_based_on_environment() {
+              
+              var env_val = jQuery('[name="p4m_options[p4m_field_env]"]').val();
+
+              if ( env_val == 'live' ) {
+                jQuery('[name="p4m_options[p4m_field_mode]"]').val('everyone');
+              } else {
+                jQuery('[name="p4m_options[p4m_field_mode]"]').val('admin_only');
+              }
+
+            }
+
+            jQuery('[name="p4m_options[p4m_field_env]"]').change( default_mode_based_on_environment );
+
+          });
+        </script>
+
+
+        <select id="<?php echo esc_attr( $args['label_for'] ); ?>"
+        data-custom="<?php echo esc_attr( $args['p4m_custom_data'] ); ?>"
+        name="p4m_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
+        >
+        <option value="admin_only" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'admin_only', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'Test Mode : P4M Widgets are only visible if logged onto the site as Admin', 'p4m' ); ?>
+        </option>
+        <option value="everyone" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'everyone', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'Live Mode : P4M Widgets are visible to all site visitors', 'p4m' ); ?>
+        </option>
+        </select>
+
+        <?php
+      }
+
+
       function text_input_field_cb( $args ) {
         // get the value of the setting we've registered with register_setting()
         $options = get_option( 'p4m_options' );
