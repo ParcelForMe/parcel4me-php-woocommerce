@@ -390,7 +390,6 @@ body.fullbleed {
   src: url("fonts/p4m.eot?it9ffc#iefix") format("embedded-opentype"), url("fonts/p4m.ttf?it9ffc") format("truetype"), url("fonts/p4m.woff?it9ffc") format("woff"), url("fonts/p4m.svg?it9ffc#icomoon") format("svg");
   font-weight: normal;
   font-style: normal; }
-
 [class^="p4micon-"], [class*=" p4micon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'p4m' !important;
@@ -540,70 +539,60 @@ body.fullbleed {
   src: url("fonts/Lato-BlaIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-BlaIta-webfont.woff") format("woff"), url("fonts/Lato-BlaIta-webfont.ttf") format("truetype"), url("fonts/Lato-BlaIta-webfont.svg#LatoBlackItalic") format("svg");
   font-weight: 800;
   font-style: italic; }
-
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-Bla-webfont.eot");
   src: url("fonts/Lato-Bla-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Bla-webfont.woff") format("woff"), url("fonts/Lato-Bla-webfont.ttf") format("truetype"), url("fonts/Lato-Bla-webfont.svg#LatoBlack") format("svg");
   font-weight: 800;
   font-style: normal; }
-
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-BolIta-webfont.eot");
   src: url("fonts/Lato-BolIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-BolIta-webfont.woff") format("woff"), url("fonts/Lato-BolIta-webfont.ttf") format("truetype"), url("fonts/Lato-BolIta-webfont.svg#LatoBoldItalic") format("svg");
   font-weight: 600;
   font-style: italic; }
-
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-Bol-webfont.eot");
   src: url("fonts/Lato-Bol-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Bol-webfont.woff") format("woff"), url("fonts/Lato-Bol-webfont.ttf") format("truetype"), url("fonts/Lato-Bol-webfont.svg#LatoBold") format("svg");
   font-weight: 600;
   font-style: normal; }
-
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-RegIta-webfont.eot");
   src: url("fonts/Lato-RegIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-RegIta-webfont.woff") format("woff"), url("fonts/Lato-RegIta-webfont.ttf") format("truetype"), url("fonts/Lato-RegIta-webfont.svg#LatoItalic") format("svg");
   font-weight: 400;
   font-style: italic; }
-
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-Reg-webfont.eot");
   src: url("fonts/Lato-Reg-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Reg-webfont.woff") format("woff"), url("fonts/Lato-Reg-webfont.ttf") format("truetype"), url("fonts/Lato-Reg-webfont.svg#LatoRegular") format("svg");
   font-weight: 400;
   font-style: normal; }
-
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-LigIta-webfont.eot");
   src: url("fonts/Lato-LigIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-LigIta-webfont.woff") format("woff"), url("fonts/Lato-LigIta-webfont.ttf") format("truetype"), url("fonts/Lato-LigIta-webfont.svg#LatoLightItalic") format("svg");
   font-weight: 200;
   font-style: italic; }
-
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-Lig-webfont.eot");
   src: url("fonts/Lato-Lig-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Lig-webfont.woff") format("woff"), url("fonts/Lato-Lig-webfont.ttf") format("truetype"), url("fonts/Lato-Lig-webfont.svg#LatoLight") format("svg");
   font-weight: 200;
   font-style: normal; }
-
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-HaiIta-webfont.eot");
   src: url("fonts/Lato-HaiIta-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-HaiIta-webfont.woff") format("woff"), url("fonts/Lato-HaiIta-webfont.ttf") format("truetype"), url("fonts/Lato-HaiIta-webfont.svg#LatoHairlineItalic") format("svg");
   font-weight: 100;
   font-style: italic; }
-
 @font-face {
   font-family: 'Lato';
   src: url("fonts/Lato-Hai-webfont.eot");
   src: url("fonts/Lato-Hai-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Lato-Hai-webfont.woff") format("woff"), url("fonts/Lato-Hai-webfont.ttf") format("truetype"), url("fonts/Lato-Hai-webfont.svg#LatoHairline") format("svg");
   font-weight: 100;
   font-style: normal; }
-
 a, a:visited {
   color: #aaa;
   cursor: pointer;
@@ -634,7 +623,6 @@ a, a:visited {
 
 @decimal-format creditcard {
   grouping-separator: " "; }
-
 .italic {
   font-style: italic; }
 
@@ -667,7 +655,6 @@ a, a:visited {
     border-color: #37a553;
     box-shadow: 0 0 10px 10px rgba(55, 165, 83, 0);
     background: rgba(55, 165, 83, 0); } }
-
 .changed {
   animation-name: greenPulse;
   animation-duration: 1.5s;
@@ -994,31 +981,24 @@ p4m-register h1, p4m-register h2, p4m-register h3, p4m-register h4, p4m-register
   font-weight: 600 !important;
   text-rendering: optimizeLegibility;
   letter-spacing: -.02em; }
-
 p4m-register h1, p4m-login h1, p4m-checkout h1 {
   font-size: 24px;
-  margin: .5em 0; }
-
+  margin: 0.5em 0; }
 p4m-register h2, p4m-login h2, p4m-checkout h2 {
   font-size: 21px;
-  margin: .5em 0; }
-
+  margin: 0.5em 0; }
 p4m-register h3, p4m-login h3, p4m-checkout h3 {
   font-size: 18px;
-  margin: .5em 0; }
-
+  margin: 0.5em 0; }
 p4m-register h4, p4m-login h4, p4m-checkout h4 {
   font-size: 16px;
-  margin: .5em 0; }
-
+  margin: 0.5em 0; }
 p4m-register h5, p4m-login h5, p4m-checkout h5 {
   font-size: 14px;
-  margin: .5em 0; }
-
+  margin: 0.5em 0; }
 p4m-register h6, p4m-login h6, p4m-checkout h6 {
   font-size: 12px;
-  margin: .5em 0; }
-
+  margin: 0.5em 0; }
 p4m-register p, p4m-login p, p4m-checkout p {
   font-size: 12px;
   margin: .5em 0; }
@@ -1151,7 +1131,6 @@ p4m-checkout [type='text'], p4m-checkout [type='password'], p4m-checkout [type='
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none; }
-
 p4m-checkout [type='submit']:not(.search-button), p4m-checkout .button:not(.search-button) {
   border-radius: 0;
   transition: background-color 0.25s ease-out, color 0.25s ease-out;
@@ -1438,7 +1417,7 @@ p4m-login #loginWidget, p4m-login #p4m-menu-wrapper {
   text-transform: none;
   letter-spacing: normal; }
 
-#loginWidget {
+p4m-login #loginWidget {
   cursor: pointer;
   background: #37a553;
   width: initial;
@@ -1451,102 +1430,102 @@ p4m-login #loginWidget, p4m-login #p4m-menu-wrapper {
   position: relative;
   text-transform: none;
   letter-spacing: normal; }
-  #loginWidget #p4m-logo {
+  p4m-login #loginWidget #p4m-logo {
     width: 24px;
     height: 24px;
     margin-right: 4px;
     margin-left: 12px; }
-    #loginWidget #p4m-logo svg {
+    p4m-login #loginWidget #p4m-logo svg {
       fill: #fff; }
-  #loginWidget p4m-profile {
+  p4m-login #loginWidget p4m-profile {
     display: flex;
     flex: 1;
     min-width: 100px; }
-  #loginWidget #p4m-profile-container {
+  p4m-login #loginWidget #p4m-profile-container {
     display: flex;
     flex: 1;
     flex-direction: row-reverse;
     min-width: 100px; }
-  #loginWidget #profileImage {
+  p4m-login #loginWidget #profileImage {
     display: none;
     width: 40px;
     height: 40px;
     margin-right: 0;
     margin-left: 12px; }
-    #loginWidget #profileImage #profileImg {
+    p4m-login #loginWidget #profileImage #profileImg {
       display: flex;
       width: 40px;
       height: 40px;
       border-radius: 0 3px 3px 0; }
-    #loginWidget #profileImage svg {
+    p4m-login #loginWidget #profileImage svg {
       display: none; }
-  #loginWidget #loggingInMessage {
+  p4m-login #loginWidget #loggingInMessage {
     display: none;
     justify-content: center;
     width: 156px;
     margin-right: 8px; }
-  #loginWidget #loginMessage {
+  p4m-login #loginWidget #loginMessage {
     display: flex;
     justify-content: center;
     width: 156px;
     margin-right: 8px; }
-  #loginWidget #profileName {
+  p4m-login #loginWidget #profileName {
     display: none; }
-  #loginWidget.loggingIn #loggingInMessage {
-    display: flex;
-    flex: 1;
-    justify-content: center; }
-  #loginWidget.loggingIn #loginMessage {
-    display: none; }
-  #loginWidget.loggedIn #loggingInMessage {
-    display: none; }
-  #loginWidget.loggedIn #loginMessage {
-    display: none; }
-  #loginWidget.loggedIn #profileName {
-    display: flex;
-    flex: 1;
-    max-width: 100px;
-    overflow: hidden;
-    justify-content: flex-start; }
-  #loginWidget.loggedIn #profileImage {
-    display: flex; }
-  #loginWidget.med {
+p4m-login.loggingIn #loginWidget #loggingInMessage {
+  display: flex;
+  flex: 1;
+  justify-content: center; }
+p4m-login.loggingIn #loginWidget #loginMessage {
+  display: none; }
+p4m-login.loggedIn #loginWidget #loggingInMessage {
+  display: none; }
+p4m-login.loggedIn #loginWidget #loginMessage {
+  display: none; }
+p4m-login.loggedIn #loginWidget #profileName {
+  display: flex;
+  flex: 1;
+  max-width: 100px;
+  overflow: hidden;
+  justify-content: flex-start; }
+p4m-login.loggedIn #loginWidget #profileImage {
+  display: flex; }
+p4m-login.med #loginWidget {
+  height: 32px; }
+  p4m-login.med #loginWidget #p4m-logo {
+    width: 21px;
+    height: 21px; }
+  p4m-login.med #loginWidget #profileImage {
+    width: 32px;
     height: 32px; }
-    #loginWidget.med #p4m-logo {
-      width: 21px;
-      height: 21px; }
-    #loginWidget.med #profileImage {
+    p4m-login.med #loginWidget #profileImage #profileImg {
       width: 32px;
       height: 32px; }
-      #loginWidget.med #profileImage #profileImg {
-        width: 32px;
-        height: 32px; }
-    #loginWidget.med #loggingInMessage, #loginWidget.med #loginMessage {
-      width: 146px; }
-    #loginWidget.med #loginMessage, #loginWidget.med #loggingInMessage, #loginWidget.med #profileName {
-      font-size: 14px; }
-  #loginWidget.sml {
+  p4m-login.med #loginWidget #loggingInMessage, p4m-login.med #loginWidget #loginMessage {
+    width: 146px; }
+  p4m-login.med #loginWidget #loginMessage, p4m-login.med #loginWidget #loggingInMessage, p4m-login.med #loginWidget #profileName {
+    font-size: 14px; }
+p4m-login.sml #loginWidget {
+  height: 24px; }
+  p4m-login.sml #loginWidget #p4m-logo {
+    width: 18px;
+    height: 18px; }
+  p4m-login.sml #loginWidget #profileImage {
+    width: 24px;
     height: 24px; }
-    #loginWidget.sml #p4m-logo {
-      width: 18px;
-      height: 18px; }
-    #loginWidget.sml #profileImage {
+    p4m-login.sml #loginWidget #profileImage #profileImg {
       width: 24px;
       height: 24px; }
-      #loginWidget.sml #profileImage #profileImg {
-        width: 24px;
-        height: 24px; }
-    #loginWidget.sml #loggingInMessage, #loginWidget.sml #loginMessage {
-      width: 136px; }
-    #loginWidget.sml #loginMessage, #loginWidget.sml #loggingInMessage, #loginWidget.sml #profileName {
-      font-size: 12px; }
-  #loginWidget.white {
-    background: #fff;
+  p4m-login.sml #loginWidget #loggingInMessage, p4m-login.sml #loginWidget #loginMessage {
+    width: 136px; }
+  p4m-login.sml #loginWidget #loginMessage, p4m-login.sml #loginWidget #loggingInMessage, p4m-login.sml #loginWidget #profileName {
+    font-size: 12px; }
+p4m-login.white #loginWidget {
+  background: #fff;
+  color: #37a553; }
+  p4m-login.white #loginWidget #p4m-logo svg {
+    fill: #37a553; }
+  p4m-login.white #loginWidget #loginMessage, p4m-login.white #loginWidget #loggingInMessage, p4m-login.white #loginWidget #profileName {
     color: #37a553; }
-    #loginWidget.white #p4m-logo svg {
-      fill: #37a553; }
-    #loginWidget.white #loginMessage, #loginWidget.white #loggingInMessage, #loginWidget.white #profileName {
-      color: #37a553; }
 
 #lastCartDlg {
   background: #37a553;
@@ -2189,8 +2168,8 @@ p4m-checkout {
   p4m-checkout .toggle-content {
     margin-top: 0;
     /*padding: 10px 0 0 18px;
-        border-top: 1px solid #ccc;
-        border-bottom: 1px solid #ccc;*/ }
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;*/ }
   p4m-checkout .header {
     padding: 0 10px;
     line-height: 50px; }
@@ -2511,24 +2490,18 @@ p4m-address #container {
   p4m-address #container ul {
     padding: 0;
     margin: 0 10px 5px 10px; }
-
 p4m-address .side-action {
   float: right; }
-
 p4m-address .side-action a {
   color: white; }
-
 p4m-address .address-actions {
   display: flex;
   flex-direction: row; }
-
 p4m-address .address-actions a {
   color: black;
   margin: 4px; }
-
 p4m-address p {
   margin: 3px 0; }
-
 p4m-address i {
   color: #c5c5c5;
   margin-left: 6px; }
@@ -2536,19 +2509,15 @@ p4m-address i {
     margin-left: 0;
     margin-right: 6px;
     color: #555; }
-
 p4m-address .address-tag {
   color: #D0D0D0;
   letter-spacing: 3px;
   text-transform: uppercase; }
-
 p4m-address .address-form input, p4m-address .address-form vaadin-combo-box-light input {
   margin-left: 0 !important;
   margin-right: 0 !important; }
-
 p4m-address .cancel-button a {
   text-decoration: none; }
-
 p4m-address .p4m-button {
   height: 36px;
   background-color: #37a553;
@@ -2571,40 +2540,32 @@ p4m-address .p4m-button {
     color: #fff; }
     p4m-address .p4m-button:hover i {
       color: #fff; }
-
 p4m-address .p4m-button.p4m-primary-button {
   background-color: rgba(13, 165, 83, 0.8);
   color: #000000; }
-
 p4m-address .p4m-address-label {
   font-weight: 600; }
-
 p4m-address .address-text {
   font-weight: 400;
   color: #aaa; }
-
 p4m-address .address-form {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap; }
-
 p4m-address .address-form input {
   margin: 4px;
   width: 100%;
   max-width: 100%; }
-
 p4m-address .card-body {
   display: flex;
   flex-direction: row;
   padding: 8px; }
-
 p4m-address .card-body.card-edit {
   display: flex;
   flex-direction: column;
   background: #f8f8f8;
   box-sizing: border-box;
   padding: 15px; }
-
 p4m-address .buttons {
   display: flex;
   flex-direction: row;
@@ -2678,3 +2639,5 @@ footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn {
     footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:not(.payWith_paypal), footer.p4m-checkout p4m-purchase-btn#p4mPurchaseBtn #p4mPurchaseBtnContainer.invalid button:hover:not(.payWith_paypal) {
       opacity: .5;
       cursor: not-allowed; }
+
+/*# sourceMappingURL=p4m.css.map */

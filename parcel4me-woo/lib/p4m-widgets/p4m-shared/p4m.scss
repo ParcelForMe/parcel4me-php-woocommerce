@@ -1738,169 +1738,177 @@ p4m-login {
   }
 }
 // Logged out
-#loginWidget {
-  cursor: pointer;
-  background: #37a553;
-  width: initial;
-  height: 40px;
-  color: #fff;
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 3px;
-  position: relative;
-  text-transform: none;
-  letter-spacing: normal;
-  #p4m-logo {
-    width: 24px;
-    height: 24px;
-    margin-right: 4px;
-    margin-left: 12px;
-    svg {
-      fill: #fff;
-    }
-  }
-  p4m-profile {
-    display: flex;
-    flex: 1;
-    min-width: 100px;
-  }
-  #p4m-profile-container {
-    display: flex;
-    flex: 1;
-    flex-direction: row-reverse;
-    min-width: 100px;
-  }
-  #profileImage {
-    display: none;
-    width: 40px;
+p4m-login {
+  #loginWidget {
+    cursor: pointer;
+    background: #37a553;
+    width: initial;
     height: 40px;
-    margin-right: 0;
-    margin-left: 12px;
-    #profileImg {
-      display: flex;
-      width: 40px;
-      height: 40px;
-      border-radius: 0 3px 3px 0;
-    }
-    svg {
-      display: none;
-    }
-  }
-  #loggingInMessage {
-    display: none;
-    justify-content: center;
-    width: 156px;
-    margin-right: 8px;
-  }
-  #loginMessage {
-    display: flex;
-    justify-content: center;
-    width: 156px;
-    margin-right: 8px;
-  }
-  #profileName {
-    display: none;
-  }
-
-// Logging in
-  &.loggingIn {
-    #loggingInMessage {
-      display: flex;
-      flex: 1;
-      justify-content: center;
-    }
-    #loginMessage {
-      display: none;
-    }
-  }
-
-// Logged in
-  &.loggedIn {
-    #loggingInMessage {
-      display: none;
-    }
-    #loginMessage {
-      display: none;
-    }
-    #profileName {
-      display: flex;
-      flex: 1;
-      max-width: 100px;
-      overflow: hidden;
-      justify-content: flex-start;
-    }
-    #profileImage {
-      display: flex;
-    }
-  }
-
-
-  // Sizes
-
-  // Medium - 32px
-  &.med {
-    height: 32px;
+    color: #fff;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 3px;
+    position: relative;
+    text-transform: none;
+    letter-spacing: normal;
     #p4m-logo {
-      width: 21px;
-      height: 21px;
-    }
-    #profileImage {
-      width: 32px;
-      height: 32px;
-      #profileImg {
-        width: 32px;
-        height: 32px;
-      }
-    }
-    #loggingInMessage, #loginMessage {
-      width: 146px;
-    }
-    #loginMessage, #loggingInMessage, #profileName {
-      font-size: 14px;
-    }
-  }
-
-  // Small - 24px
-  &.sml {
-    height: 24px;
-    #p4m-logo {
-      width: 18px;
-      height: 18px;
-    }
-    #profileImage {
-      width: 24px;
-      height: 24px;
-      #profileImg {
         width: 24px;
         height: 24px;
-      }
+        margin-right: 4px;
+        margin-left: 12px;
+        svg {
+        fill: #fff;
+        }
     }
-    #loggingInMessage, #loginMessage {
-      width: 136px;
+    p4m-profile {
+        display: flex;
+        flex: 1;
+        min-width: 100px;
     }
-    #loginMessage, #loggingInMessage, #profileName {
-      font-size: 12px;
+    #p4m-profile-container {
+        display: flex;
+        flex: 1;
+        flex-direction: row-reverse;
+        min-width: 100px;
+    }
+    #profileImage {
+        display: none;
+        width: 40px;
+        height: 40px;
+        margin-right: 0;
+        margin-left: 12px;
+        #profileImg {
+        display: flex;
+        width: 40px;
+        height: 40px;
+        border-radius: 0 3px 3px 0;
+        }
+        svg {
+        display: none;
+        }
+    }
+    #loggingInMessage {
+        display: none;
+        justify-content: center;
+        width: 156px;
+        margin-right: 8px;
+    }
+    #loginMessage {
+        display: flex;
+        justify-content: center;
+        width: 156px;
+        margin-right: 8px;
+    }
+    #profileName {
+        display: none;
     }
   }
-
-  // Colours
-
-  // White
-  &.white {
-    background: #fff;
-    color: #37a553;
-    #p4m-logo svg {
-      fill: #37a553;
+    // Logging in
+    &.loggingIn {
+        #loginWidget {
+            #loggingInMessage {
+            display: flex;
+            flex: 1;
+            justify-content: center;
+            }
+            #loginMessage {
+            display: none;
+            }
+        }
     }
-    #loginMessage, #loggingInMessage, #profileName {
-      color: #37a553;
+    // Logged in
+    &.loggedIn {
+        #loginWidget {
+        #loggingInMessage {
+        display: none;
+        }
+        #loginMessage {
+        display: none;
+        }
+        #profileName {
+        display: flex;
+        flex: 1;
+        max-width: 100px;
+        overflow: hidden;
+        justify-content: flex-start;
+        }
+        #profileImage {
+        display: flex;
+        }
+        }
     }
-  }
 
+
+    // Sizes
+
+    // Medium - 32px
+    &.med {
+        #loginWidget {
+        height: 32px;
+        #p4m-logo {
+        width: 21px;
+        height: 21px;
+        }
+        #profileImage {
+        width: 32px;
+        height: 32px;
+        #profileImg {
+            width: 32px;
+            height: 32px;
+        }
+        }
+        #loggingInMessage, #loginMessage {
+        width: 146px;
+        }
+        #loginMessage, #loggingInMessage, #profileName {
+        font-size: 14px;
+        }
+        }
+    }
+
+    // Small - 24px
+    &.sml {
+        #loginWidget {
+        height: 24px;
+        #p4m-logo {
+        width: 18px;
+        height: 18px;
+        }
+        #profileImage {
+        width: 24px;
+        height: 24px;
+        #profileImg {
+            width: 24px;
+            height: 24px;
+        }
+        }
+        #loggingInMessage, #loginMessage {
+        width: 136px;
+        }
+        #loginMessage, #loggingInMessage, #profileName {
+        font-size: 12px;
+        }
+        }
+    }
+
+    // Colours
+
+    // White
+    &.white {
+        #loginWidget {
+        background: #fff;
+        color: #37a553;
+        #p4m-logo svg {
+        fill: #37a553;
+        }
+        #loginMessage, #loggingInMessage, #profileName {
+        color: #37a553;
+        }
+        }
+    }
 
 }
-
 
 
 // Restore last Cart Dialog 
