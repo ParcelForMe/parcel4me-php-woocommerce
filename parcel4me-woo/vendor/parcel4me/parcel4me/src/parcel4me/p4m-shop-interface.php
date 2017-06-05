@@ -77,10 +77,10 @@ interface P4M_Shop_Interface {
 
     /**
         return an object with the following fields from the current local cart :
-            ->Tax
-            ->Shipping 
-            ->Discount 
-            ->Total
+            ->tax
+            ->shipping 
+            ->discount 
+            ->total
     */
     public function getCartTotals();
 
@@ -88,9 +88,9 @@ interface P4M_Shop_Interface {
     /**
         apply this discount/coupon code and update the totals on the local cart
         return discount details object, which includes
-            ->Code (same as passed in)
-            ->Description 
-            ->Amount 
+            ->code (same as passed in)
+            ->description 
+            ->amount 
         (if the coupon code is not valid, throw an exception)
     */
     public function updateWithDiscountCode( $discountCode );
@@ -106,7 +106,7 @@ interface P4M_Shop_Interface {
     /**
         pass in an array of item codes and new quantities,
         like this :
-             [ {"ItemCode": "item1", "Qty": 10.12}, {"ItemCode": "item2", "Qty": 12.34}, ...]
+             [ {"itemCode": "item1", "qty": 10.12}, {"itemCode": "item2", "qty": 12.34}, ...]
         return an array of "Discount"s
     */
     public function updateCartItemQuantities( $itemsUpdateArray );
@@ -115,12 +115,12 @@ interface P4M_Shop_Interface {
     /**
         close the cart and do any other required processing
         Important properties of the $purchase_data :
-            ->Cart	The P4M Cart including items and discounts
-            ->Id	The transaction Id
-            ->TransactionTypeCode	"DB" debit, "PA" payment authorization
-            ->AuthCode	PSP authorization code used for refunds, etc
-            ->DeliverTo   P4M Address for delivery
-            ->BillTo      P4M Address for billing
+            ->cart	The P4M Cart including items and discounts
+            ->id	The transaction Id
+            ->transactionTypeCode	"DB" debit, "PA" payment authorization
+            ->authCode	PSP authorization code used for refunds, etc
+            ->deliverTo   P4M Address for delivery
+            ->billTo      P4M Address for billing
     */
     public function completePurchase ( $purchase_data );
 
