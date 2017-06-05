@@ -130,6 +130,40 @@ class Parcel4me_Settings {
 
 
         add_settings_section(
+          'p4m_section_appearance',
+          __( 'Widget Appearance', 'p4m' ),
+          'p4m_nosubheading_cb',
+          'p4m'
+        );
+
+        add_settings_field(
+          'p4m_field_appearance_size',
+          __( 'Size', 'p4m' ),
+          'p4m_field_appearance_size_cb',
+          'p4m',
+          'p4m_section_appearance',
+          [
+            'label_for' => 'p4m_field_appearance_size',
+            'class' => 'p4m_row',
+            'p4m_custom_data' => 'custom',
+          ]
+        );
+
+        add_settings_field(
+          'p4m_field_appearance_color',
+          __( 'Color', 'p4m' ),
+          'p4m_field_appearance_color_cb',
+          'p4m',
+          'p4m_section_appearance',
+          [
+            'label_for' => 'p4m_field_appearance_color',
+            'class' => 'p4m_row',
+            'p4m_custom_data' => 'custom',
+          ]
+        );
+
+
+        add_settings_section(
           'p4m_section_env',
           __( 'Parcel For Me Environment', 'p4m' ),
           'p4m_nosubheading_cb',
@@ -161,8 +195,6 @@ class Parcel4me_Settings {
             'p4m_custom_data' => 'custom',
           ]
         );
-
-
       }
       
 
@@ -207,6 +239,63 @@ class Parcel4me_Settings {
       }
       function p4m_nosubheading_cb( $args ) {
         // do nothing callback
+      }
+
+
+
+      function p4m_field_appearance_size_cb( $args ) {
+        // get the value of the setting we've registered with register_setting()
+        $options = get_option( 'p4m_options' );
+        // output the field
+        ?>
+        <select id="<?php echo esc_attr( $args['label_for'] ); ?>"
+        data-custom="<?php echo esc_attr( $args['p4m_custom_data'] ); ?>"
+        name="p4m_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
+        onchange=""
+        >
+        <option value="large" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'large', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'Large', 'p4m' ); ?>
+        </option>
+        <option value="medium" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'medium', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'Medium', 'p4m' ); ?>
+        </option>
+        <option value="small" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'small', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'Small', 'p4m' ); ?>
+        </option>
+        </select>
+
+        <p class="description">
+        <?php esc_html_e( 'You can also use the "size" attribute in a shortcode to override a specific widget.', 'p4m' ); ?>
+        </p>
+
+        <?php
+      }
+
+
+
+      function p4m_field_appearance_color_cb( $args ) {
+        // get the value of the setting we've registered with register_setting()
+        $options = get_option( 'p4m_options' );
+        // output the field
+        ?>
+        <select id="<?php echo esc_attr( $args['label_for'] ); ?>"
+        data-custom="<?php echo esc_attr( $args['p4m_custom_data'] ); ?>"
+        name="p4m_options[<?php echo esc_attr( $args['label_for'] ); ?>]"
+        onchange=""
+        >
+        <option value="green" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'green', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'Green', 'p4m' ); ?>
+        </option>
+        <option value="white" <?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], 'white', false ) ) : ( '' ); ?>>
+        <?php esc_html_e( 'White', 'p4m' ); ?>
+        </option>
+        </select>
+
+        <p class="description">
+        <?php esc_html_e( 'You can also use the "color" attribute in a shortcode to override a specific widget.', 'p4m' ); ?>
+        </p>
+
+        <?php
       }
 
 
