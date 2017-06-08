@@ -48,7 +48,7 @@ class P4M_Shop_CaCert
 
         $local_mod_date = filemtime( P4M_Shop_CaCert::localCertPath() );
 
-        if ( $local_mod_date >= $remote_mod_date ) {
+        if ( (!$local_mod_date) || ($local_mod_date >= $remote_mod_date) ) {
             P4M_Shop_CaCert::writeToLog( 'Local version up to date ('.P4M_Shop_CaCert::localCertPath().' : '. 
                                          date("Y-m-d H:i", $local_mod_date).') ('.P4M_Shop_CaCert::remoteCertPath().' : '. 
                                          date("Y-m-d H:i", $remote_mod_date).')' );
