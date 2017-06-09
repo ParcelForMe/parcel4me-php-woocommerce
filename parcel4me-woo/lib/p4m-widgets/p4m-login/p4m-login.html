@@ -133,6 +133,9 @@
                 p4mToken: {
                     type: String
                 },
+                class: {
+                  reflectToAttribute: true
+                },
                 _restoreCartMessage: {
                     type: String,
                     value: "There is a shopping cart available from your previous visit. Would you like to use it?"
@@ -226,7 +229,7 @@
                     this._showAsLoggingIn();
                     this._makeState();
                     this._makeAuthUrl();
-                    this.popupCenter(this._authUrl, "Login", 450, 500);
+                    this.popupCenter(this._authUrl, "Login", 480, 560);
                     this._waitForAuthCompletion();
             },
 			
@@ -248,7 +251,7 @@
 
             logoutThisDevice: function () {
                 var logoutUrl = this.idSrvUrl + "/connect/endsession";
-                this.popupCenter(logoutUrl, "Logout", 450, 500);
+                this.popupCenter(logoutUrl, "Logout", 480, 560);
                 this.clearCookies();
                 if (this.logoutForm && this.logoutForm != '') {
                     var formElem = document.getElementById(this.logoutForm);
@@ -266,7 +269,7 @@
 			
             logoutAllDevices: function () {
                 var logoutUrl = this.idSrvUrl + "/ui/globalLogout";
-                this.popupCenter(logoutUrl, "Logout", 450, 500);
+                this.popupCenter(logoutUrl, "Logout", 480, 560);
                 this.clearCookies();
                 if (this.logoutForm && this.logoutForm != '') {
                     var formElem = document.getElementById(this.logoutForm);
@@ -440,20 +443,20 @@
 
             _showAsLoggingIn: function() {
                 this.$.p4mProfile.classList.add("hidden");
-                this.$.loginWidget.classList.add("loggingIn");
+                this.set("class", "loggingIn");
                 this.$.spinner.active = true;
             },
 
             _showAsLoggedIn: function() {
                 this.$.p4mProfile.classList.remove("hidden");
-                this.$.loginWidget.classList.add("loggedIn");
+                this.set("class", "loggedIn");
                 this.$.spinner.active = false;
             },
 
 
             _showAsLoggedOut: function() {
                 this.$.p4mProfile.classList.add("hidden");
-                this.$.loginWidget.classList.add("loggedOut");
+                this.set("class", "loggedOut");
             }
         });
     </script>

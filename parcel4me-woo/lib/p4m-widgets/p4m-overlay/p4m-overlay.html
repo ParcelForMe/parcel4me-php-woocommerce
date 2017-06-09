@@ -1,6 +1,5 @@
 ﻿<link rel="import" href="../../polymer/polymer.html" />
 <link rel="import" href="../../iron-overlay-behavior/iron-overlay-behavior.html" />
-<!-- <link rel="import" href="../../paper-spinner/paper-spinner.html" /> -->
 <link rel="import" href="../p4m-spinner/p4m-spinner.html" />
 
 <dom-module id="p4m-overlay">
@@ -16,16 +15,15 @@
     </style>
 
     <template>
-       <!-- <content><paper-spinner active="true"></paper-spinner></content>  -->
         <content>
-        <div class="checking">
+            <div class="checking">
 
-            <h3>Processing payment, please wait ...</h3>
-            <p4m-spinner species="progress" id="cvv_check" active="true" active></p4m-spinner>
-            <div class="powered-by-link">
-                <img class="powered-by" src="../p4m-shared/img/powered-by-parcel-for-me.png" id="powered-by" />
+                <h3>Processing payment, please wait ...</h3>
+                <p4m-spinner species="progress" id="cvv_check" active="true" active></p4m-spinner>
+                <div class="powered-by-link">
+                    <img class="powered-by" src="../p4m-shared/img/powered-by-parcel-for-me.png" id="powered-by" />
+                </div>
             </div>
-
         </content> 
        
     </template>

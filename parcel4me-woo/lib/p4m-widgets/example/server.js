@@ -78,6 +78,7 @@ site.use('/p4m', Express.static('static_api/p4m'));
 //--- Routing for index.html and widgets 
 site.use('/lib/p4m-widgets', Express.static('..'));
 site.use('/lib', Express.static('../bower_components'));
+site.use('/build', Express.static('../build'));
 site.use(Express.static('.'));
 
 
