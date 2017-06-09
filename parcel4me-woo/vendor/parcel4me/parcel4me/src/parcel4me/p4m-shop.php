@@ -832,7 +832,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $this->setBearerToken($_COOKIE["p4mToken"]);
                 $p4mPostBody = json_encode( 
                                 array ( 
-                                    'cartId'        => $thisPostBody->cartId,
+                                    'CartId'        => $thisPostBody->cartId,
                                     'cvv'           => $thisPostBody->cvv,
                                     'orderId'       => $local_order_id
                                 ) 
