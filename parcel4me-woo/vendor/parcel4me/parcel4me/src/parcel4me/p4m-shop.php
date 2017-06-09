@@ -846,7 +846,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 
                 if ( (!property_exists($rob, 'ACSUrl')) || (!$rob->ACSUrl) ) {
 
-                    $this->completePurchase( $rob );
+                    $this->completePurchase( $local_order_id, $rob );
 
                     $resultObject->RedirectUrl = Settings::getPublic( 'RedirectURl:PaymentDone' );
                 
@@ -893,7 +893,8 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             // Send the p4m server paypal setup API request 
             $this->setBearerToken($_COOKIE["p4mToken"]);
             try {
-                $postParam = json_encode( array ( 'cartId'  => $cartId ) );
+                $orderId = $this->createOrder();
+                $postParam = json_encode( array ( 'cartId'  => $cartId, 'orderId' => $orderId ) );
                 $rob = $this->apiHttp_withoutErrorHandler('POST', P4M_Shop_Urls::endPoint('paypalSetup'), $postParam );
                 $resultObject->Success = true;
                 $resultObject->Token   = $rob->Token;            
@@ -911,21 +912,21 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
 
     
-    public function purchaseComplete($cartId) {
+    public function purchaseComplete($orderId) {
         // http://developer.parcelfor.me/docs/documentation/parcel-for-me-widgets/p4m-checkout-widget/purchasecomplete/
 
-        // This endpoint is called when a 3D Secure transaction has completed. 
+        // This endpoint is called when a PayPal or 3D Secure transaction has completed. 
         // It allows the host server to request the cart from P4M and store the cart, delivery and billing address details.
 
         $this->setBearerToken($_COOKIE["p4mToken"]);
         try {
             $rob = $this->apiHttp_withoutErrorHandler('GET', 
-                        P4M_Shop_Urls::endPoint('cart', '/'.$cartId.'?wantAddress=true')
+                        P4M_Shop_Urls::endPoint('cart', '/'.$orderId.'?wantAddress=true')
             );
 
             if ($rob->Success) {
 
-                $this->completePurchase( $rob );
+                $this->completePurchase( $orderId, $rob );
                 
                 $this->redirectTo(Settings::getPublic( 'RedirectURl:PaymentDone' ));
             } else {
