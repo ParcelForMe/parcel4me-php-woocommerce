@@ -34,7 +34,8 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     abstract public function updateWithDiscountCode( $discountCode );
     abstract public function updateRemoveDiscountCode( $discountCode );
     abstract public function updateCartItemQuantities( $itemsUpdateArray );
-    abstract public function completePurchase ( $purchase_data );
+    abstract public function createOrder();
+    abstract public function completePurchase ( $order_id, $purchase_data );
     abstract public function handleError( $message );
 
 
@@ -822,11 +823,18 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
             try {
 
+                // Create the Order
+
+                $local_order_id = $this->createOrder();
+
+                // And send the order number to Parcel For Me
+
                 $this->setBearerToken($_COOKIE["p4mToken"]);
                 $p4mPostBody = json_encode( 
                                 array ( 
                                     'cartId'        => $thisPostBody->cartId,
-                                    'cvv'           => $thisPostBody->cvv
+                                    'cvv'           => $thisPostBody->cvv,
+                                    'orderId'       => $local_order_id
                                 ) 
                             );
                 if (property_exists($thisPostBody, 'newDropPoint')) {

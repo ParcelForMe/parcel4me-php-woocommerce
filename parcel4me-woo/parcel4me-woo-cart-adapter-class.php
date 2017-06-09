@@ -432,12 +432,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
     }
     
 
-    public function completePurchase ( $purchase_data ) {
-        
-        $p4m_cart           = $purchase_data->cart; 
-        $transactionId      = $purchase_data->id;
-        $transationTypeCode = $purchase_data->transactionTypeCode; 
-        $authCode           = $purchase_data->authCode;
+    public function createOrder() {
 
         $wp_user = wp_get_current_user();
 
@@ -460,6 +455,22 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         update_post_meta( $order_id, '_payment_method', 'p4m_payment_gateway' );
         update_post_meta( $order_id, '_payment_method_title', 'Parcel For Me Payment' );
 
+        return $order_id;
+
+    }
+
+
+    public function completePurchase ( $order_id, $purchase_data ) {
+
+        $p4m_cart           = $purchase_data->cart; 
+        $transactionId      = $purchase_data->id;
+        $transationTypeCode = $purchase_data->transactionTypeCode; 
+        $authCode           = $purchase_data->authCode;
+
+        // Prevent timeout
+        @set_time_limit(0);
+
+        $order = wc_get_order( $order_id );
 
         if (property_exists($purchase_data, 'deliverTo') && $purchase_data->deliverTo) {
             $p4m_ad = $purchase_data->deliverTo;
