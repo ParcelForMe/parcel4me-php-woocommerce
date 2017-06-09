@@ -111,6 +111,12 @@ interface P4M_Shop_Interface {
     */
     public function updateCartItemQuantities( $itemsUpdateArray );
 
+    
+    /**
+        create the local order and return the order id
+    */
+    public function createOrder();
+    
 
     /**
         close the cart and do any other required processing
@@ -122,7 +128,7 @@ interface P4M_Shop_Interface {
             ->DeliverTo   P4M Address for delivery
             ->BillTo      P4M Address for billing
     */
-    public function completePurchase ( $purchase_data );
+    public function completePurchase ( $order_id, $purchase_data );
 
 
     /**
