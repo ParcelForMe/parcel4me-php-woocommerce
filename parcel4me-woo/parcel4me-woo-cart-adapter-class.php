@@ -437,7 +437,6 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $wp_user = wp_get_current_user();
 
         $cart = WC()->cart;
-
         if ( $cart->is_empty() ) {
             throw new Exception( sprintf( __( 'Sorry, your session has expired. <a href="%s" class="wc-backward">Return to shop</a>', 'woocommerce' ), esc_url( wc_get_page_permalink( 'shop' ) ) ) );
         }
@@ -519,6 +518,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         $order->calculate_totals();
         $order->payment_complete( $transactionId ); 
 
+        $cart = WC()->cart;
         $cart->empty_cart();
 
         return true;
