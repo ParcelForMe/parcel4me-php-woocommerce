@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Parcel4me_Shortcodes {
  
-  function display_widget() {
+  static function display_widget() {
 
     $options = get_option( 'p4m_options' );
     if ( 'admin_only' == $options['p4m_field_mode'] ) {
@@ -36,7 +36,8 @@ class Parcel4me_Shortcodes {
   }
 
 
-  function set_classes_str( $atts ) {
+  static function set_classes_str( $atts ) {
+ 
     $atts = array_change_key_case((array)$atts, CASE_LOWER);
 
     $class_str = ' class="';
@@ -46,8 +47,8 @@ class Parcel4me_Shortcodes {
     $size  = $options['p4m_field_appearance_size'];
     $color = $options['p4m_field_appearance_color'];
 
-    if ( $atts['size'] )  $size = $atts['size'];
-    if ( $atts['color'] ) $color = $atts['color'];
+    if ( array_key_exists('size', $atts) )  $size = $atts['size'];
+    if ( array_key_exists('color', $atts) ) $color = $atts['color'];
 
     if ( 'medium' == $size ) $class_str.='med ';
     elseif ( 'small' == $size ) $class_str.='sml ';
@@ -62,8 +63,11 @@ class Parcel4me_Shortcodes {
 
   public function __construct() {
 
+    
     function base_uri() {
-      return plugins_url() . '/parcel4me-woo/lib/';
+      $options = get_option( 'p4m_options' );
+      return 'https://p4m'.$options['p4m_field_env'].'cdn.azureedge.net/pw/';
+      //return plugins_url() . '/parcel4me-woo/lib/';
     }
 
 
@@ -125,8 +129,10 @@ class Parcel4me_Shortcodes {
 
       $gfs_access_token = (array_key_exists('gfsCheckoutToken', $_COOKIE) ? $_COOKIE['gfsCheckoutToken'] : '');
       $r = '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-checkout/p4m-checkout.html" />';
+      $options = get_option( 'p4m_options' );
       $r .= '<p4m-checkout use-paypal="true" 
                           use-gfs-checkout="true"
+                          host-type="'.$options['p4m_field_env'].'"
                           session-id="' . session_id() . '"
                           gfs-access-token="' . $gfs_access_token . '" '.Parcel4me_Shortcodes::set_classes_str( $atts ).'>
             </p4m-checkout>';
