@@ -21,7 +21,7 @@
         <small>Use "AAA" discount code for a $5 discount (any other code is invalid)</small>
 
         <h2>p4m-login</h2>
-        <p4m-login id-srv-url="https://dev.parcelfor.me:44333" 
+        <p4m-login id-srv-url="https://dev-ids.parcelfor.me" 
                     client-id="10006" 
                     redirect-url="http://localhost:8080/p4m/getP4MAccessToken" 
                     logout-form="logoutForm">
@@ -32,7 +32,9 @@
         <div style="margin: 0 auto;">
             <p4m-checkout 
                 use-paypal="true" 
+
                 use-gfs-checkout="true"
+                host-type="dev"
                 session-id="SessionA1"
                 gfs-access-token="[gfs-access-token]" >
             </p4m-checkout>

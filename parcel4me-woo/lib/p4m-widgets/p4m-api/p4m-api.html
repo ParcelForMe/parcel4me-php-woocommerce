@@ -183,11 +183,7 @@
                 },
                 hostType: {
                     type: String,
-                    value: "dev" //local, dev, test, live
-                },
-                port: {
-                    type: Number,
-                    value: 44321
+                    value: "dev-api" //local, dev, test, live
                 },
                 version: {
                     type: String,
@@ -224,7 +220,7 @@
                     return "//" + window.location.host + "/p4m/";                   
                 }
                 else {
-                    return (this.ssl ? "https" : "http") + "://" + this.hostType + "." + this.hostBaseDomain + ":" + this.port + "/api/" + this.version + "/";
+                    return (this.ssl ? "https" : "http") + "://" + this.hostType + "-api." + this.hostBaseDomain +  "/api/" + this.version + "/";
                 }               
             },
 
@@ -362,8 +358,8 @@
 
             _handleResponse: function (apiRequest, finalCallback, responseData) {
                 console.log("API response: ", apiRequest, responseData);
-                if (!responseData.Success) {
-                    var err = responseData.Error || responseData.Message;
+                if (!responseData.success) {
+                    var err = responseData.error || responseData.message;
                     if (responseData.status == 401 || err.indexOf("expired") > -1 || err.indexOf("denied") > -1) {
                         var loginWidget = document.getElementsByTagName("p4m-login")[0];
                         loginWidget.logoutThisSite();

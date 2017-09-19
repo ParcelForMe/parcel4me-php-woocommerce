@@ -13,20 +13,20 @@ require_once 'p4m-model.php';
 class WishListItem extends P4mModel
 {
 
-    public  $ConsumerId;            /* (read only) */
-    public  $RetailerId;            /* (read only) */
-    public  $RetailerName;          /* (read only) */
-    public  $Date;                  /* (read only) */
-    public  $Currency;              /* ISO currency code */
-    public  $Make; 
-    public  $Sku;
-    public  $Desc;
-    public  $Price;
-    public  $LinkToImage;
-    public  $LinkToItem;
-    public  $Tags;                  /* Product categories (comma separated) */
-    public  $SiteReference;         /* can be used by the Retailer to hold information specific to the Retailer */
-    public  $Options;               /* (key=value) a list of options that the consumer may have selected when adding the item to the cart */
+    public  $consumerId;            /* (read only) */
+    public  $retailerId;            /* (read only) */
+    public  $retailerName;          /* (read only) */
+    public  $date;                  /* (read only) */
+    public  $currency;              /* ISO currency code */
+    public  $make; 
+    public  $sku;
+    public  $desc;
+    public  $price;
+    public  $linkToImage;
+    public  $linkToItem;
+    public  $tags;                  /* Product categories (comma separated) */
+    public  $siteReference;         /* can be used by the Retailer to hold information specific to the Retailer */
+    public  $options;               /* (key=value) a list of options that the consumer may have selected when adding the item to the cart */
 
 }
 

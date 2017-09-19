@@ -554,8 +554,11 @@
                                 if (httpRequest.status == 200 || httpRequest.status == 201) {
                                     callback(null, httpRequest.responseText);
                                 }
-                                else {                               
-                                    callback(httpRequest.status, httpRequest.responseText);
+                                else {
+                                    debugger;
+                                    console.log("GFS error. Re-starting session.");    
+                                    this.postGfsData(callback);                     
+                                    //callback(httpRequest.status, httpRequest.responseText);
                                 }                                 
                             }
                             catch (e) {

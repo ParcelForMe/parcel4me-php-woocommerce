@@ -20,15 +20,15 @@
                             
                     </div>
                     </div>
-                    <div class$="card-content {{cardData.Issuer}}">
+                    <div class$="card-content {{cardData.issuer}}">
                         <custom-validator id="validator" validator-name="cvv"></custom-validator>
                         <div class="card-details">
-                            <div class="card-name">{{cardData.Name}}</div>
+                            <div class="card-name">{{cardData.name}}</div>
                             <div class="payment-method-logo"></div>
                         </div>   
                         <div class="card-description creditcard">
-                            <span>{{cardData.Description}}</span><i class="p4micon-credit-card"></i></div>   
-                        <div class="inputs instruction tooltip-right attnRight" data-tooltip="Enter the Check Digits on the back of your card" tabindex="0">
+                            <span>{{cardData.description}}</span><i class="p4micon-credit-card"></i></div>   
+                        <div class="inputs instruction tooltip-right" data-tooltip="Enter the Check Digits on the back of your card" tabindex="0">
                             <input is="iron-input" type="text" id="cvvField" bind-value="{{cvv}}" allowed-pattern="[0-9]" prevent-invalid-input placeholder="CVV"/>
                         </div>                  
                     </div>
@@ -180,7 +180,7 @@
 
             select: function () {
                 console.log('Firing on-selected');
-                this.selectedCardId = this.cardData.Id;
+                this.selectedCardId = this.cardData.id;
                 this.cardData.cvv = this.cvv;
                 this.fire('selected', this.cardData);
             },
@@ -195,7 +195,7 @@
 
             onDataChange: function (e) {
                 if (this.cardData) {
-                    if (this.cardData.Issuer != "Amex") {
+                    if (this.cardData.issuer != "Amex") {
                         this._cvvLength = 3;
                     }
                     else {
@@ -233,7 +233,7 @@
             updateUi: function()
             {
                 
-                this.isSelected = (this.cardData && (this.selectedCardId === this.cardData.Id));
+                this.isSelected = (this.cardData && (this.selectedCardId === this.cardData.id));
                 if (this.isSelected) {
                     this.$.selectedToggle.classList.add('chosen');
                     if (this.showCvv) {

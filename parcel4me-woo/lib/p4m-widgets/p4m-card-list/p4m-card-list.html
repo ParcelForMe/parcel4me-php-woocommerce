@@ -21,7 +21,7 @@
 
                 <iron-page id="cardListPage"> 
                     <div class="cardList">
-                        <template is="dom-repeat" items="{{consumerData.PaymentMethods}}">
+                        <template is="dom-repeat" items="{{consumerData.paymentMethods}}">
                             <p4m-card card-data="{{item}}" on-selected="onCardSelected" show-cvv="false" container-class="card-list-item" selected-card-id="{{selectedCardId}}"></p4m-card>
                         </template>
                     </div>
@@ -66,8 +66,8 @@
             },
 
             observers: [
-                "onConsumerDataChange(consumerData.DefaultPayMethodId)",
-                "onCartDataChange(cartData.PayMethodId)"
+                "onConsumerDataChange(consumerData.defaultPayMethodId)",
+                "onCartDataChange(cartData.payMethodId)"
             ],
 
             ready: function()
@@ -75,7 +75,7 @@
             },
 
             onCardSelected(e) {
-                this.set("selectedCardId", e.detail.Id); //This should now trigger the other cards to update their UI
+                this.set("selectedCardId", e.detail.id); //This should now trigger the other cards to update their UI
             },
 
             addNewCard: function () {
@@ -112,21 +112,21 @@
 
             onConsumerDataChange: function () {
                 if (false && !this.selectedCardId && this.consumerData) {
-                    //console.log("Setting selectedCardId to", this.consumerData.DefaultPayMethodId);
-                    var foundDefaultCard = this.getCardDataById(this.consumerData.DefaultPayMethodId);
+                    //console.log("Setting selectedCardId to", this.consumerData.defaultPayMethodId);
+                    var foundDefaultCard = this.getCardDataById(this.consumerData.defaultPayMethodId);
                     if (foundDefaultCard) {
-                        this.set('selectedCardId', this.consumerData.DefaultPayMethodId);
+                        this.set('selectedCardId', this.consumerData.defaultPayMethodId);
                         this.fire('selected', foundDefaultCard);
                     }
                 }
             },
 
             onCartDataChange: function () {
-                if (!this.selectedCardId && this.cartData && this.cartData.PayMethodId && this.consumerData) {
+                if (!this.selectedCardId && this.cartData && this.cartData.payMethodId && this.consumerData) {
                     //console.log("Setting selectedCardId to", this.cartData.PayMethodId);
-                    var foundCard = this.getCardDataById(this.cartData.PayMethodId || this.consumerData.PayMethodId);
+                    var foundCard = this.getCardDataById(this.cartData.payMethodId || this.consumerData.payMethodId);
                     if (foundCard) {
-                        this.set('selectedCardId', this.cartData.PayMethodId);
+                        this.set('selectedCardId', this.cartData.payMethodId);
                         this.fire('selected', foundCard);
                     }
                 }
@@ -134,16 +134,16 @@
 
             getCardDataById: function (id) {
                 var item;
-                for (var i = 0; i < this.consumerData.PaymentMethods.length; i++) {
-                    item = this.consumerData.PaymentMethods[i];
-                    if (item.Id === id) {
+                for (var i = 0; i < this.consumerData.paymentMethods.length; i++) {
+                    item = this.consumerData.paymentMethods[i];
+                    if (item.id === id) {
                         return item;
                     }
                 }
             },
 
             _cardsOnly: function (item) {
-                return true;// (item && item.AccountType && item.AccountType === "Card");
+                return true;// (item && item.accountType && item.accountType === "Card");
             }
 
 

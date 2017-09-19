@@ -1,4 +1,4 @@
 {
-	"Success": true,
-	"Token": "this is my Paypal token"
+	"success": true,
+	"token": "this is my Paypal token"
 }

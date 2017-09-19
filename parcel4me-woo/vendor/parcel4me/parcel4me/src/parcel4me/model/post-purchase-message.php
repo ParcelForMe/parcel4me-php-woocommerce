@@ -13,9 +13,9 @@ require_once 'p4m-model.php';
 class PostPurchaseMessage extends P4mModel
 {
 
-    public  $CartId;
-    public  $CVV;
-    public  $NewDropPoint;          /* (optional) Address object (This Address object must be of type "Collect") */
+    public  $cartId;
+    public  $cvv;
+    public  $newDropPoint;          /* (optional) Address object (This Address object must be of type "Collect") */
 
 }
 

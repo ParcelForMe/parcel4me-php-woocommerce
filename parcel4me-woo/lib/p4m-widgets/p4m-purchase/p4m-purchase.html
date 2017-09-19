@@ -23,7 +23,7 @@
 
             <div class$="selectedPaymentMethod_{{selectedPaymentType}}">
                 <template is="dom-if" if="{{selectedCard}}">
-                    <p4m-card id="card" selected-card-id={{selectedCard.Id}} on-cvv="onCvv" show-actions="false" show-toggle-btn="false" show-cvv="true" card-data="{{selectedCard}}"></p4m-card>
+                    <p4m-card id="card" selected-card-id={{selectedCard.id}} on-cvv="onCvv" show-actions="false" show-toggle-btn="false" show-cvv="true" card-data="{{selectedCard}}"></p4m-card>
                 </template>
                 <template is="dom-if" if="{{_noCardSelected}}">
                     You have not yet selected a payment method. <a on-click="requestPaymentMethod">Click here to select one.</a>
@@ -245,7 +245,7 @@
                     if (this.beforePurchase) {
                         this.beforePurchase()
                     }
-                    var postData = { cartId: this.cartData.Id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.Total };
+                    var postData = { cartId: this.cartData.id, cvv: this.selectedCard.cvv, cartTotal: this.cartData.total };
                     /*postData.newDropPoint = null;
                     if (this.newDropPoint) {
                         postData.newDropPoint = this.newDropPoint;
@@ -258,7 +258,7 @@
                 if (this._state === States.NOT_PURCHASED || this._state === States.FAILED_PURCHASE || this._state === States.CVV_NEEDED) {
                     this._state = States.PURCHASING;
                     debugger;
-                    this.$.localApi.call('paypalSetup', { cartId: this.cartData.Id, cartTotal: this.cartData.Total }, null, this.onPaypalSetup.bind(this));
+                    this.$.localApi.call('paypalSetup', { cartId: this.cartData.id, cartTotal: this.cartData.total }, null, this.onPaypalSetup.bind(this));
                 }
             },
 
@@ -271,25 +271,18 @@
 
             onPurchase: function (err, data) {
                 console.log('onPurchase', data);
-                if (data.Success == false) {
+                if (data.success == false) {
                     this.errorMsg = this.msgFailedPayment;
                     this._state = States.FAILED_PURCHASE;
                 }
                 else {
                     // check we need to launch the 3D Secure popup
-                    if (data.ACSUrl && data.ACSUrl !== '') {
-                        this.launch3DSecure(data.ACSUrl, data.PaReq, data.ACSResponseUrl, data.P4MData);
+                    if (data.ACSUrl && data.AcsUrl !== '') {
+                        this.launch3DSecure(data.acsUrl, data.paReq, data.acsResponseUrl, data.p4mData);
                     }
                     else {
                         this._state = States.PURCHASED;
-                        this.fire("payment-complete", {redirectUrl: data.RedirectUrl || this.redirectUrl || null});
-                        /*if (data.RedirectUrl) {
-
-                            window.location.href = data.RedirectUrl;
-                        }
-                        else if (this.redirectUrl) {
-                            window.location.href = this.redirectUrl;
-                        }*/
+                        this.fire("payment-complete", {redirectUrl: data.redirectUrl || this.redirectUrl || null});
                     }
                 }
             },
@@ -310,7 +303,7 @@
                 }
                 else {
                     // we have a token from PP so now we can launch PP in a popup
-                    this.openPopup(this.paypalUrl + result.Token, "paypalWindow", 650, 750);
+                    this.openPopup(this.paypalUrl + result.token, "paypalWindow", 650, 750);
                 }
             },
 

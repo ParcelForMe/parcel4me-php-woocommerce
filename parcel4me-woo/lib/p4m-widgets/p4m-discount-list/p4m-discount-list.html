@@ -5,11 +5,11 @@
 
     <template>
         <div id="content">
-            <template is="dom-repeat" items="{{cartData.Discounts}}">
+            <template is="dom-repeat" items="{{cartData.discounts}}">
                 <div class="discount">
-                    <div id="p4mDiscountListRemoveBtn" class="p4m-cell closeBtn p4m-button p4m-button-active neutral" on-click="deleteItem"><iron-icon  name$="{{item.Code}}" icon="icons:close"></iron-icon></div>
-                    <div class="p4m-cell discount-code">{{item.Code}}</div>
-                    <div class="p4m-cell discount-description">{{item.Description}}</div>                                   
+                    <div id="p4mDiscountListRemoveBtn" class="p4m-cell closeBtn p4m-button p4m-button-active neutral" on-click="deleteItem"><iron-icon  name$="{{item.code}}" icon="icons:close"></iron-icon></div>
+                    <div class="p4m-cell discount-code">{{item.code}}</div>
+                    <div class="p4m-cell discount-description">{{item.description}}</div>                                   
                 </div>
             </template>
         </div>

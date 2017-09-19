@@ -13,10 +13,10 @@ require_once 'p4m-model.php';
 class PostCartMessage extends P4mModel
 {
 
-    public  $Cart;                  /* a "Cart" object */
-    public  $SessionId;             /* Consumer's session on the retailer's site */
-    public  $ClearItems;            /* Boolean	 Clear existing cart items before adding new ones */
-    public  $DeliverToNewDropPoint; /* Boolean	 Allows the Cart's address Id to be blank or non-existent */
+    public  $cart;                  /* a "Cart" object */
+    public  $sessionId;             /* Consumer's session on the retailer's site */
+    public  $clearItems;            /* Boolean	 Clear existing cart items before adding new ones */
+    public  $deliverToNewDropPoint; /* Boolean	 Allows the Cart's address Id to be blank or non-existent */
 
 }
 
