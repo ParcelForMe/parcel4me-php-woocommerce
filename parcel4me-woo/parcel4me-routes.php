@@ -43,6 +43,9 @@ function handle_p4m_routes( $query )
             case 'p4m/paypalSetup' :            $p4m_shopping_cart_adapter->paypalSetup();               break;
             case 'p4m/paypalCancel' :           $p4m_shopping_cart_adapter->paypalCancel();              break;
 
+            case 'p4m/localLogout' :            $p4m_shopping_cart_adapter->doWooLogout();
+
+
             // this need never be used - but it is there just in case - hitting this endpoint will auto update the cacert.pem file :
             case 'p4m/updateTheCaCert' :        $p4m_shopping_cart_adapter->updateCaCertificateIfChanged(); break;
 

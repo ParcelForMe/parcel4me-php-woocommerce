@@ -76,6 +76,16 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         return true;
     }
 
+    function doWooLogout() 
+    {
+        // empty cart
+        $cart = WC()->cart;
+        $cart->empty_cart();
+        // and redirect to woo logout page
+        header("Location: /my-account/customer-logout");
+        exit();
+    }
+
 
     function setCurrentUserDetails( $p4m_consumer ) 
     {
@@ -454,8 +464,13 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
         update_post_meta( $order_id, '_payment_method', 'p4m_payment_gateway' );
         update_post_meta( $order_id, '_payment_method_title', 'Parcel For Me Payment' );
 
-        return $order_id;
+        // we can actually empty out the shopping cart here
+        $cart = WC()->cart;
+        $cart->empty_cart();
 
+
+        return $order_id;
+        
     }
 
 
