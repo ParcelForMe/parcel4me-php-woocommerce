@@ -50,7 +50,7 @@ site.use(logRoute);
 
 /* 
 
-These are the minimum parcel 5 me endpoints we need to implement so 
+These are the minimum parcel 4 me endpoints we need to implement so 
 that the widgets will actually work
 
 */

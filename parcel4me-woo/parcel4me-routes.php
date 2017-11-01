@@ -36,6 +36,7 @@ function handle_p4m_routes( $query )
             // GET
             case 'p4m/signup' :                 $p4m_shopping_cart_adapter->signUp();                    break;
             case 'p4m/getP4MAccessToken' :      $p4m_shopping_cart_adapter->getP4MAccessToken();         break;
+            case 'p4m/renewShippingToken' :     $p4m_shopping_cart_adapter->renewShippingToken();        break;
             case 'p4m/isLocallyLoggedIn' :      $p4m_shopping_cart_adapter->isLocallyLoggedIn();         break;                
             case 'p4m/localLogin' :             $p4m_shopping_cart_adapter->localLogin();                break;                
             case 'p4m/restoreLastCart' :        $p4m_shopping_cart_adapter->restoreLastCart();           break;
