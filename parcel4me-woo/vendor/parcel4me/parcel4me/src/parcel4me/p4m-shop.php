@@ -444,6 +444,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                         gmdate( "D, d M Y H:i:s T", $cookieExpire )
                       );
         $_COOKIE['gfsCheckoutToken'] = $encodeToken;
+        return $accessToken;
     }
 
 
