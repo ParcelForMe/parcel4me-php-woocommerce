@@ -146,7 +146,7 @@ class Parcel4me_Shortcodes {
       if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
 
       $r = '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-get-html/p4m-get-html.html" />';
-      $r .= '<p4m-get-html content-url="' . P4M\Settings::getPublic( 'Server:P4M_OID_SERVER' ) .'/Thankyou/Thankyou.html" '.Parcel4me_Shortcodes::set_classes_str( $atts ).'>';
+      $r .= '<p4m-get-html content-url="' . base_uri() . 'thankyou/p4m-thankyou-hostsite.html" '.Parcel4me_Shortcodes::set_classes_str( $atts ).'>';
       return $r;
     }
     add_shortcode( 'p4m-payment-complete', 'p4m_pc_func' );
