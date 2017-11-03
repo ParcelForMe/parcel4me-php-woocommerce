@@ -384,7 +384,9 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         // set the p4m cookie for this retailer's site
         $accessToken  = $oidc->getAccessToken();
-        $cookieExpire = strtotime('+'.$response->expires_in.' seconds');
+        // $cookieExpire = strtotime('+'.$response->expires_in.' seconds');
+        $tokenResp = $oidc->getTokenResponse();
+        $cookieExpire = time() + $tokenResp->expires_in;
         $path         = '/';
         setcookie( "p4mToken",
                    $accessToken,
