@@ -862,7 +862,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $resultObject->success   = true;
                 
                 if ( (!property_exists($rob, 'acsUrl')) || (!$rob->acsUrl) ) {
-
+                    Settings::setPublic('General:RetailerName', '$rob->cart->retailerName');
                     $this->completePurchase( $local_order_id, $rob );
 
                     $resultObject->redirectUrl = Settings::getPublic( 'RedirectURl:PaymentDone' );
@@ -946,6 +946,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 $this->completePurchase( $orderId, $rob );
                 
                 $this->redirectTo(Settings::getPublic( 'RedirectURl:PaymentDone' ));
+
             } else {
                 $this->somethingWentWrong('non-success getting p4m cart after calling purchaseComplete');
             }
