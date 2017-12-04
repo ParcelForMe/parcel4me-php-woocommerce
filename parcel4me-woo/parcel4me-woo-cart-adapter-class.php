@@ -384,7 +384,8 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             // determine the woo cart_item_key for this product 
             $cart_item_key = $woo_cart->find_product_in_cart( $product_id );
             // now set the quantity for that line
-            $woo_cart->set_quantity( $cart_item_key, $item_update->qty, $refresh_totals );
+            //$woo_cart->set_quantity( $cart_item_key, $item_update->qty, $refresh_totals );
+            $woo_cart->set_quantity( $item_update->itemCode, $item_update->qty, $refresh_totals );
         }
 
         $p4m_discounts = $this->get_p4m_discounts_from_woo_cart_coupons();
