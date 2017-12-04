@@ -498,15 +498,17 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 setcookie( "p4mOfferCartRestore",       ( $rob->hasOpenCart ? "true" : "false" ),       $cookieExpire, $path );
                 setcookie( "p4mLocalLogin",             "true",                                         $cookieExpire, $path );
                 if (isset($consumer->prefDeliveryAddress)) {
-                    setcookie( "p4mDefaultPostCode",        $consumer->prefDeliveryAddress->postCode,       $cookieExpire, $path );
-                    setcookie( "p4mDefaultCountryCode",     $consumer->prefDeliveryAddress->countryCode,    $cookieExpire, $path );
+                    $addr = $consumer->prefDeliveryAddress;
+                    setcookie( "p4mConsumer", $consumer->id."|".$addr->id."|".$addr->street1."|".$addr->street2."|".$addr->city."|".
+                                              $addr->postCode."|".$addr->state."|".$addr->countryCode."|".
+                                              $addr->latitude."|".$addr->longitude."|".$consumer->deliveryPreferences, 
+                                $cookieExpire, $path );
                 }
-
             }
 
 
             /*
-                Handle these possible scenereos 
+                Handle these possible scenarios 
                      Local User	    P4M User	                Action
                      -------------- --------------------------- ----------------------------------------------------
                 1	 Not logged in	Has no local Id 	        Create and login a new local user using the P4M details
@@ -616,8 +618,9 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             echo '{"success": false, "error": "'.$rob->error.'" }';
 
         } else {
-
-            $this->setCartOfCurrentUser( $rob->cart );
+            $cart = $rob->cart;
+            $this->setCartOfCurrentUser( $cart );
+            setCookie("p4mCart", $cart->id . "|" . $cart->addressId . "|" . $cart->dropPointId . "|" . $cart->serviceId . "|" . $cart->expDeliveryDate);
 
             // delete the "p4mOfferCartRestore" cookie by setting it to have already expired
             if (isset($_COOKIE['p4mOfferCartRestore'])) {
@@ -628,6 +631,16 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         }
 
+    }
+
+    function getTokenExpiry($token) {
+        $parts = explode(".", $token);
+        $length = count($parts);
+        if ($length != 3)
+            return null;
+        $payload = base64_decode($parts[1]);
+        $jwt = json_decode($payload);
+        return $jwt.exp;
     }
 
 
