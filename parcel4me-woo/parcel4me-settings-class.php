@@ -1,4 +1,4 @@
-<?
+<?php
    /*
    Description: Admin setting config screen for parcel4me
    Version: 0.0.1
