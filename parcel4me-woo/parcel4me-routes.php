@@ -38,8 +38,7 @@ function handle_p4m_routes( $query )
             case 'p4m/getP4MAccessToken' :      $p4m_shopping_cart_adapter->getP4MAccessToken();         break;
             case 'p4m/renewShippingToken' :     $p4m_shopping_cart_adapter->renewShippingToken();        break;
             case 'p4m/isLocallyLoggedIn' :      $p4m_shopping_cart_adapter->isLocallyLoggedIn();         break;                
-            case 'p4m/localLogin' :             $p4m_shopping_cart_adapter->localLogin();                break;                
-            case 'p4m/restoreLastCart' :        $p4m_shopping_cart_adapter->restoreLastCart();           break;
+            //case 'p4m/restoreLastCart' :        $p4m_shopping_cart_adapter->restoreLastCart();           break;
             case 'p4m/getP4MCart' :             $p4m_shopping_cart_adapter->getP4MCart();                break;
             case 'p4m/paypalSetup' :            $p4m_shopping_cart_adapter->paypalSetup();               break;
             case 'p4m/paypalCancel' :           $p4m_shopping_cart_adapter->paypalCancel();              break;
@@ -52,6 +51,8 @@ function handle_p4m_routes( $query )
 
 
             // POST
+            case 'p4m/localLogin' :             $p4m_shopping_cart_adapter->localLogin();                break;                
+            case 'p4m/restoreLastCart' :        $p4m_shopping_cart_adapter->restoreLastCart();           break;
             case 'p4m/updShippingService' :     $p4m_shopping_cart_adapter->updShippingService();        break;
             case 'p4m/applyDiscountCode' :      $p4m_shopping_cart_adapter->applyDiscountCode();         break;
             case 'p4m/removeDiscountCode' :     $p4m_shopping_cart_adapter->removeDiscountCode();        break;
