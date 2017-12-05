@@ -127,14 +127,14 @@ class Parcel4me_Shortcodes {
       $p4m_shopping_cart_adapter = $GLOBALS['parcel4me_woo']->p4m_shopping_cart_adapter;
       $p4m_shopping_cart_adapter->checkout();
 
-      $gfs_access_token = (array_key_exists('gfsCheckoutToken', $_COOKIE) ? $_COOKIE['gfsCheckoutToken'] : '');
+      //$gfs_access_token = (array_key_exists('gfsCheckoutToken', $_COOKIE) ? $_COOKIE['gfsCheckoutToken'] : '');
       $r = '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-checkout/p4m-checkout.html" />';
       $options = get_option( 'p4m_options' );
       $r .= '<p4m-checkout use-paypal="true" 
                           use-gfs-checkout="true"
                           host-type="'.$options['p4m_field_env'].'"
-                          session-id="' . session_id() . '"
-                          gfs-access-token="' . $gfs_access_token . '" '.Parcel4me_Shortcodes::set_classes_str( $atts ).'>
+                          session-id="' . session_id() . '" '
+                          .Parcel4me_Shortcodes::set_classes_str( $atts ).'>
             </p4m-checkout>';
       return $r;
     }
