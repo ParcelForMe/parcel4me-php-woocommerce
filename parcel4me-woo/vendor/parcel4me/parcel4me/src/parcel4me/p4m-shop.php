@@ -439,13 +439,13 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
 
         $accessToken  = $response->access_token;
-        $encodeToken = base64_encode($accessToken);
-        $cookieExpire = strtotime('+'.$response->expires_in.' seconds');
-        $this->createJsCookie( "gfsCheckoutToken",
-                        $encodeToken,
-                        gmdate( "D, d M Y H:i:s T", $cookieExpire )
-                      );
-        $_COOKIE['gfsCheckoutToken'] = $encodeToken;
+        // $encodeToken = base64_encode($accessToken);
+        // $cookieExpire = strtotime('+'.$response->expires_in.' seconds');
+        // $this->createJsCookie( "gfsCheckoutToken",
+        //                 $encodeToken,
+        //                 gmdate( "D, d M Y H:i:s T", $cookieExpire )
+        //               );
+        // $_COOKIE['gfsCheckoutToken'] = $encodeToken;
         return $accessToken;
     }
 
@@ -469,6 +469,103 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
 
     public function localLogin() {
+        // http://developer.parcelfor.me/docs/documentation/parcel-for-me-widgets/p4m-login-widget/locallogin/
+        $postBody = file_get_contents('php://input');
+        $postBody = json_decode($postBody);
+        $consumer = $postBody->consumer;
+        $currentPage = $postBody->currentPage;
+
+        setcookie( "p4mLocalLogin", false, 0, '/' );
+
+        /*
+            Handle these possible scenarios 
+                    Local User	    P4M User	                Action
+                    -------------- --------------------------- ----------------------------------------------------
+            1	 Not logged in	Has no local Id 	        Create and login a new local user using the P4M details
+                                                            Store the local Id in P4M Consumer.Extras["LocalId"]
+            2a	 Not logged in	Has a VALID local Id 	    Login using the P4M local Id, update local details 
+            2b   Not logged in  Id is invalid               Check if user exists with that email,
+                                                                If not : Create user and login 
+                                                                If so  : Update id that p4m stores for this user 
+                                                            and login 
+            3	 Logged in	    Has no local Id 	        Logout current user, proceed for 1
+            4	 Logged in	    Has a different local Id 	Logout current user, proceed for 2 
+            5	 Logged in	    Has matching local Id 	    Update local details from P4M if required 
+        */
+
+        $hasLocalId = ( isset($consumer->extras) && isset($consumer->extras->localId) && $consumer->extras->localId);
+        $localId = "";
+        $loggedInUser = $this->userIsLoggedIn();
+        if (!$loggedInUser) {
+
+            if ( (!$hasLocalId) || (!$this->isValidUserId($consumer->extras->localId)) ) {
+                // case 1 OR case 2b
+
+                $localUser = $this->fetchLocalUserByEmail( $consumer->email );
+                if ( !$localUser ) $localUser = $this->createNewUser( $consumer ); 
+                    
+                if ( !$localUser ) $this->returnJsonError("Failed to create new local user");
+                if ( !isset($localUser->id) ) $this->returnJsonError('No "id" field on local (non logged in) user');
+
+                // try {
+                //     $setExtra = json_encode( array('localId' => $localUser->id) );
+                //     $rob = $this->apiHttp_withoutErrorHandler('POST',  P4M_Shop_Urls::endPoint('consumerExtras'), $setExtra);
+                // } catch (\Exception $e) {
+                //     $this->returnJsonError( $e->getMessage()) ;
+                // }
+                //if ( !$rob->success ) $this->returnJsonError( $rob->error );
+
+                $this->loginUser( $localUser->id );
+                $localId = $localUser->id;
+            } else {
+                // case 2a
+                $this->loginUser( $consumer->extras->localId );
+                $localId = $consumer->extras->localId;
+            }
+
+        } else {
+
+            $local_consumer = $this->getCurrentUserDetails();
+
+            if (!$hasLocalId) {
+                // case 3
+                $this->logoutCurrentUser();
+
+                $localUser = $this->fetchLocalUserByEmail( $consumer->email );
+                if ( !$localUser ) $localUser = $this->createNewUser( $consumer ); 
+
+                if ( !isset($localUser->id) ) $this->returnJsonError('No "id" field on local (logged in) user');
+                $localId = $localUser->id;
+                
+            } elseif ( (property_exists($consumer, 'extras')) && 
+                        (property_exists($consumer->extras, 'localId')) && 
+                        (is_object($local_consumer)) &&
+                        (property_exists($local_consumer, 'extras')) &&
+                        (property_exists($local_consumer->extras, 'localId')) &&
+                        ($consumer->extras->localId != $local_consumer->extras->localId) ) 
+            {
+                // case 4
+                $this->logoutCurrentUser();
+                $this->loginUser( $consumer->extras->localId );
+                $localId = $consumer->extras->localId;
+            } else {
+                // case 5
+                $this->setCurrentUserDetails( $consumer );
+                $localId = $consumer->extras->localId;
+            }
+        }
+
+        if (array_key_exists('currentPage', $_GET)) {
+            $redirectTo = '"'.$_GET['currentPage'].'"';
+        } else {
+            $redirectTo = 'null';
+        }
+        setcookie( "p4mLocalLogin", "false", 0, "/" );        
+        echo '{ "redirectUrl": '.$redirectTo.', "localId": "'.$localId.'", "success": true, "error": null }';
+
+    }
+
+/*    public function localLogin() {
         // http://developer.parcelfor.me/docs/documentation/parcel-for-me-widgets/p4m-login-widget/locallogin/
 
         setcookie( "p4mLocalLogin", false, 0, '/' );
@@ -507,7 +604,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             }
 
 
-            /*
+            /
                 Handle these possible scenarios 
                      Local User	    P4M User	                Action
                      -------------- --------------------------- ----------------------------------------------------
@@ -521,7 +618,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
                 3	 Logged in	    Has no local Id 	        Logout current user, proceed for 1
                 4	 Logged in	    Has a different local Id 	Logout current user, proceed for 2 
                 5	 Logged in	    Has matching local Id 	    Update local details from P4M if required 
-            */
+            /
 
             $hasLocalId = ( isset($consumer->extras) && isset($consumer->extras->localId) && $consumer->extras->localId);
             $loggedInUser = $this->userIsLoggedIn();
@@ -598,10 +695,18 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         }
 
 
+    }*/
+
+    public function restoreLastCart() {
+        // the p4m-login widget posts the latest cart to this endpoint
+        $postBody = file_get_contents('php://input');
+        $cart = json_decode($postBody);
+        $this->setCartOfCurrentUser( $cart );
+        echo  '{"success": true, "error": null }';
     }
 
 
-    public function restoreLastCart() {
+    /*public function restoreLastCart() {
         // http://developer.parcelfor.me/docs/documentation/parcel-for-me-widgets/p4m-login-widget/restorelastcart/
 
 
@@ -631,7 +736,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         }
 
-    }
+    }*/
 
     function getTokenExpiry($token) {
         $parts = explode(".", $token);

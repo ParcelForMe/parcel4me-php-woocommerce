@@ -18,8 +18,9 @@ class Cart extends P4mModel
     public  $sessionId;               /* Consumer's session Id on retailer's site */
     public  $retailerId;              /* (read only) */
     public  $retailerName;            /* (read only) */
-    public  $reference;               /* Retailer reference (usually order no.) */
+    public  $orderId;                 /* Retailer reference (usually order no.) */
     public  $addressId;               /* must be the Id of an existing consumer address or collection point, unless the consumer has selected a new collection point, in which case calls to the API must indicate this, and the new collection point details must be passed during the purchase call */
+    public  $dropPointId;             /* set if the cart address is a collect point */
     public  $billingAddressId;        /* must be the Id of an existing consumer address, not a collection point */
     public  $date;                    /* UTC date */ 
     public  $currency;

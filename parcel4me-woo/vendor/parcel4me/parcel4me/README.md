@@ -60,8 +60,8 @@ To bring the Parcel4Me functionality into an existing shopping cart 3 steps are 
 > 
 > * GET  p4m/getP4MAccessToken
 > * GET  p4m/isLocallyLoggedIn
-> * GET  p4m/localLogin
-> * GET  p4m/restoreLastCart
+> * POST p4m/localLogin
+> * POST p4m/restoreLastCart
 > 
 > ##### p4m-checkout Widget
 > 
