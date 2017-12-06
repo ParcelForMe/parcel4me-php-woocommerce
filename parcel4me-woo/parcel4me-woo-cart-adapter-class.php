@@ -265,7 +265,7 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             $cartItem->price        = (double)$woo_item['data']->price;
             $cartItem->linkToImage  = ( (has_post_thumbnail( $woo_item['data']->post->ID )) ? (wp_get_attachment_image_src( get_post_thumbnail_id( $woo_item['data']->post->ID ), 'single-post-thumbnail' )[0]) : null );
             $cartItem->linkToItem   = get_permalink( $woo_item['data']->post->ID );
-            $cartItem->lineId       = $woo_item['p4m_line_id'];
+            //$cartItem->lineId       = $woo_item['p4m_line_id'];
             $cartItem->removeNullProperties();    
             $items[] = $cartItem;
         }
@@ -384,8 +384,8 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
             // determine the woo cart_item_key for this product 
             $cart_item_key = $woo_cart->find_product_in_cart( $product_id );
             // now set the quantity for that line
-            //$woo_cart->set_quantity( $cart_item_key, $item_update->qty, $refresh_totals );
-            $woo_cart->set_quantity( $item_update->itemCode, $item_update->qty, $refresh_totals );
+            $woo_cart->set_quantity( $cart_item_key, $item_update->qty, $refresh_totals );
+            //$woo_cart->set_quantity( $item_update->itemCode, $item_update->qty, $refresh_totals );
         }
 
         $p4m_discounts = $this->get_p4m_discounts_from_woo_cart_coupons();
