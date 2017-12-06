@@ -66,7 +66,10 @@ class Parcel4me_Shortcodes {
     
     function base_uri() {
       $options = get_option( 'p4m_options' );
-      return 'https://p4m'.$options['p4m_field_env'].'cdn.azureedge.net/pw/';
+      if ($options['p4m_field_env'] == 'dev')
+        return 'https://p4mdevauestore.blob.core.windows.net/cdn/pw/';
+      else
+        return 'https://p4m'.$options['p4m_field_env'].'cdn.azureedge.net/pw/';
       //return plugins_url() . '/parcel4me-woo/lib/';
     }
 
@@ -91,6 +94,7 @@ class Parcel4me_Shortcodes {
       $r .= '<p4m-login id-srv-url="' . P4M\Settings::getPublic('Server:P4M_OID_SERVER') . '" 
                        client-id="' . P4M\Settings::getPublic('OpenIdConnect:ClientId') . '" 
                        redirect-url="' . P4M\Settings::getPublic('OpenIdConnect:RedirectUrl') . '" 
+                       session-id="' . session_id() . '" 
                        logout-form="p4m_special_hidden_logout_form_hack" '.Parcel4me_Shortcodes::set_classes_str( $atts ).'> 
             </p4m-login>';
       return $r;
