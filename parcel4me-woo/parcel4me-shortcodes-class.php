@@ -88,13 +88,15 @@ class Parcel4me_Shortcodes {
     // [p4m-login]
     function p4m_login_func( $atts ){
       if ( ! Parcel4me_Shortcodes::display_widget() ) return '';
-
+      
+      $options = get_option( 'p4m_options' );
       $r = '<form style="display:none" action="/p4m/localLogout" id="p4m_special_hidden_logout_form_hack"></form>';
       $r .= '<link rel="import" href="' . base_uri() . 'p4m-widgets/p4m-login/p4m-login.html" />';
       $r .= '<p4m-login id-srv-url="' . P4M\Settings::getPublic('Server:P4M_OID_SERVER') . '" 
                        client-id="' . P4M\Settings::getPublic('OpenIdConnect:ClientId') . '" 
                        redirect-url="' . P4M\Settings::getPublic('OpenIdConnect:RedirectUrl') . '" 
                        session-id="' . session_id() . '" 
+                       host-type="'.$options['p4m_field_env'].'" 
                        logout-form="p4m_special_hidden_logout_form_hack" '.Parcel4me_Shortcodes::set_classes_str( $atts ).'> 
             </p4m-login>';
       return $r;
