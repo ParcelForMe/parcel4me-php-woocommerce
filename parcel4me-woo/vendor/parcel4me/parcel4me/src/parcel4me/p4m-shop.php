@@ -355,6 +355,31 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
     public function getP4MAccessToken() {
         // http://developer.parcelfor.me/docs/documentation/parcel-for-me-widgets/p4m-login-widget/getp4maccesstoken/#
+        // this can be a POST or a GET
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == 'GET') {
+            // if this is a get we can just return a blank page because the iframe will get the details from the url
+            echo '<html><body></body></html>';
+            exit();
+        }
+        if ($_COOKIE["p4mState"] != $_POST['state']) {
+            $this->somethingWentWrong('Authentication error (p4mState)');
+            exit();
+        }
+
+        // set the p4m cookie for this retailer's site
+        setcookie( "p4mToken", $_POST['access_token'], NULL, '/' );
+        $cookieExpire = date('Y-m-dTH:i:sZ', strtotime('+'.$_POST['expires_in'].' seconds', gmmktime()));
+        setcookie( "p4mTokenExpires", $cookieExpire, NULL, '/' );
+            
+        // close this popped up window
+        echo '<script>window.close();</script>';
+
+    }
+
+/*
+    public function getP4MAccessToken() {
+        // http://developer.parcelfor.me/docs/documentation/parcel-for-me-widgets/p4m-login-widget/getp4maccesstoken/#
 
         if ($_COOKIE["p4mState"] != $_REQUEST['state']) {
             $this->somethingWentWrong('Authentication error (p4mState)');
@@ -397,6 +422,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         echo '<script>window.close();</script>';
 
     }
+*/
 
     public function renewShippingToken() {
         // the GFS token has expired so get a new one and set it in the cookie
@@ -450,22 +476,16 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     }
 
 
-    public function isLocallyLoggedIn() {
-        // http://developer.parcelfor.me/docs/documentation/parcel-for-me-widgets/p4m-login-widget/islocallyloggedin/
-
-        if ($this->userIsLoggedIn()) {
-            
-            setcookie( "p4mLocalLogin", true, 0, '/' );
-            echo '{ "success": true, "error": null }';
-
-        } else {
-
-            setcookie( "p4mLocalLogin", false, 0, '/' );
-            echo '{ "success": false, "error": "Not logged in" }';
-
-        }
-
-    }
+    // public function isLocallyLoggedIn() {
+    //     // http://developer.parcelfor.me/docs/documentation/parcel-for-me-widgets/p4m-login-widget/islocallyloggedin/
+    //     if ($this->userIsLoggedIn()) {
+    //         setcookie( "p4mLocalLogin", true, 0, '/' );
+    //         echo '{ "success": true, "error": null }';
+    //     } else {
+    //         setcookie( "p4mLocalLogin", false, 0, '/' );
+    //         echo '{ "success": false, "error": "Not logged in" }';
+    //     }
+    // }
 
 
     public function localLogin() {
@@ -560,7 +580,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         } else {
             $redirectTo = 'null';
         }
-        setcookie( "p4mLocalLogin", "false", 0, "/" );        
+        setcookie( "p4mLocalLogin", "true", 0, "/" );        
         echo '{ "redirectUrl": '.$redirectTo.', "localId": "'.$localId.'", "success": true, "error": null }';
 
     }
@@ -757,11 +777,11 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     }
 
 
-    private function createJsCookie($name, $value, $expire) {
-        echo " <script>
-                document.cookie = '{$name}={$value}; expires={$expire}; path=/;';
-              </script> ";
-    }
+    // private function createJsCookie($name, $value, $expire) {
+    //     echo " <script>
+    //             document.cookie = '{$name}={$value}; expires={$expire}; path=/;';
+    //           </script> ";
+    // }
 
 
     public function checkout() {
@@ -916,11 +936,16 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
+        $itemsArray = $postBody.items;
+        $shipping - $postBody.shippingDetails;
         
         $resultObject = new \stdClass();
 
         try {
-            $discountsArray = $this->updateCartItemQuantities( $postBody );
+            $discountsArray = $this->updateCartItemQuantities( $itemsArray );
+            if (null != $shipping)
+                $this->updateShipping( $shipping->service, $shipping->amount, $shipping->dueDate, $shipping->address );
+
             $totalsObject = $this->getCartTotals();
 
             $resultObject->success   = true;

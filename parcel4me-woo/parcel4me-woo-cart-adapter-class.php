@@ -78,11 +78,14 @@ class Parcel4me_Woo_Cart_Adapter extends P4M\P4M_Shop {
 
     function doWooLogout() 
     {
-        // empty cart
-        $cart = WC()->cart;
-        $cart->empty_cart();
-        // and redirect to woo logout page
-        header("Location: /my-account/customer-logout");
+        // check if the passed logout token is valid
+        if ($_POST["logoutToken"] == $_SESSION["logoutToken"]) {
+            // empty cart
+            $cart = WC()->cart;
+            $cart->empty_cart();
+            // and redirect to woo logout page
+            header("Location: /my-account/customer-logout");
+        }
         exit();
     }
 
