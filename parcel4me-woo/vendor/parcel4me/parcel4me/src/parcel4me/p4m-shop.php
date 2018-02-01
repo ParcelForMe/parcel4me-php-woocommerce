@@ -757,7 +757,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         }
 
     }*/
-
+/*
     function getTokenExpiry($token) {
         $parts = explode(".", $token);
         $length = count($parts);
@@ -765,9 +765,9 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             return null;
         $payload = base64_decode($parts[1]);
         $jwt = json_decode($payload);
-        return $jwt.exp;
+        return $jwt->exp;
     }
-
+*/
 
     public function checkoutRedirect() {
         // check if logged onto parcel for me, if so redirect to redirect_url_checkout, if not do nothing
@@ -936,8 +936,8 @@ abstract class P4M_Shop implements P4M_Shop_Interface
 
         $postBody = file_get_contents('php://input');
         $postBody = json_decode($postBody);
-        $itemsArray = $postBody.items;
-        $shipping - $postBody.shippingDetails;
+        $itemsArray = $postBody->items;
+        $shipping - $postBody->shippingDetails;
         
         $resultObject = new \stdClass();
 
