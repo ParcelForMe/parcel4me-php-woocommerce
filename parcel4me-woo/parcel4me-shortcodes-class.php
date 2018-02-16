@@ -113,6 +113,7 @@ class Parcel4me_Shortcodes {
       // scripts required for all components
       //wp_enqueue_script( 'webcomponentsjs', '///cdn.rawgit.com/webcomponents/webcomponentsjs/v0.7.24/webcomponents-lite.js' );
       wp_enqueue_script( 'webcomponentsjs', base_uri() . 'webcomponentsjs/webcomponents-lite.js' );
+      wp_enqueue_script( 'signalr-client-1.0.0-alpha2-final.min.js', base_uri() . 'websockets/signalr-client-1.0.0-alpha2-final.min.js' );
     }
     add_action( 'wp_enqueue_scripts', 'add_all_scripts', 0 );
 
