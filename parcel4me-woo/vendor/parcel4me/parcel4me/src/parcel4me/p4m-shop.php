@@ -427,8 +427,9 @@ abstract class P4M_Shop implements P4M_Shop_Interface
     public function renewShippingToken() {
         // the GFS token has expired so get a new one and set it in the cookie
         try {
-            $token = $this->getGFSCheckoutToken();
-            echo '{ "token": "'.$token.'", "success": true, "error": null }';    
+            $tokenResp = $this->getGFSCheckoutToken();
+            $expires = date('Y-m-dTH:i:sZ', strtotime('+'.$tokenResp->expires_in.' seconds', gmmktime()));
+            echo '{ "token": "'.$tokenResp->access_token.'", "expires": "'.$expires.'", "success": true, "error": null }';    
         } catch (\Exception $e) {
             echo '{ "token": null, "success": false, "error": "'.$e->getMessage().'" }';                
         }
@@ -454,7 +455,7 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             } else if (!property_exists($response, 'access_token')) {
                 throw new \Exception('Response from GFS server has no access_token:'.(string)$response);
             }
-
+            return $response;
         } catch (\OpenIDConnectClientException $oidcE) {
             $this->somethingWentWrong('OIDC Exception :'.$oidcE->getMessage());
             throw $oidcE;
@@ -462,17 +463,6 @@ abstract class P4M_Shop implements P4M_Shop_Interface
             $this->somethingWentWrong('Exception doing OIDC auth:'.$e->getMessage());
             throw $e;
         }
-
-
-        $accessToken  = $response->access_token;
-        // $encodeToken = base64_encode($accessToken);
-        // $cookieExpire = strtotime('+'.$response->expires_in.' seconds');
-        // $this->createJsCookie( "gfsCheckoutToken",
-        //                 $encodeToken,
-        //                 gmdate( "D, d M Y H:i:s T", $cookieExpire )
-        //               );
-        // $_COOKIE['gfsCheckoutToken'] = $encodeToken;
-        return $accessToken;
     }
 
 
