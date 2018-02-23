@@ -371,6 +371,8 @@ abstract class P4M_Shop implements P4M_Shop_Interface
         setcookie( "p4mToken", $_POST['access_token'], NULL, '/' );
         $cookieExpire = date('Y-m-dTH:i:sZ', strtotime('+'.$_POST['expires_in'].' seconds', gmmktime()));
         setcookie( "p4mTokenExpires", $cookieExpire, NULL, '/' );
+        $cookieExpire = date('Y-m-d', strtotime('+1 year'));
+        setcookie( "p4mHasAccount", "Y", $cookieExpire, '/' );
             
         // close this popped up window
         echo '<script>window.close();</script>';
